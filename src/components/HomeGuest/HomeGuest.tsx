@@ -1,6 +1,26 @@
+import axios from 'axios';
+import { FormEvent, useState } from 'react';
 import Page from '../../pages/Page/Page';
 
 const HomeGuest = () => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('');
+
+  const submitUserHandler = async (event: FormEvent) => {
+    event.preventDefault();
+    try {
+      await axios.post('http://localhost:8080/register', {
+        username,
+        email,
+        password,
+      });
+      console.log('User was succesfully created.');
+    } catch (e) {
+      console.log('There was an error.');
+    }
+  };
+
   return (
     <Page wide={true} title="Welcome">
       <div className="row align-items-center">
@@ -14,7 +34,7 @@ const HomeGuest = () => {
           </p>
         </div>
         <div className="col-lg-5 pl-lg-5 pb-3 py-lg-5">
-          <form>
+          <form onSubmit={submitUserHandler}>
             <div className="form-group">
               <label htmlFor="username-register" className="text-muted mb-1">
                 <small>Username</small>
@@ -26,6 +46,7 @@ const HomeGuest = () => {
                 type="text"
                 placeholder="Pick a username"
                 autoComplete="off"
+                onChange={(event) => setUsername(event.target.value)}
               />
             </div>
             <div className="form-group">
@@ -39,6 +60,7 @@ const HomeGuest = () => {
                 type="text"
                 placeholder="you@example.com"
                 autoComplete="off"
+                onChange={(event) => setEmail(event.target.value)}
               />
             </div>
             <div className="form-group">
@@ -51,6 +73,7 @@ const HomeGuest = () => {
                 className="form-control"
                 type="password"
                 placeholder="Create a password"
+                onChange={(event) => setPassword(event.target.value)}
               />
             </div>
             <button
