@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { FormEvent, useState } from 'react';
-import Page from '../../pages/Page/Page';
+import Page from '../Page/Page';
 
 const HomeGuest = () => {
   const [username, setUsername] = useState('');
