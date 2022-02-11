@@ -12,6 +12,7 @@ import './main.css';
 import Home from './pages/Home/Home';
 import CreatePost from './pages/CreatePost/CreatePost';
 import axios from 'axios';
+import ViewSinglePost from './pages/ViewSinglePost/ViewSinglePost';
 
 axios.defaults.baseURL = 'http://localhost:8080';
 
@@ -37,6 +38,7 @@ const App = () => {
       />
       <Routes>
         <Route path="/" element={loggedIn ? <Home /> : <HomeGuest />} />
+        <Route path="/post/:id" element={<ViewSinglePost />} />
         <Route path="/create-post" element={<CreatePost />} />
         <Route path="/about-us" element={<About />} />
         <Route path="/terms" element={<Terms />} />

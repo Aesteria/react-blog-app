@@ -1,8 +1,12 @@
 import axios from 'axios';
 import { FormEvent, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Page from '../Page/Page';
 
+type PostId = string;
+
 const CreatePost = () => {
+  let navigate = useNavigate();
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
 
@@ -10,11 +14,13 @@ const CreatePost = () => {
     event.preventDefault();
 
     try {
-      await axios.post('/create-post', {
+      const response = await axios.post<PostId>('/create-post', {
         title,
         body,
         token: localStorage.getItem('complexappToken'),
       });
+      navigate(`/post/${response.data}`);
+
       console.log('Post was succesfully created.');
     } catch (e) {
       console.log('There was an error');
