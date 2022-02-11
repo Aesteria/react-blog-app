@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import HeaderLoggedIn from './HeaderLoggedIn';
 import HeaderLoggedOut from './HeaderLoggedOut';
 

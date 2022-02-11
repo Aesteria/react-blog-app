@@ -17,7 +17,7 @@ const HeaderLoggedOut = ({ onLogin }: HeaderLoggedOutProps) => {
     event.preventDefault();
 
     try {
-      const response = await axios.post<User>('http://localhost:8080/login', {
+      const response = await axios.post<User>('/login', {
         username,
         password,
       });

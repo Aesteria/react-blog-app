@@ -10,7 +10,7 @@ const HomeGuest = () => {
   const submitUserHandler = async (event: FormEvent) => {
     event.preventDefault();
     try {
-      await axios.post('http://localhost:8080/register', {
+      await axios.post('/register', {
         username,
         email,
         password,

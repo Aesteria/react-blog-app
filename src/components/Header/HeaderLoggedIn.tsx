@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 type HeaderLoggedInProps = { onLogout: () => void };
 
 const HeaderLoggedIn = ({ onLogout }: HeaderLoggedInProps) => {
@@ -23,9 +25,9 @@ const HeaderLoggedIn = ({ onLogout }: HeaderLoggedInProps) => {
       <a href="#" className="mr-2">
         <img className="small-header-avatar" src={avatarSrc} alt="avatar" />
       </a>
-      <a className="btn btn-sm btn-success mr-2" href="/create-post">
+      <Link className="btn btn-sm btn-success mr-2" to="/create-post">
         Create Post
-      </a>
+      </Link>
       <button className="btn btn-sm btn-secondary" onClick={logoutHandler}>
         Sign Out
       </button>

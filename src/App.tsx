@@ -10,6 +10,10 @@ import Terms from './pages/Terms/Terms';
 
 import './main.css';
 import Home from './pages/Home/Home';
+import CreatePost from './pages/CreatePost/CreatePost';
+import axios from 'axios';
+
+axios.defaults.baseURL = 'http://localhost:8080';
 
 const App = () => {
   const [loggedIn, setLoggedIn] = useState(
@@ -33,6 +37,7 @@ const App = () => {
       />
       <Routes>
         <Route path="/" element={loggedIn ? <Home /> : <HomeGuest />} />
+        <Route path="/create-post" element={<CreatePost />} />
         <Route path="/about-us" element={<About />} />
         <Route path="/terms" element={<Terms />} />
       </Routes>
