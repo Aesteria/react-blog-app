@@ -1,10 +1,12 @@
+import { useContext } from 'react';
 import { Link } from 'react-router-dom';
+import { AuthContext } from '../../context/auth-context';
 
-type HeaderLoggedInProps = { onLogout: () => void };
+const HeaderLoggedIn = () => {
+  const { setLoggedIn } = useContext(AuthContext);
 
-const HeaderLoggedIn = ({ onLogout }: HeaderLoggedInProps) => {
   const logoutHandler = () => {
-    onLogout();
+    setLoggedIn(false);
 
     localStorage.removeItem('complexappToken');
     localStorage.removeItem('complexappUsername');

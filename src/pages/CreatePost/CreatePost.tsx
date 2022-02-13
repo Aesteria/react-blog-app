@@ -1,14 +1,16 @@
 import axios from 'axios';
-import { FormEvent, useState } from 'react';
+import { FormEvent, useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { FlashMessagesContext } from '../../context/flash-messages-context';
 import Page from '../Page/Page';
 
 type PostId = string;
 
 const CreatePost = () => {
-  let navigate = useNavigate();
+  const navigate = useNavigate();
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
+  const { addFlashMessage } = useContext(FlashMessagesContext);
 
   const submitPostHandler = async (event: FormEvent) => {
     event.preventDefault();
@@ -19,6 +21,7 @@ const CreatePost = () => {
         body,
         token: localStorage.getItem('complexappToken'),
       });
+      addFlashMessage('Congrats, you succesfully created a post');
       navigate(`/post/${response.data}`);
 
       console.log('Post was succesfully created.');

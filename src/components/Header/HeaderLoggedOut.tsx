@@ -1,7 +1,8 @@
 import axios from 'axios';
-import { FormEvent, useState } from 'react';
+import { FormEvent, useContext, useState } from 'react';
+import { AuthContext } from '../../context/auth-context';
 
-type HeaderLoggedOutProps = { onLogin: () => void };
+// type HeaderLoggedOutProps = { onLogin: () => void };
 
 type User = {
   avatar: string;
@@ -9,9 +10,10 @@ type User = {
   username: string;
 };
 
-const HeaderLoggedOut = ({ onLogin }: HeaderLoggedOutProps) => {
+const HeaderLoggedOut = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const { setLoggedIn } = useContext(AuthContext);
 
   const loginHandler = async (event: FormEvent) => {
     event.preventDefault();
@@ -26,7 +28,7 @@ const HeaderLoggedOut = ({ onLogin }: HeaderLoggedOutProps) => {
         localStorage.setItem('complexappToken', response.data.token);
         localStorage.setItem('complexappUsername', response.data.username);
         localStorage.setItem('complexappAvatar', response.data.avatar);
-        onLogin();
+        setLoggedIn(true);
       } else {
         console.log('Incorrect username / password');
       }
