@@ -1,8 +1,6 @@
 import { useContext } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
-import { AuthContext } from './context/auth-context';
-
 import Footer from './components/Footer/Footer';
 import Header from './components/Header/Header';
 import HomeGuest from './pages/HomeGuest/HomeGuest';
@@ -17,11 +15,12 @@ import ViewSinglePost from './pages/ViewSinglePost/ViewSinglePost';
 import FlashMessages from './components/FlashMessages/FlashMessages';
 
 import './main.css';
+import { AppStateContext } from './context/app-context';
 
 axios.defaults.baseURL = 'http://localhost:8080';
 
 const App = () => {
-  const { loggedIn } = useContext(AuthContext);
+  const { loggedIn } = useContext(AppStateContext);
 
   return (
     <BrowserRouter>

@@ -1,11 +1,11 @@
 import { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { AuthContext } from '../../context/auth-context';
+import { AppStateContext } from '../../context/app-context';
 import HeaderLoggedIn from './HeaderLoggedIn';
 import HeaderLoggedOut from './HeaderLoggedOut';
 
 const Header = () => {
-  const { loggedIn } = useContext(AuthContext);
+  const { loggedIn } = useContext(AppStateContext);
 
   return (
     <header className="header-bar bg-primary mb-3">
