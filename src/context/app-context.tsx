@@ -1,4 +1,5 @@
-import { createContext, ReactNode, useReducer, Dispatch } from 'react';
+import { createContext, ReactNode, Dispatch } from 'react';
+import { useImmerReducer } from 'use-immer';
 
 type BasicAppAction = {
   type: 'LOGIN' | 'LOGOUT';
@@ -16,45 +17,32 @@ type AppState = {
   flashMessages: string[];
 };
 
-type AppStateConext = {
-  loggedIn: boolean;
-  flashMessages: string[];
-};
-
 type AppDispatchContextType = Dispatch<AppAction>;
 
-const reducer = (state: AppState, action: AppAction): AppState => {
+const reducer = (draft: AppState, action: AppAction): void => {
   switch (action.type) {
     case 'ADD_FLASH_MESSAGE':
-      return {
-        loggedIn: state.loggedIn,
-        flashMessages: [...state.flashMessages, action.payload],
-      };
-    case 'LOGOUT':
-      return {
-        loggedIn: false,
-        flashMessages: state.flashMessages,
-      };
+      draft.flashMessages.push(action.payload);
+      break;
     case 'LOGIN':
-      return {
-        loggedIn: true,
-        flashMessages: state.flashMessages,
-      };
+      draft.loggedIn = true;
+      break;
+    case 'LOGOUT':
+      draft.loggedIn = false;
+      break;
     default:
-      return state;
+      break;
   }
 };
 
-export const AppStateContext = createContext<AppStateConext>(
-  {} as AppStateConext
-);
+export const AppStateContext = createContext<AppState>({} as AppState);
 
 export const AppDispatchContext = createContext<AppDispatchContextType>(
   {} as AppDispatchContextType
 );
 
 export const AppContextProvider = ({ children }: { children: ReactNode }) => {
-  const [state, dispatch] = useReducer(reducer, {
+  const [state, dispatch] = useImmerReducer(reducer, {
     loggedIn: Boolean(localStorage.getItem('complexappToken')),
     flashMessages: [],
   });
