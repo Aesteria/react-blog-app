@@ -16,11 +16,24 @@ import FlashMessages from './components/FlashMessages/FlashMessages';
 
 import './main.css';
 import { AppStateContext } from './context/app-context';
+import { useEffect } from 'react';
 
 axios.defaults.baseURL = 'http://localhost:8080';
 
 const App = () => {
-  const { loggedIn } = useContext(AppStateContext);
+  const { loggedIn, user } = useContext(AppStateContext);
+
+  useEffect(() => {
+    if (loggedIn) {
+      localStorage.setItem('complexappToken', user.token);
+      localStorage.setItem('complexappUsername', user.username);
+      localStorage.setItem('complexappAvatar', user.avatar);
+    } else {
+      localStorage.removeItem('complexappToken');
+      localStorage.removeItem('complexappUsername');
+      localStorage.removeItem('complexappAvatar');
+    }
+  }, [loggedIn, user.token, user.username, user.avatar]);
 
   return (
     <BrowserRouter>

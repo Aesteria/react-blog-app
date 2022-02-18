@@ -7,10 +7,6 @@ const HeaderLoggedIn = () => {
 
   const logoutHandler = () => {
     dispatch({ type: 'LOGOUT' });
-
-    localStorage.removeItem('complexappToken');
-    localStorage.removeItem('complexappUsername');
-    localStorage.removeItem('complexappAvatar');
   };
 
   const avatarSrc = localStorage.getItem('complexappAvatar') as string;
