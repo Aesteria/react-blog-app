@@ -1,12 +1,14 @@
+import { useContext } from 'react';
+import { AppStateContext } from '../../context/app-context';
 import Page from '../Page/Page';
 
 const Home = () => {
-  const username = localStorage.getItem('complexappUsername') as string;
+  const { user } = useContext(AppStateContext);
 
   return (
     <Page title="Your Feed">
       <h2 className="text-center">
-        Hello <strong>{username}</strong>, your feed is empty.
+        Hello <strong>{user.username}</strong>, your feed is empty.
       </h2>
       <p className="lead text-muted text-center">
         Your feed displays the latest posts from the people you follow. If you

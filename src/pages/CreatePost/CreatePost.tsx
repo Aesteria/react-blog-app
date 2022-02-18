@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { FormEvent, useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AppDispatchContext } from '../../context/app-context';
+import { AppDispatchContext, AppStateContext } from '../../context/app-context';
 import Page from '../Page/Page';
 
 type PostId = string;
@@ -11,6 +11,7 @@ const CreatePost = () => {
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
   const dispatch = useContext(AppDispatchContext);
+  const { user } = useContext(AppStateContext);
 
   const submitPostHandler = async (event: FormEvent) => {
     event.preventDefault();
@@ -19,7 +20,7 @@ const CreatePost = () => {
       const response = await axios.post<PostId>('/create-post', {
         title,
         body,
-        token: localStorage.getItem('complexappToken'),
+        token: user.token,
       });
       dispatch({
         type: 'ADD_FLASH_MESSAGE',

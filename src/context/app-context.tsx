@@ -60,8 +60,6 @@ export const AppContextProvider = ({ children }: { children: ReactNode }) => {
     },
   });
 
-  console.log(state.user);
-
   return (
     <AppDispatchContext.Provider value={dispatch}>
       <AppStateContext.Provider value={state}>
