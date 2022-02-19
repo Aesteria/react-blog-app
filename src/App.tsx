@@ -1,22 +1,23 @@
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import axios from 'axios';
 
 import Footer from './components/Footer/Footer';
 import Header from './components/Header/Header';
-import HomeGuest from './pages/HomeGuest/HomeGuest';
 
+import HomeGuest from './pages/HomeGuest/HomeGuest';
 import About from './pages/About/About';
 import Terms from './pages/Terms/Terms';
-
-import Home from './pages/Home/Home';
-import CreatePost from './pages/CreatePost/CreatePost';
-import axios from 'axios';
 import ViewSinglePost from './pages/ViewSinglePost/ViewSinglePost';
+import CreatePost from './pages/CreatePost/CreatePost';
+import Home from './pages/Home/Home';
+import Profile from './pages/Profile/Profile';
+
 import FlashMessages from './components/FlashMessages/FlashMessages';
 
-import './main.css';
 import { AppStateContext } from './context/app-context';
-import { useEffect } from 'react';
+
+import './main.css';
 
 axios.defaults.baseURL = 'http://localhost:8080';
 
@@ -45,6 +46,7 @@ const App = () => {
         <Route path="/create-post" element={<CreatePost />} />
         <Route path="/about-us" element={<About />} />
         <Route path="/terms" element={<Terms />} />
+        <Route path="/profile/:username" element={<Profile />} />
       </Routes>
       <Footer />
     </BrowserRouter>

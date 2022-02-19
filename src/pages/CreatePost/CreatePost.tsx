@@ -26,6 +26,7 @@ const CreatePost = () => {
         type: 'ADD_FLASH_MESSAGE',
         payload: 'Congrats, you succesfully created a post',
       });
+      // change url to see post that was created.
       navigate(`/post/${response.data}`);
 
       console.log('Post was succesfully created.');
