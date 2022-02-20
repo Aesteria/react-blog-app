@@ -5,6 +5,7 @@ import LoadingDotsIcon from '../../components/LoadingDotsIcon/LoadingDotsIcon';
 import { Post } from '../../types/Post';
 import { formatDate } from '../../utils/formatDate';
 import Page from '../Page/Page';
+import ReactMarkdown from 'react-markdown';
 
 const ViewSinglePost = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -72,7 +73,9 @@ const ViewSinglePost = () => {
         on {dateFormatted}
       </p>
 
-      <div className="body-content">{post.body}</div>
+      <div className="body-content">
+        <ReactMarkdown children={post.body} />
+      </div>
     </Page>
   );
 };
