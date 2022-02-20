@@ -11,17 +11,25 @@ const ProfilePosts = () => {
   const { username } = useParams();
 
   useEffect(() => {
+    const source = axios.CancelToken.source();
+
     const fetchPosts = async () => {
       try {
-        const response = await axios.get<Post[]>(`/profile/${username}/posts`);
+        const response = await axios.get<Post[]>(`/profile/${username}/posts`, {
+          cancelToken: source.token,
+        });
         setPosts(response.data);
         setIsLoading(false);
-      } catch (e) {
+      } catch (e: any) {
         console.log('There was a problem fetching profile posts');
       }
     };
 
     fetchPosts();
+
+    return () => {
+      source.cancel('The request was cancelled');
+    };
   }, [username]);
 
   if (isLoading) {

@@ -12,9 +12,13 @@ const ViewSinglePost = () => {
   const { id } = useParams();
 
   useEffect(() => {
+    const source = axios.CancelToken.source();
+
     const fetchPost = async () => {
       try {
-        const response = await axios.get<Post>(`/post/${id}`);
+        const response = await axios.get<Post>(`/post/${id}`, {
+          cancelToken: source.token,
+        });
         setPost(response.data);
         setIsLoading(false);
       } catch (e) {
@@ -23,6 +27,10 @@ const ViewSinglePost = () => {
     };
 
     fetchPost();
+
+    return () => {
+      source.cancel('The request was cancelled.');
+    };
   }, [id]);
 
   if (isLoading) {

@@ -27,11 +27,19 @@ const Profile = () => {
   } = userProfile;
 
   useEffect(() => {
+    const source = axios.CancelToken.source();
+
     const fetchData = async () => {
       try {
-        const response = await axios.post<ProfileData>(`/profile/${username}`, {
-          token: user.token,
-        });
+        const response = await axios.post<ProfileData>(
+          `/profile/${username}`,
+          {
+            token: user.token,
+          },
+          {
+            cancelToken: source.token,
+          }
+        );
         setUserProfile(response.data);
       } catch (e) {
         console.log('There was a problem loading profile');
@@ -39,6 +47,10 @@ const Profile = () => {
     };
 
     fetchData();
+
+    return () => {
+      source.cancel('The request was cancelled');
+    };
   }, [username, user.token]);
 
   return (
