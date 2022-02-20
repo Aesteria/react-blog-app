@@ -6,6 +6,7 @@ import { Post } from '../../types/Post';
 import { formatDate } from '../../utils/formatDate';
 import Page from '../Page/Page';
 import ReactMarkdown from 'react-markdown';
+import ReactTooltip from 'react-tooltip';
 
 const ViewSinglePost = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -49,12 +50,14 @@ const ViewSinglePost = () => {
       <div className="d-flex justify-content-between">
         <h2>{post.title}</h2>
         <span className="pt-2">
-          <a href="#" className="text-primary mr-2" title="Edit">
+          <a href="#" className="text-primary mr-2" data-tip="Edit">
             <i className="fas fa-edit"></i>
           </a>
-          <a className="delete-post-button text-danger" title="Delete">
+          <ReactTooltip />{' '}
+          <a className="delete-post-button text-danger" data-tip="Delete">
             <i className="fas fa-trash"></i>
           </a>
+          <ReactTooltip />
         </span>
       </div>
 
