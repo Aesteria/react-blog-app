@@ -1,19 +1,18 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { ProfilePost } from '../../types/Profile';
+import { Post } from '../../types/Post';
+import { formatDate } from '../../utils/formatDate';
 
 const ProfilePosts = () => {
-  const [posts, setPosts] = useState<ProfilePost[] | []>([]);
+  const [posts, setPosts] = useState<Post[] | []>([]);
   const [isLoading, setIsLoading] = useState(true);
   const { username } = useParams();
 
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await axios.get<ProfilePost[]>(
-          `/profile/${username}/posts`
-        );
+        const response = await axios.get<Post[]>(`/profile/${username}/posts`);
         setPosts(response.data);
         setIsLoading(false);
       } catch (e) {
@@ -31,10 +30,7 @@ const ProfilePosts = () => {
   return (
     <div className="list-group">
       {posts.map(({ _id, author: { avatar }, title, createdDate }) => {
-        const date = new Date(createdDate);
-        const dateFormatted = `${
-          date.getMonth() + 1
-        }/${date.getDate()}/${date.getFullYear()}`;
+        const dateFormatted = formatDate(createdDate);
 
         return (
           <Link
