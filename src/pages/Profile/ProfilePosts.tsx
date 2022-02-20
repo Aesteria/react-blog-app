@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import LoadingDotsIcon from '../../components/LoadingDotsIcon/LoadingDotsIcon';
 import { Post } from '../../types/Post';
 import { formatDate } from '../../utils/formatDate';
 
@@ -24,7 +25,7 @@ const ProfilePosts = () => {
   }, [username]);
 
   if (isLoading) {
-    return <p>Loading...</p>;
+    return <LoadingDotsIcon />;
   }
 
   return (
