@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { AppDispatchContext, AppStateContext } from '../../context/app-context';
+import { AppDispatchContext, AppStateContext } from '../../context/appContext';
 
 const HeaderLoggedIn = () => {
   const dispatch = useContext(AppDispatchContext);

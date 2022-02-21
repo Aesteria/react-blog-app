@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { AppStateContext } from '../../context/app-context';
+import { AppStateContext } from '../../context/appContext';
 import HeaderLoggedIn from './HeaderLoggedIn';
 import HeaderLoggedOut from './HeaderLoggedOut';
 

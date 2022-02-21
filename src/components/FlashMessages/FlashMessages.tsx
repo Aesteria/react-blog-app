@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { AppStateContext } from '../../context/app-context';
+import { AppStateContext } from '../../context/appContext';
 
 const FlashMessages = () => {
   const { flashMessages } = useContext(AppStateContext);

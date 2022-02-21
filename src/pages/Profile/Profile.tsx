@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { AppStateContext } from '../../context/app-context';
+import { AppStateContext } from '../../context/appContext';
 import { ProfileData } from '../../types/Profile';
 import Page from '../Page/Page';
 import ProfilePosts from './ProfilePosts';

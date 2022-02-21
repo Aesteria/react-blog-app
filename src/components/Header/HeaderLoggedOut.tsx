@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { FormEvent, useContext, useState } from 'react';
-import { AppDispatchContext } from '../../context/app-context';
+import { AppDispatchContext } from '../../context/appContext';
 import { User } from '../../types/User';
 
 const HeaderLoggedOut = () => {

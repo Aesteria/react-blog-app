@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { FormEvent, useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AppDispatchContext, AppStateContext } from '../../context/app-context';
+import { AppDispatchContext, AppStateContext } from '../../context/appContext';
 import Page from '../Page/Page';
 
 type PostId = string;

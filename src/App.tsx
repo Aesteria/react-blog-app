@@ -15,9 +15,10 @@ import Profile from './pages/Profile/Profile';
 
 import FlashMessages from './components/FlashMessages/FlashMessages';
 
-import { AppStateContext } from './context/app-context';
+import { AppStateContext } from './context/appContext';
 
 import './main.css';
+import EditPost from './pages/EditPost/EditPost';
 
 axios.defaults.baseURL = 'http://localhost:8080';
 
@@ -43,6 +44,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={loggedIn ? <Home /> : <HomeGuest />} />
         <Route path="/post/:id" element={<ViewSinglePost />} />
+        <Route path="/post/:id/edit" element={<EditPost />} />
         <Route path="/create-post" element={<CreatePost />} />
         <Route path="/about-us" element={<About />} />
         <Route path="/terms" element={<Terms />} />
