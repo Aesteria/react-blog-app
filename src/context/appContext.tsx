@@ -1,6 +1,6 @@
 import { createContext, ReactNode, Dispatch } from 'react';
 import { useImmerReducer } from 'use-immer';
-import { User } from '../types/User';
+import { User } from '../types/user';
 
 type LoginAppAction = {
   type: 'LOGIN';

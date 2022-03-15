@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { FormEvent, useContext, useState } from 'react';
 import { AppDispatchContext } from '../../context/appContext';
-import { User } from '../../types/User';
+import { User } from '../../types/user';
 
 const HeaderLoggedOut = () => {
   const [username, setUsername] = useState('');

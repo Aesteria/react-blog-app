@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import LoadingDotsIcon from '../../components/LoadingDotsIcon/LoadingDotsIcon';
-import { Post } from '../../types/Post';
+import { Post } from '../../types/post';
 import { formatDate } from '../../utils/formatDate';
 import Page from '../Page/Page';
 import ReactMarkdown from 'react-markdown';
