@@ -28,8 +28,18 @@ const EditPost = () => {
   const { user } = useContext(AppStateContext);
   const appDispatch = useContext(AppDispatchContext);
 
+  let formIsValid = false;
+
+  if (!state.body.hasError && !state.title.hasError) {
+    formIsValid = true;
+  }
+
   const submitEditPostHandler = (event: FormEvent) => {
     event.preventDefault();
+
+    if (!formIsValid) {
+      return;
+    }
 
     if (!state.title.hasError) {
       // create axios cancel token to abort request when component is unmounted
@@ -142,6 +152,11 @@ const EditPost = () => {
               dispatch({ type: 'changeBody', payload: e.target.value })
             }
           />
+          {state.body.hasError && (
+            <div className="alert alert-danger small liveValidateMessage">
+              {state.body.errorMessage}
+            </div>
+          )}
         </div>
 
         <button className="btn btn-primary" disabled={state.isSaving}>
