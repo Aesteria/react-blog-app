@@ -19,6 +19,7 @@ import { AppStateContext } from './context/appContext';
 
 import './main.css';
 import EditPost from './pages/EditPost/EditPost';
+import NotFound from './pages/NotFound/NotFound';
 
 axios.defaults.baseURL = 'http://localhost:8080';
 
@@ -49,6 +50,7 @@ const App = () => {
         <Route path="/about-us" element={<About />} />
         <Route path="/terms" element={<Terms />} />
         <Route path="/profile/:username" element={<Profile />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />
     </BrowserRouter>

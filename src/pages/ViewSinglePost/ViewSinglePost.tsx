@@ -7,6 +7,7 @@ import { formatDate } from '../../utils/formatDate';
 import Page from '../Page/Page';
 import ReactMarkdown from 'react-markdown';
 import ReactTooltip from 'react-tooltip';
+import NotFound from '../NotFound/NotFound';
 
 const ViewSinglePost = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -34,6 +35,10 @@ const ViewSinglePost = () => {
       source.cancel('The request was cancelled.');
     };
   }, [id]);
+
+  if (!isLoading && !post) {
+    return <NotFound />;
+  }
 
   if (isLoading) {
     return (
