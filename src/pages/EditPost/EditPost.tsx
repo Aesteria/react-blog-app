@@ -1,11 +1,12 @@
 import axios, { CancelTokenSource } from 'axios';
-import { FormEvent, useContext, useEffect, useMemo, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { FormEvent, useContext, useEffect } from 'react';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useImmerReducer } from 'use-immer';
 import LoadingDotsIcon from '../../components/LoadingDotsIcon/LoadingDotsIcon';
 import { AppDispatchContext, AppStateContext } from '../../context/appContext';
 import { editPostReducer } from '../../reducers/editPostReducer/editPostReducer';
 import { Post } from '../../types/post';
+import NotFound from '../NotFound/NotFound';
 import Page from '../Page/Page';
 
 const EditPost = () => {
@@ -24,9 +25,11 @@ const EditPost = () => {
     isSaving: false,
     id: useParams().id as string,
     submitCancelToken: {} as CancelTokenSource,
+    notFound: false,
   });
   const { user } = useContext(AppStateContext);
   const appDispatch = useContext(AppDispatchContext);
+  const navigate = useNavigate();
 
   let formIsValid = false;
 
@@ -82,7 +85,26 @@ const EditPost = () => {
         const response = await axios.get<Post>(`post/${state.id}`, {
           cancelToken: source.token,
         });
-        dispatch({ type: 'fetchResolved', payload: response.data });
+
+        const checkPermission = (data: Post) => {
+          const isAuthor = response.data.author.username === user.username;
+
+          if (isAuthor) {
+            dispatch({ type: 'fetchResolved', payload: response.data });
+          } else {
+            appDispatch({
+              type: 'ADD_FLASH_MESSAGE',
+              payload: "You don't have permission to edit that post",
+            });
+            navigate('/');
+          }
+        };
+
+        if (response.data) {
+          checkPermission(response.data);
+        } else {
+          dispatch({ type: 'notFound' });
+        }
       } catch (e: any) {
         console.log(e.message || 'There was a problem');
       }
@@ -93,7 +115,7 @@ const EditPost = () => {
     return () => {
       source.cancel('Fetch post data was cancelled.');
     };
-  }, [state.id, dispatch]);
+  }, [state.id, dispatch, user.username, appDispatch, navigate]);
 
   // Cleanup function when post was saved
   useEffect(() => {
@@ -103,6 +125,10 @@ const EditPost = () => {
       };
     }
   }, [state.submitCancelToken]);
+
+  if (state.notFound) {
+    return <NotFound />;
+  }
 
   if (state.isFetching) {
     return (
@@ -114,7 +140,11 @@ const EditPost = () => {
 
   return (
     <Page title="Edit Post">
-      <form onSubmit={submitEditPostHandler}>
+      <Link className="small font-weight-bold" to={`/post/${state.id}`}>
+        &laquo; Back to viewing post
+      </Link>
+
+      <form className="mt-3" onSubmit={submitEditPostHandler}>
         <div className="form-group">
           <label htmlFor="post-title" className="text-muted mb-1">
             <small>Title</small>

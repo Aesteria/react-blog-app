@@ -29,10 +29,15 @@ type SetCancelSource = {
   payload: CancelTokenSource;
 };
 
+type NotFound = {
+  type: 'notFound';
+};
+
 export type EditPostAction =
   | EditPostFetch
   | EditPostTitle
   | EditPostBody
   | SavePostResolved
   | SavePostPending
-  | SetCancelSource;
+  | SetCancelSource
+  | NotFound;

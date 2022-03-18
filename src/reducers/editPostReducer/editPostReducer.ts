@@ -16,6 +16,7 @@ export type EditPostState = {
   isSaving: boolean;
   id: string;
   submitCancelToken: CancelTokenSource;
+  notFound: boolean;
 };
 
 export const editPostReducer = (
@@ -54,6 +55,9 @@ export const editPostReducer = (
       break;
     case 'setCancelSource':
       draft.submitCancelToken = action.payload;
+      break;
+    case 'notFound':
+      draft.notFound = true;
       break;
     default:
       break;
