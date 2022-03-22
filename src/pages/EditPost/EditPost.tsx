@@ -5,36 +5,49 @@ import { useImmerReducer } from 'use-immer';
 import { ApiService } from '../../api/ApiService';
 import LoadingDotsIcon from '../../components/LoadingDotsIcon/LoadingDotsIcon';
 import { AppDispatchContext, AppStateContext } from '../../context/appContext';
+import { useInput } from '../../hooks/useInput';
 import { editPostReducer } from '../../reducers/editPostReducer/editPostReducer';
 import { Post } from '../../types/post';
+import { isNotEmpty } from '../../utils/validate';
 import NotFound from '../NotFound/NotFound';
 import Page from '../Page/Page';
 
 const EditPost = () => {
   const [state, dispatch] = useImmerReducer(editPostReducer, {
-    body: {
-      value: '',
-      hasError: false,
-      errorMessage: '',
-    },
-    title: {
-      value: '',
-      hasError: false,
-      errorMessage: '',
-    },
     isFetching: true,
     isSaving: false,
     id: useParams().id as string,
     submitCancelToken: {} as CancelTokenSource,
     notFound: false,
+    value: '',
+    body: '',
   });
+  const {
+    value: title,
+    error: titleErrorMessage,
+    valueHasErrors: titleHasErrors,
+    valueChangeHandler: titleChangeHandler,
+    valueBlurHandler: titleBlurHandler,
+    valueIsValid: titleIsValid,
+    setValue: setTitle,
+  } = useInput('title', isNotEmpty);
+
+  const {
+    value: body,
+    error: bodyErrorMessage,
+    valueHasErrors: bodyHasErrors,
+    valueChangeHandler: bodyChangeHandler,
+    valueBlurHandler: bodyBlurHandler,
+    valueIsValid: bodyIsValid,
+    setValue: setBody,
+  } = useInput('body', isNotEmpty);
   const { user } = useContext(AppStateContext);
   const appDispatch = useContext(AppDispatchContext);
   const navigate = useNavigate();
 
   let formIsValid = false;
 
-  if (!state.body.hasError && !state.title.hasError) {
+  if (titleIsValid && bodyIsValid) {
     formIsValid = true;
   }
 
@@ -45,35 +58,33 @@ const EditPost = () => {
       return;
     }
 
-    if (!state.title.hasError) {
-      // create axios cancel token to abort request when component is unmounted
-      const cancelTokenSource = axios.CancelToken.source();
-      dispatch({ type: 'setCancelSource', payload: cancelTokenSource });
+    // create axios cancel token to abort request when component is unmounted
+    const cancelTokenSource = axios.CancelToken.source();
+    dispatch({ type: 'setCancelSource', payload: cancelTokenSource });
 
-      const fetchData = async () => {
-        try {
-          dispatch({ type: 'savePending' });
-          await ApiService.editPost(
-            state.id,
-            {
-              title: state.title.value,
-              body: state.body.value,
-              token: user.token,
-            },
-            { cancelToken: cancelTokenSource.token }
-          );
-          dispatch({ type: 'saveResolved' });
-          appDispatch({
-            type: 'ADD_FLASH_MESSAGE',
-            payload: 'Post was updated',
-          });
-        } catch (e: any) {
-          console.log(e.message || 'There was a problem while submit form');
-        }
-      };
+    const fetchData = async () => {
+      try {
+        dispatch({ type: 'savePending' });
+        await ApiService.editPost(
+          state.id,
+          {
+            title: title,
+            body: body,
+            token: user.token,
+          },
+          { cancelToken: cancelTokenSource.token }
+        );
+        dispatch({ type: 'saveResolved' });
+        appDispatch({
+          type: 'ADD_FLASH_MESSAGE',
+          payload: 'Post was updated',
+        });
+      } catch (e: any) {
+        console.log(e.message || 'There was a problem while submit form');
+      }
+    };
 
-      fetchData();
-    }
+    fetchData();
   };
 
   useEffect(() => {
@@ -89,6 +100,8 @@ const EditPost = () => {
           const isAuthor = data.author.username === user.username;
 
           if (isAuthor) {
+            setTitle(response.data.title);
+            setBody(response.data.body);
             dispatch({ type: 'fetchResolved', payload: response.data });
           } else {
             appDispatch({
@@ -114,7 +127,15 @@ const EditPost = () => {
     return () => {
       source.cancel('Fetch post data was cancelled.');
     };
-  }, [state.id, dispatch, user.username, appDispatch, navigate]);
+  }, [
+    state.id,
+    dispatch,
+    user.username,
+    appDispatch,
+    navigate,
+    setBody,
+    setTitle,
+  ]);
 
   // Cleanup function when post was saved
   useEffect(() => {
@@ -156,14 +177,13 @@ const EditPost = () => {
             type="text"
             placeholder=""
             autoComplete="off"
-            value={state.title.value}
-            onChange={(e) => {
-              dispatch({ type: 'changeTitle', payload: e.target.value });
-            }}
+            value={title}
+            onChange={titleChangeHandler}
+            onBlur={titleBlurHandler}
           />
-          {state.title.hasError && (
+          {titleHasErrors && (
             <div className="alert alert-danger small liveValidateMessage">
-              {state.title.errorMessage}
+              {titleErrorMessage}
             </div>
           )}
         </div>
@@ -176,14 +196,13 @@ const EditPost = () => {
             name="body"
             id="post-body"
             className="body-content tall-textarea form-control"
-            value={state.body.value}
-            onChange={(e) =>
-              dispatch({ type: 'changeBody', payload: e.target.value })
-            }
+            value={body}
+            onChange={bodyChangeHandler}
+            onBlur={bodyBlurHandler}
           />
-          {state.body.hasError && (
+          {bodyHasErrors && (
             <div className="alert alert-danger small liveValidateMessage">
-              {state.body.errorMessage}
+              {bodyErrorMessage}
             </div>
           )}
         </div>
