@@ -2,16 +2,40 @@ import { FormEvent, useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ApiService } from '../../api/ApiService';
 import { AppDispatchContext, AppStateContext } from '../../context/appContext';
+import { useInput } from '../../hooks/useInput';
+import { isNotEmpty } from '../../utils/validate';
 import Page from '../Page/Page';
 
 const CreatePost = () => {
   const navigate = useNavigate();
-  const [title, setTitle] = useState('');
-  const [body, setBody] = useState('');
+  const {
+    value: title,
+    error: titleErrorMessage,
+    valueHasErrors: titleHasErrors,
+    valueChangeHandler: titleChangeHandler,
+    valueBlurHandler: titleBlurHandler,
+    valueIsValid: titleIsValid,
+  } = useInput('title', isNotEmpty);
+
+  const {
+    value: body,
+    error: bodyErrorMessage,
+    valueHasErrors: bodyHasErrors,
+    valueChangeHandler: bodyChangeHandler,
+    valueBlurHandler: bodyBlurHandler,
+    valueIsValid: bodyIsValid,
+  } = useInput('body', isNotEmpty);
+
   const dispatch = useContext(AppDispatchContext);
   const {
     user: { token },
   } = useContext(AppStateContext);
+
+  let formIsValid = false;
+
+  if (titleIsValid && bodyIsValid) {
+    formIsValid = true;
+  }
 
   const submitPostHandler = async (event: FormEvent) => {
     event.preventDefault();
@@ -46,9 +70,15 @@ const CreatePost = () => {
             type="text"
             placeholder=""
             autoComplete="off"
-            onChange={(event) => setTitle(event.target.value)}
+            onChange={titleChangeHandler}
+            onBlur={titleBlurHandler}
             value={title}
           />
+          {titleHasErrors && (
+            <p style={{ color: 'red', fontWeight: 'bold' }}>
+              {titleErrorMessage}
+            </p>
+          )}
         </div>
 
         <div className="form-group">
@@ -59,12 +89,20 @@ const CreatePost = () => {
             name="body"
             id="post-body"
             className="body-content tall-textarea form-control"
-            onChange={(event) => setBody(event.target.value)}
+            onChange={bodyChangeHandler}
+            onBlur={bodyBlurHandler}
             value={body}
           ></textarea>
+          {bodyHasErrors && (
+            <p style={{ color: 'red', fontWeight: 'bold' }}>
+              {bodyErrorMessage}
+            </p>
+          )}
         </div>
 
-        <button className="btn btn-primary">Save New Post</button>
+        <button disabled={!formIsValid} className="btn btn-primary">
+          Save New Post
+        </button>
       </form>
     </Page>
   );
