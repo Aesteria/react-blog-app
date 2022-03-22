@@ -3,6 +3,7 @@ import { FormEvent, useContext, useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useImmerReducer } from 'use-immer';
 import { ApiService } from '../../api/ApiService';
+import FormPost from '../../components/FormPost/FormPost';
 import LoadingDotsIcon from '../../components/LoadingDotsIcon/LoadingDotsIcon';
 import { AppDispatchContext, AppStateContext } from '../../context/appContext';
 import { useInput } from '../../hooks/useInput';
@@ -19,8 +20,6 @@ const EditPost = () => {
     id: useParams().id as string,
     submitCancelToken: {} as CancelTokenSource,
     notFound: false,
-    value: '',
-    body: '',
   });
   const {
     value: title,
@@ -31,7 +30,6 @@ const EditPost = () => {
     valueIsValid: titleIsValid,
     setValue: setTitle,
   } = useInput('title', isNotEmpty);
-
   const {
     value: body,
     error: bodyErrorMessage,
@@ -41,6 +39,7 @@ const EditPost = () => {
     valueIsValid: bodyIsValid,
     setValue: setBody,
   } = useInput('body', isNotEmpty);
+
   const { user } = useContext(AppStateContext);
   const appDispatch = useContext(AppDispatchContext);
   const navigate = useNavigate();
@@ -164,56 +163,20 @@ const EditPost = () => {
         &laquo; Back to viewing post
       </Link>
 
-      <form className="mt-3" onSubmit={submitHandler}>
-        <div className="form-group">
-          <label htmlFor="post-title" className="text-muted mb-1">
-            <small>Title</small>
-          </label>
-          <input
-            autoFocus
-            name="title"
-            id="post-title"
-            className="form-control form-control-lg form-control-title"
-            type="text"
-            placeholder=""
-            autoComplete="off"
-            value={title}
-            onChange={titleChangeHandler}
-            onBlur={titleBlurHandler}
-          />
-          {titleHasErrors && (
-            <div className="alert alert-danger small liveValidateMessage">
-              {titleErrorMessage}
-            </div>
-          )}
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="post-body" className="text-muted mb-1 d-block">
-            <small>Body Content</small>
-          </label>
-          <textarea
-            name="body"
-            id="post-body"
-            className="body-content tall-textarea form-control"
-            value={body}
-            onChange={bodyChangeHandler}
-            onBlur={bodyBlurHandler}
-          />
-          {bodyHasErrors && (
-            <div className="alert alert-danger small liveValidateMessage">
-              {bodyErrorMessage}
-            </div>
-          )}
-        </div>
-
-        <button
-          className="btn btn-primary"
-          disabled={!formIsValid || state.isSaving}
-        >
-          Save Updates
-        </button>
-      </form>
+      <FormPost
+        submitHandler={submitHandler}
+        titleChangeHandler={titleChangeHandler}
+        titleBlurHandler={titleBlurHandler}
+        titleHasErrors={titleHasErrors}
+        titleErrorMessage={titleErrorMessage}
+        title={title}
+        bodyChangeHandler={bodyChangeHandler}
+        bodyBlurHandler={bodyBlurHandler}
+        bodyHasErrors={bodyHasErrors}
+        bodyErrorMessage={bodyErrorMessage}
+        body={body}
+        formIsValid={formIsValid}
+      />
     </Page>
   );
 };

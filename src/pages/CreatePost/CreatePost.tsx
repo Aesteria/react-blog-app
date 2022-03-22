@@ -1,6 +1,7 @@
 import { FormEvent, useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ApiService } from '../../api/ApiService';
+import FormPost from '../../components/FormPost/FormPost';
 import { AppDispatchContext, AppStateContext } from '../../context/appContext';
 import { useInput } from '../../hooks/useInput';
 import { isNotEmpty } from '../../utils/validate';
@@ -57,53 +58,20 @@ const CreatePost = () => {
 
   return (
     <Page title="Create New Post">
-      <form onSubmit={submitHandler}>
-        <div className="form-group">
-          <label htmlFor="post-title" className="text-muted mb-1">
-            <small>Title</small>
-          </label>
-          <input
-            autoFocus
-            name="title"
-            id="post-title"
-            className="form-control form-control-lg form-control-title"
-            type="text"
-            placeholder=""
-            autoComplete="off"
-            onChange={titleChangeHandler}
-            onBlur={titleBlurHandler}
-            value={title}
-          />
-          {titleHasErrors && (
-            <div className="alert alert-danger small liveValidateMessage">
-              {titleErrorMessage}
-            </div>
-          )}
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="post-body" className="text-muted mb-1 d-block">
-            <small>Body Content</small>
-          </label>
-          <textarea
-            name="body"
-            id="post-body"
-            className="body-content tall-textarea form-control"
-            onChange={bodyChangeHandler}
-            onBlur={bodyBlurHandler}
-            value={body}
-          ></textarea>
-          {bodyHasErrors && (
-            <div className="alert alert-danger small liveValidateMessage">
-              {bodyErrorMessage}
-            </div>
-          )}
-        </div>
-
-        <button disabled={!formIsValid} className="btn btn-primary">
-          Save New Post
-        </button>
-      </form>
+      <FormPost
+        submitHandler={submitHandler}
+        titleChangeHandler={titleChangeHandler}
+        titleBlurHandler={titleBlurHandler}
+        titleHasErrors={titleHasErrors}
+        titleErrorMessage={titleErrorMessage}
+        title={title}
+        bodyChangeHandler={bodyChangeHandler}
+        bodyBlurHandler={bodyBlurHandler}
+        bodyHasErrors={bodyHasErrors}
+        bodyErrorMessage={bodyErrorMessage}
+        body={body}
+        formIsValid={formIsValid}
+      />
     </Page>
   );
 };
