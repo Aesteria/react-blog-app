@@ -37,7 +37,7 @@ const CreatePost = () => {
     formIsValid = true;
   }
 
-  const submitPostHandler = async (event: FormEvent) => {
+  const submitHandler = async (event: FormEvent) => {
     event.preventDefault();
 
     try {
@@ -57,7 +57,7 @@ const CreatePost = () => {
 
   return (
     <Page title="Create New Post">
-      <form onSubmit={submitPostHandler}>
+      <form onSubmit={submitHandler}>
         <div className="form-group">
           <label htmlFor="post-title" className="text-muted mb-1">
             <small>Title</small>
@@ -75,9 +75,9 @@ const CreatePost = () => {
             value={title}
           />
           {titleHasErrors && (
-            <p style={{ color: 'red', fontWeight: 'bold' }}>
+            <div className="alert alert-danger small liveValidateMessage">
               {titleErrorMessage}
-            </p>
+            </div>
           )}
         </div>
 
@@ -94,9 +94,9 @@ const CreatePost = () => {
             value={body}
           ></textarea>
           {bodyHasErrors && (
-            <p style={{ color: 'red', fontWeight: 'bold' }}>
+            <div className="alert alert-danger small liveValidateMessage">
               {bodyErrorMessage}
-            </p>
+            </div>
           )}
         </div>
 

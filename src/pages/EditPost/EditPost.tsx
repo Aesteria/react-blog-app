@@ -51,7 +51,7 @@ const EditPost = () => {
     formIsValid = true;
   }
 
-  const submitEditPostHandler = (event: FormEvent) => {
+  const submitHandler = (event: FormEvent) => {
     event.preventDefault();
 
     if (!formIsValid) {
@@ -164,7 +164,7 @@ const EditPost = () => {
         &laquo; Back to viewing post
       </Link>
 
-      <form className="mt-3" onSubmit={submitEditPostHandler}>
+      <form className="mt-3" onSubmit={submitHandler}>
         <div className="form-group">
           <label htmlFor="post-title" className="text-muted mb-1">
             <small>Title</small>
