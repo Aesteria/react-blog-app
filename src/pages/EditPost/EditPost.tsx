@@ -86,7 +86,7 @@ const EditPost = () => {
         });
 
         const checkPermission = (data: Post) => {
-          const isAuthor = response.data.author.username === user.username;
+          const isAuthor = data.author.username === user.username;
 
           if (isAuthor) {
             dispatch({ type: 'fetchResolved', payload: response.data });
@@ -188,7 +188,10 @@ const EditPost = () => {
           )}
         </div>
 
-        <button className="btn btn-primary" disabled={state.isSaving}>
+        <button
+          className="btn btn-primary"
+          disabled={!formIsValid || state.isSaving}
+        >
           Save Updates
         </button>
       </form>

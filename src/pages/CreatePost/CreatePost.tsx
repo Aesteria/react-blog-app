@@ -47,6 +47,7 @@ const CreatePost = () => {
             placeholder=""
             autoComplete="off"
             onChange={(event) => setTitle(event.target.value)}
+            value={title}
           />
         </div>
 
@@ -59,6 +60,7 @@ const CreatePost = () => {
             id="post-body"
             className="body-content tall-textarea form-control"
             onChange={(event) => setBody(event.target.value)}
+            value={body}
           ></textarea>
         </div>
 
