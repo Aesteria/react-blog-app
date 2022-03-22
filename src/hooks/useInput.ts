@@ -5,6 +5,7 @@ export const useInput = (
   validateFn: (value: string) => boolean
 ) => {
   const [value, setValue] = useState('');
+
   const [isTouched, setIsTouched] = useState(false);
   const [error, setError] = useState('');
 
@@ -17,7 +18,9 @@ export const useInput = (
     setValue(event.target.value);
     setIsTouched(true);
 
-    if (!valueIsValid) setError(`You must provide a ${inputFieldName}`);
+    if (!validateFn(event.target.value)) {
+      setError(`You must provide a ${inputFieldName}`);
+    }
   };
 
   const valueBlurHandler = () => {
@@ -32,5 +35,6 @@ export const useInput = (
     valueChangeHandler,
     valueBlurHandler,
     valueIsValid,
+    setValue,
   };
 };
