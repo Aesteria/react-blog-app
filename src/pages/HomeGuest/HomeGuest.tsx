@@ -1,5 +1,5 @@
-import axios from 'axios';
 import { FormEvent, useState } from 'react';
+import { ApiService } from '../../api/ApiService';
 import Page from '../Page/Page';
 
 const HomeGuest = () => {
@@ -10,11 +10,7 @@ const HomeGuest = () => {
   const submitUserHandler = async (event: FormEvent) => {
     event.preventDefault();
     try {
-      await axios.post('/register', {
-        username,
-        email,
-        password,
-      });
+      ApiService.signup({ username, email, password });
       console.log('User was succesfully created.');
     } catch (e) {
       console.log('There was an error.');

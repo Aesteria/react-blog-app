@@ -1,27 +1,23 @@
-import axios from 'axios';
 import { FormEvent, useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { ApiService } from '../../api/ApiService';
 import { AppDispatchContext, AppStateContext } from '../../context/appContext';
 import Page from '../Page/Page';
-
-type PostId = string;
 
 const CreatePost = () => {
   const navigate = useNavigate();
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
   const dispatch = useContext(AppDispatchContext);
-  const { user } = useContext(AppStateContext);
+  const {
+    user: { token },
+  } = useContext(AppStateContext);
 
   const submitPostHandler = async (event: FormEvent) => {
     event.preventDefault();
 
     try {
-      const response = await axios.post<PostId>('/create-post', {
-        title,
-        body,
-        token: user.token,
-      });
+      const response = await ApiService.createPost({ title, body, token });
       dispatch({
         type: 'ADD_FLASH_MESSAGE',
         payload: 'Congrats, you succesfully created a post',

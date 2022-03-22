@@ -1,13 +1,13 @@
 import axios from 'axios';
 import { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { ApiService } from '../../api/ApiService';
 import { AppStateContext } from '../../context/appContext';
-import { ProfileData } from '../../types/profile';
 import Page from '../Page/Page';
 import ProfilePosts from './ProfilePosts';
 
 const Profile = () => {
-  const [userProfile, setUserProfile] = useState<ProfileData>({
+  const [userProfile, setUserProfile] = useState({
     profileUsername: '...',
     profileAvatar: 'https://gravatar.com/avatar/placeholder?s=128',
     isFollowing: false,
@@ -18,7 +18,9 @@ const Profile = () => {
     },
   });
   const { username } = useParams();
-  const { user } = useContext(AppStateContext);
+  const {
+    user: { token },
+  } = useContext(AppStateContext);
 
   const {
     profileAvatar,
@@ -31,14 +33,10 @@ const Profile = () => {
 
     const fetchData = async () => {
       try {
-        const response = await axios.post<ProfileData>(
-          `/profile/${username}`,
-          {
-            token: user.token,
-          },
-          {
-            cancelToken: source.token,
-          }
+        const response = await ApiService.fetchUserProfile(
+          username,
+          { token },
+          { cancelToken: source.token }
         );
         setUserProfile(response.data);
       } catch (e) {
@@ -51,7 +49,7 @@ const Profile = () => {
     return () => {
       source.cancel('The request was cancelled');
     };
-  }, [username, user.token]);
+  }, [username, token]);
 
   return (
     <Page title="Profile">

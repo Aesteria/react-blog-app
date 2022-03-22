@@ -8,6 +8,7 @@ import Page from '../Page/Page';
 import ReactMarkdown from 'react-markdown';
 import ReactTooltip from 'react-tooltip';
 import NotFound from '../NotFound/NotFound';
+import { ApiService } from '../../api/ApiService';
 
 const ViewSinglePost = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -19,7 +20,7 @@ const ViewSinglePost = () => {
 
     const fetchPost = async () => {
       try {
-        const response = await axios.get<Post>(`/post/${id}`, {
+        const response = await ApiService.fetchPost(id, {
           cancelToken: source.token,
         });
         setPost(response.data);

@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import { ApiService } from '../../api/ApiService';
 import LoadingDotsIcon from '../../components/LoadingDotsIcon/LoadingDotsIcon';
 import { Post } from '../../types/post';
 import { formatDate } from '../../utils/formatDate';
@@ -15,7 +16,7 @@ const ProfilePosts = () => {
 
     const fetchPosts = async () => {
       try {
-        const response = await axios.get<Post[]>(`/profile/${username}/posts`, {
+        const response = await ApiService.fetchProfilePosts(username, {
           cancelToken: source.token,
         });
         setPosts(response.data);

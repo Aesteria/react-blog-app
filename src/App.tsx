@@ -20,8 +20,9 @@ import { AppStateContext } from './context/appContext';
 import './main.css';
 import EditPost from './pages/EditPost/EditPost';
 import NotFound from './pages/NotFound/NotFound';
+import { ApiService } from './api/ApiService';
 
-axios.defaults.baseURL = 'http://localhost:8080';
+axios.defaults.baseURL = ApiService.baseURL;
 
 const App = () => {
   const { loggedIn, user } = useContext(AppStateContext);

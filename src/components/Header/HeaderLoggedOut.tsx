@@ -1,7 +1,6 @@
-import axios from 'axios';
 import { FormEvent, useContext, useState } from 'react';
+import { ApiService } from '../../api/ApiService';
 import { AppDispatchContext } from '../../context/appContext';
-import { User } from '../../types/user';
 
 const HeaderLoggedOut = () => {
   const [username, setUsername] = useState('');
@@ -12,10 +11,7 @@ const HeaderLoggedOut = () => {
     event.preventDefault();
 
     try {
-      const response = await axios.post<User>('/login', {
-        username,
-        password,
-      });
+      const response = await ApiService.login({ username, password });
 
       if (response.data) {
         dispatch({ type: 'LOGIN', payload: response.data });

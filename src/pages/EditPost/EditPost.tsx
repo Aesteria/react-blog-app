@@ -2,6 +2,7 @@ import axios, { CancelTokenSource } from 'axios';
 import { FormEvent, useContext, useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useImmerReducer } from 'use-immer';
+import { ApiService } from '../../api/ApiService';
 import LoadingDotsIcon from '../../components/LoadingDotsIcon/LoadingDotsIcon';
 import { AppDispatchContext, AppStateContext } from '../../context/appContext';
 import { editPostReducer } from '../../reducers/editPostReducer/editPostReducer';
@@ -52,16 +53,14 @@ const EditPost = () => {
       const fetchData = async () => {
         try {
           dispatch({ type: 'savePending' });
-          const response = await axios.post<Post>(
-            `post/${state.id}/edit`,
+          await ApiService.editPost(
+            state.id,
             {
               title: state.title.value,
               body: state.body.value,
               token: user.token,
             },
-            {
-              cancelToken: cancelTokenSource.token,
-            }
+            { cancelToken: cancelTokenSource.token }
           );
           dispatch({ type: 'saveResolved' });
           appDispatch({
@@ -82,7 +81,7 @@ const EditPost = () => {
 
     const fetchData = async () => {
       try {
-        const response = await axios.get<Post>(`post/${state.id}`, {
+        const response = await ApiService.fetchPost(state.id, {
           cancelToken: source.token,
         });
 
