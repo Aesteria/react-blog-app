@@ -21,11 +21,12 @@ import './main.css';
 import EditPost from './pages/EditPost/EditPost';
 import NotFound from './pages/NotFound/NotFound';
 import { ApiService } from './api/ApiService';
+import Search from './components/Search/Search';
 
 axios.defaults.baseURL = ApiService.baseURL;
 
 const App = () => {
-  const { loggedIn, user } = useContext(AppStateContext);
+  const { loggedIn, user, isSearchActive } = useContext(AppStateContext);
 
   useEffect(() => {
     if (loggedIn) {
@@ -53,6 +54,7 @@ const App = () => {
         <Route path="/profile/:username" element={<Profile />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
+      {isSearchActive && <Search />}
       <Footer />
     </BrowserRouter>
   );

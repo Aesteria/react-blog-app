@@ -65,8 +65,11 @@ const EditPost = () => {
           cancelToken: source.token,
         });
 
+        // If someone go to url for post edit and doesn't have permission
+        // make redirect to HomePage
         const checkPermission = (data: Post) => {
           const isAuthor = data.author.username === user.username;
+          console.log(user.username);
 
           if (isAuthor) {
             dispatch({ type: 'fetchResolved', payload: response.data });

@@ -16,12 +16,26 @@ type AddFlashMessageAppAction = {
   payload: string;
 };
 
-type AppAction = LoginAppAction | LogoutAppAction | AddFlashMessageAppAction;
+type CloseSearchAction = {
+  type: 'closeSearch';
+};
+
+type OpenSearchAction = {
+  type: 'openSearch';
+};
+
+type AppAction =
+  | LoginAppAction
+  | LogoutAppAction
+  | AddFlashMessageAppAction
+  | CloseSearchAction
+  | OpenSearchAction;
 
 type AppState = {
   loggedIn: boolean;
   flashMessages: string[];
   user: User;
+  isSearchActive: boolean;
 };
 
 type AppDispatchContextType = Dispatch<AppAction>;
@@ -37,6 +51,12 @@ const reducer = (draft: AppState, action: AppAction): void => {
       break;
     case 'LOGOUT':
       draft.loggedIn = false;
+      break;
+    case 'closeSearch':
+      draft.isSearchActive = false;
+      break;
+    case 'openSearch':
+      draft.isSearchActive = true;
       break;
     default:
       break;
@@ -58,6 +78,7 @@ export const AppContextProvider = ({ children }: { children: ReactNode }) => {
       username: localStorage.getItem('complexappUsername') ?? '',
       avatar: localStorage.getItem('complexappAvatar') ?? '',
     },
+    isSearchActive: false,
   });
 
   return (

@@ -1,18 +1,30 @@
-import { useContext } from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { AppDispatchContext, AppStateContext } from '../../context/appContext';
 
 const HeaderLoggedIn = () => {
-  const dispatch = useContext(AppDispatchContext);
+  const appDispatch = useContext(AppDispatchContext);
   const { user } = useContext(AppStateContext);
 
   const logoutHandler = () => {
-    dispatch({ type: 'LOGOUT' });
+    appDispatch({ type: 'LOGOUT' });
+  };
+
+  const openSearchHandler = (
+    event: React.MouseEvent<HTMLAnchorElement, MouseEvent>
+  ) => {
+    event.preventDefault();
+
+    appDispatch({ type: 'openSearch' });
   };
 
   return (
     <div className="flex-row my-3 my-md-0">
-      <a href="#" className="text-white mr-2 header-search-icon">
+      <a
+        href="#"
+        className="text-white mr-2 header-search-icon"
+        onClick={openSearchHandler}
+      >
         <i className="fas fa-search"></i>
       </a>
       <span className="mr-2 header-chat-icon text-white">
