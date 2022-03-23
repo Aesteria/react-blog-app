@@ -1,15 +1,13 @@
 import axios, { CancelTokenSource } from 'axios';
-import { FormEvent, useContext, useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useImmerReducer } from 'use-immer';
 import { ApiService } from '../../api/ApiService';
 import FormPost from '../../components/FormPost/FormPost';
 import LoadingDotsIcon from '../../components/LoadingDotsIcon/LoadingDotsIcon';
 import { AppDispatchContext, AppStateContext } from '../../context/appContext';
-import { useInput } from '../../hooks/useInput';
 import { editPostReducer } from '../../reducers/editPostReducer/editPostReducer';
 import { Post } from '../../types/post';
-import { isNotEmpty } from '../../utils/validate';
 import NotFound from '../NotFound/NotFound';
 import Page from '../Page/Page';
 
@@ -20,43 +18,15 @@ const EditPost = () => {
     id: useParams().id as string,
     submitCancelToken: {} as CancelTokenSource,
     notFound: false,
+    titleFetched: '',
+    bodyFetched: '',
   });
-  const {
-    value: title,
-    error: titleErrorMessage,
-    valueHasErrors: titleHasErrors,
-    valueChangeHandler: titleChangeHandler,
-    valueBlurHandler: titleBlurHandler,
-    valueIsValid: titleIsValid,
-    setValue: setTitle,
-  } = useInput('title', isNotEmpty);
-  const {
-    value: body,
-    error: bodyErrorMessage,
-    valueHasErrors: bodyHasErrors,
-    valueChangeHandler: bodyChangeHandler,
-    valueBlurHandler: bodyBlurHandler,
-    valueIsValid: bodyIsValid,
-    setValue: setBody,
-  } = useInput('body', isNotEmpty);
 
   const { user } = useContext(AppStateContext);
   const appDispatch = useContext(AppDispatchContext);
   const navigate = useNavigate();
 
-  let formIsValid = false;
-
-  if (titleIsValid && bodyIsValid) {
-    formIsValid = true;
-  }
-
-  const submitHandler = (event: FormEvent) => {
-    event.preventDefault();
-
-    if (!formIsValid) {
-      return;
-    }
-
+  const submitHandler = (title: string, body: string) => {
     // create axios cancel token to abort request when component is unmounted
     const cancelTokenSource = axios.CancelToken.source();
     dispatch({ type: 'setCancelSource', payload: cancelTokenSource });
@@ -67,8 +37,8 @@ const EditPost = () => {
         await ApiService.editPost(
           state.id,
           {
-            title: title,
-            body: body,
+            title,
+            body,
             token: user.token,
           },
           { cancelToken: cancelTokenSource.token }
@@ -99,8 +69,6 @@ const EditPost = () => {
           const isAuthor = data.author.username === user.username;
 
           if (isAuthor) {
-            setTitle(response.data.title);
-            setBody(response.data.body);
             dispatch({ type: 'fetchResolved', payload: response.data });
           } else {
             appDispatch({
@@ -126,15 +94,7 @@ const EditPost = () => {
     return () => {
       source.cancel('Fetch post data was cancelled.');
     };
-  }, [
-    state.id,
-    dispatch,
-    user.username,
-    appDispatch,
-    navigate,
-    setBody,
-    setTitle,
-  ]);
+  }, [state.id, dispatch, user.username, appDispatch, navigate]);
 
   // Cleanup function when post was saved
   useEffect(() => {
@@ -164,18 +124,11 @@ const EditPost = () => {
       </Link>
 
       <FormPost
-        submitHandler={submitHandler}
-        titleChangeHandler={titleChangeHandler}
-        titleBlurHandler={titleBlurHandler}
-        titleHasErrors={titleHasErrors}
-        titleErrorMessage={titleErrorMessage}
-        title={title}
-        bodyChangeHandler={bodyChangeHandler}
-        bodyBlurHandler={bodyBlurHandler}
-        bodyHasErrors={bodyHasErrors}
-        bodyErrorMessage={bodyErrorMessage}
-        body={body}
-        formIsValid={formIsValid}
+        defaultTitle={state.titleFetched}
+        defaultBody={state.bodyFetched}
+        isEdit={true}
+        onSubmit={submitHandler}
+        isSaving={state.isSaving}
       />
     </Page>
   );

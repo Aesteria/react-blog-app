@@ -7,6 +7,8 @@ export type EditPostState = {
   id: string;
   submitCancelToken: CancelTokenSource;
   notFound: boolean;
+  bodyFetched: string;
+  titleFetched: string;
 };
 
 export const editPostReducer = (
@@ -16,6 +18,8 @@ export const editPostReducer = (
   switch (action.type) {
     case 'fetchResolved':
       draft.isFetching = false;
+      draft.bodyFetched = action.payload.body;
+      draft.titleFetched = action.payload.title;
       break;
     case 'saveResolved':
       draft.isSaving = false;

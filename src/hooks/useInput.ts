@@ -2,9 +2,10 @@ import { ChangeEvent, useState } from 'react';
 
 export const useInput = (
   inputFieldName: string,
-  validateFn: (value: string) => boolean
+  validateFn: (value: string) => boolean,
+  defaultValue?: string
 ) => {
-  const [value, setValue] = useState('');
+  const [value, setValue] = useState(defaultValue || '');
 
   const [isTouched, setIsTouched] = useState(false);
   const [error, setError] = useState('');

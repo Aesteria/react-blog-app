@@ -1,38 +1,51 @@
-import React, { ChangeEvent, FormEvent } from 'react';
+import { FormEvent } from 'react';
+import { useInput } from '../../hooks/useInput';
+import { isNotEmpty } from '../../utils/validate';
 
 type FormPostProps = {
-  submitHandler: (event: FormEvent) => void;
-  titleChangeHandler: (event: ChangeEvent<HTMLInputElement>) => void;
-  titleBlurHandler: () => void;
-  titleHasErrors: boolean;
-  titleErrorMessage: string;
-  title: string;
-  bodyChangeHandler: (event: ChangeEvent<HTMLTextAreaElement>) => void;
-  bodyBlurHandler: () => void;
-  bodyHasErrors: boolean;
-  bodyErrorMessage: string;
-  body: string;
-  formIsValid: boolean;
+  isEdit: boolean;
+  onSubmit: (title: string, body: string) => void;
+  defaultTitle?: string;
+  defaultBody?: string;
+  isSaving: boolean;
 };
 
 const FormPost = (props: FormPostProps) => {
+  const { isEdit, onSubmit, defaultTitle, defaultBody, isSaving } = props;
   const {
-    submitHandler,
-    titleChangeHandler,
-    titleBlurHandler,
-    titleHasErrors,
-    titleErrorMessage,
-    title,
-    bodyChangeHandler,
-    bodyBlurHandler,
-    bodyHasErrors,
-    bodyErrorMessage,
-    body,
-    formIsValid,
-  } = props;
+    value: title,
+    error: titleErrorMessage,
+    valueHasErrors: titleHasErrors,
+    valueChangeHandler: titleChangeHandler,
+    valueBlurHandler: titleBlurHandler,
+    valueIsValid: titleIsValid,
+  } = useInput('title', isNotEmpty, defaultTitle);
+  const {
+    value: body,
+    error: bodyErrorMessage,
+    valueHasErrors: bodyHasErrors,
+    valueChangeHandler: bodyChangeHandler,
+    valueBlurHandler: bodyBlurHandler,
+    valueIsValid: bodyIsValid,
+  } = useInput('body', isNotEmpty, defaultBody);
+
+  let formIsValid = false;
+  if (titleIsValid && bodyIsValid) {
+    formIsValid = true;
+  }
+
+  const postSubmitHandler = (event: FormEvent) => {
+    event.preventDefault();
+
+    if (!formIsValid) {
+      return;
+    }
+
+    onSubmit(title, body);
+  };
 
   return (
-    <form className="mt-3" onSubmit={submitHandler}>
+    <form className="mt-3" onSubmit={postSubmitHandler}>
       <div className="form-group">
         <label htmlFor="post-title" className="text-muted mb-1">
           <small>Title</small>
@@ -75,8 +88,8 @@ const FormPost = (props: FormPostProps) => {
         )}
       </div>
 
-      <button className="btn btn-primary" disabled={!formIsValid}>
-        Save Updates
+      <button className="btn btn-primary" disabled={!formIsValid || isSaving}>
+        {isEdit ? 'Save Updates' : 'Create Post'}
       </button>
     </form>
   );
