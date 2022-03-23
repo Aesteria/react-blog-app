@@ -1,5 +1,6 @@
 import { useContext, useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { CSSTransition } from 'react-transition-group';
 import axios from 'axios';
 
 import Footer from './components/Footer/Footer';
@@ -54,7 +55,14 @@ const App = () => {
         <Route path="/profile/:username" element={<Profile />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
-      {isSearchActive && <Search />}
+      <CSSTransition
+        timeout={330}
+        in={isSearchActive}
+        classNames="search-overlay"
+        unmountOnExit
+      >
+        <Search />
+      </CSSTransition>
       <Footer />
     </BrowserRouter>
   );
