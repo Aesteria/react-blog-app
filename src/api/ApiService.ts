@@ -110,4 +110,16 @@ export class ApiService {
     );
     return response;
   }
+
+  static async fetchSearchResults(
+    searchTerm: string,
+    config: AxiosRequestConfig
+  ): Promise<AxiosResponse<Post[]>> {
+    const response = await axios.post<Post[]>(
+      '/search',
+      { searchTerm },
+      config
+    );
+    return response;
+  }
 }
