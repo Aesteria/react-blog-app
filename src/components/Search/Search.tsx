@@ -1,12 +1,73 @@
-import { useContext, useEffect } from 'react';
+import axios from 'axios';
+import { ChangeEvent, useContext, useEffect, useMemo, useRef } from 'react';
+import { Link } from 'react-router-dom';
+import { useImmer } from 'use-immer';
+import { ApiService } from '../../api/ApiService';
 import { AppDispatchContext } from '../../context/appContext';
+import { Post } from '../../types/post';
+import { formatDate } from '../../utils/formatDate';
+
+type InitialState = {
+  searchTerm: string;
+  results: Post[];
+  show: string;
+};
 
 const Search = () => {
+  const [state, setState] = useImmer<InitialState>({
+    searchTerm: '',
+    results: [],
+    show: 'neither',
+  });
   const appDispatch = useContext(AppDispatchContext);
 
   const closeSearchHandler = () => {
     appDispatch({ type: 'closeSearch' });
   };
+
+  const searchChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
+    setState((draft) => {
+      draft.searchTerm = event.target.value;
+    });
+  };
+
+  useEffect(() => {
+    if (state.searchTerm.trim()) {
+      const source = axios.CancelToken.source();
+
+      setState((draft) => {
+        draft.show = 'loading';
+      });
+      const delay = setTimeout(() => {
+        const fetchResults = async () => {
+          try {
+            const response = await ApiService.fetchSearchResults(
+              state.searchTerm,
+              { cancelToken: source.token }
+            );
+            setState((draft) => {
+              draft.results = response.data;
+              draft.show = 'results';
+            });
+          } catch (e) {
+            console.log(
+              'There was an error while fetch results or request was cancelled.'
+            );
+          }
+        };
+        fetchResults();
+      }, 900);
+
+      return () => {
+        clearTimeout(delay);
+        source.cancel();
+      };
+    } else {
+      setState((draft) => {
+        draft.show = 'neither';
+      });
+    }
+  }, [state.searchTerm, setState]);
 
   useEffect(() => {
     const keypressHandler = (event: KeyboardEvent) => {
@@ -36,6 +97,8 @@ const Search = () => {
             id="live-search-field"
             className="live-search-field"
             placeholder="What are you interested in?"
+            onChange={searchChangeHandler}
+            value={state.searchTerm}
           />
           <span className="close-live-search" onClick={closeSearchHandler}>
             <i className="fas fa-times-circle"></i>
@@ -45,38 +108,61 @@ const Search = () => {
 
       <div className="search-overlay-bottom">
         <div className="container container--narrow py-3">
-          <div className="live-search-results live-search-results--visible">
-            <div className="list-group shadow-sm">
-              <div className="list-group-item active">
-                <strong>Search Results</strong> (3 items found)
+          <div
+            className={
+              'circle-loader ' +
+              (state.show === 'loading' ? 'circle-loader--visible' : '')
+            }
+          ></div>
+          <div
+            className={
+              'live-search-results ' +
+              (state.show === 'results' ? 'live-search-results--visible' : '')
+            }
+          >
+            {Boolean(state.results.length) && (
+              <div className="list-group shadow-sm">
+                <div className="list-group-item active">
+                  <strong>Search Results</strong> ({state.results.length}
+                  {state.results.length > 1 ? ' items ' : ' item '}
+                  found)
+                </div>
+                {state.results.map(
+                  ({
+                    _id,
+                    author: { avatar, username },
+                    title,
+                    createdDate,
+                  }) => {
+                    const dateFormatted = formatDate(createdDate);
+
+                    return (
+                      <Link
+                        onClick={() => appDispatch({ type: 'closeSearch' })}
+                        key={_id}
+                        to={`/post/${_id}`}
+                        className="list-group-item list-group-item-action"
+                      >
+                        <img
+                          className="avatar-tiny"
+                          src={avatar}
+                          alt="profile avatar"
+                        />{' '}
+                        <strong>{title}</strong>{' '}
+                        <span className="text-muted small">
+                          by {username} on {dateFormatted}
+                        </span>
+                      </Link>
+                    );
+                  }
+                )}
               </div>
-              <a href="#" className="list-group-item list-group-item-action">
-                <img
-                  className="avatar-tiny"
-                  src="https://gravatar.com/avatar/b9408a09298632b5151200f3449434ef?s=128"
-                />{' '}
-                <strong>Example Post #1</strong>
-                <span className="text-muted small">by brad on 2/10/2020 </span>
-              </a>
-              <a href="#" className="list-group-item list-group-item-action">
-                <img
-                  className="avatar-tiny"
-                  src="https://gravatar.com/avatar/b9216295c1e3931655bae6574ac0e4c2?s=128"
-                />{' '}
-                <strong>Example Post #2</strong>
-                <span className="text-muted small">
-                  by barksalot on 2/10/2020{' '}
-                </span>
-              </a>
-              <a href="#" className="list-group-item list-group-item-action">
-                <img
-                  className="avatar-tiny"
-                  src="https://gravatar.com/avatar/b9408a09298632b5151200f3449434ef?s=128"
-                />{' '}
-                <strong>Example Post #3</strong>
-                <span className="text-muted small">by brad on 2/10/2020 </span>
-              </a>
-            </div>
+            )}
+            {!Boolean(state.results.length) && (
+              <p className="alert alert-danger text-center shadow-sm">
+                We could not find any results
+              </p>
+            )}
           </div>
         </div>
       </div>
