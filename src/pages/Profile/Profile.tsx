@@ -1,32 +1,70 @@
 import axios from 'axios';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { ApiService } from '../../api/ApiService';
 import { AppStateContext } from '../../context/appContext';
 import Page from '../Page/Page';
 import ProfilePosts from './ProfilePosts';
+import { useImmer } from 'use-immer';
 
 const Profile = () => {
-  const [userProfile, setUserProfile] = useState({
-    profileUsername: '...',
-    profileAvatar: 'https://gravatar.com/avatar/placeholder?s=128',
-    isFollowing: false,
-    counts: {
-      followerCount: 0,
-      followingCount: 0,
-      postCount: 0,
+  const [state, setState] = useImmer({
+    profileData: {
+      profileUsername: '...',
+      profileAvatar: 'https://gravatar.com/avatar/placeholder?s=128',
+      isFollowing: false,
+      counts: {
+        followerCount: 0,
+        followingCount: 0,
+        postCount: 0,
+      },
     },
+    isFollowLoading: false,
   });
   const { username } = useParams();
   const {
-    user: { token },
+    user: { token, username: currentUsername },
+    loggedIn,
   } = useContext(AppStateContext);
 
   const {
     profileAvatar,
     profileUsername,
     counts: { followerCount, followingCount, postCount },
-  } = userProfile;
+  } = state.profileData;
+
+  const toggleFollowHandler = (type: 'startFollow' | 'stopFollow') => {
+    const source = axios.CancelToken.source();
+
+    const fetchData = async () => {
+      setState((draft) => {
+        draft.isFollowLoading = true;
+      });
+      try {
+        await ApiService[type](state.profileData.profileUsername, token, {
+          cancelToken: source.token,
+        });
+        setState((draft) => {
+          draft.isFollowLoading = false;
+          draft.profileData.isFollowing = type === 'startFollow' ? true : false;
+          type === 'startFollow'
+            ? draft.profileData.counts.followerCount++
+            : draft.profileData.counts.followerCount--;
+        });
+      } catch (e) {
+        console.log('There was a problem or request was cancelled');
+        setState((draft) => {
+          draft.isFollowLoading = false;
+        });
+      }
+    };
+
+    fetchData();
+
+    return () => {
+      source.cancel('The request was cancelled');
+    };
+  };
 
   useEffect(() => {
     const source = axios.CancelToken.source();
@@ -38,7 +76,9 @@ const Profile = () => {
           { token },
           { cancelToken: source.token }
         );
-        setUserProfile(response.data);
+        setState((draft) => {
+          draft.profileData = response.data;
+        });
       } catch (e) {
         console.log('There was a problem loading profile');
       }
@@ -49,7 +89,19 @@ const Profile = () => {
     return () => {
       source.cancel('The request was cancelled');
     };
-  }, [username, token]);
+  }, [username, token, setState]);
+
+  const showFollow =
+    loggedIn &&
+    state.profileData.profileUsername !== '...' &&
+    currentUsername !== username &&
+    !state.profileData.isFollowing;
+
+  const showUnfollow =
+    loggedIn &&
+    state.profileData.profileUsername !== '...' &&
+    currentUsername !== username &&
+    state.profileData.isFollowing;
 
   return (
     <Page title="Profile">
@@ -60,9 +112,24 @@ const Profile = () => {
           alt="Profile avatar"
         />{' '}
         {profileUsername}
-        <button className="btn btn-primary btn-sm ml-2">
-          Follow <i className="fas fa-user-plus"></i>
-        </button>
+        {showFollow && (
+          <button
+            onClick={() => toggleFollowHandler('startFollow')}
+            className="btn btn-primary btn-sm ml-2"
+            disabled={state.isFollowLoading}
+          >
+            Follow <i className="fas fa-user-plus"></i>
+          </button>
+        )}
+        {showUnfollow && (
+          <button
+            onClick={() => toggleFollowHandler('stopFollow')}
+            className="btn btn-danger btn-sm ml-2"
+            disabled={state.isFollowLoading}
+          >
+            Unfollow <i className="fas fa-user-times"></i>
+          </button>
+        )}
       </h2>
 
       <div className="profile-nav nav nav-tabs pt-2 mb-4">
