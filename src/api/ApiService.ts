@@ -1,6 +1,6 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { Post } from '../types/post';
-import { ProfileData } from '../types/profile';
+import { ProfileData, ProfileFollow } from '../types/profile';
 import { User } from '../types/user';
 
 type CreatePostData = {
@@ -106,6 +106,28 @@ export class ApiService {
   ): Promise<AxiosResponse<Post[]>> {
     const response = await axios.get<Post[]>(
       `/profile/${username}/posts`,
+      config
+    );
+    return response;
+  }
+
+  static async fetchProfileFollowers(
+    username: string | undefined,
+    config: AxiosRequestConfig
+  ): Promise<AxiosResponse<ProfileFollow[]>> {
+    const response = await axios.get<ProfileFollow[]>(
+      `/profile/${username}/followers`,
+      config
+    );
+    return response;
+  }
+
+  static async fetchProfileFollowing(
+    username: string | undefined,
+    config: AxiosRequestConfig
+  ): Promise<AxiosResponse<ProfileFollow[]>> {
+    const response = await axios.get<ProfileFollow[]>(
+      `/profile/${username}/following`,
       config
     );
     return response;
