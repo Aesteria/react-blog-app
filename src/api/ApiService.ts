@@ -122,4 +122,20 @@ export class ApiService {
     );
     return response;
   }
+
+  static async startFollow(
+    profileUsername: string,
+    token: string,
+    config: AxiosRequestConfig
+  ) {
+    await axios.post(`/addFollow/${profileUsername}`, { token }, config);
+  }
+
+  static async stopFollow(
+    profileUsername: string,
+    token: string,
+    config: AxiosRequestConfig
+  ) {
+    await axios.post(`/removeFollow/${profileUsername}`, { token }, config);
+  }
 }
