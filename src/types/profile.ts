@@ -4,6 +4,11 @@ type ProfileCounts = {
   postCount: number;
 };
 
+export type ProfileFollow = {
+  username: string;
+  avatar: string;
+};
+
 export type ProfileData = {
   profileAvatar: string;
   profileUsername: string;

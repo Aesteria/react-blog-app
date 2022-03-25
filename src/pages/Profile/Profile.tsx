@@ -1,11 +1,13 @@
 import axios from 'axios';
 import { useContext, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { Route, Routes, useLocation, useParams } from 'react-router-dom';
 import { ApiService } from '../../api/ApiService';
 import { AppStateContext } from '../../context/appContext';
 import Page from '../Page/Page';
 import ProfilePosts from './ProfilePosts';
 import { useImmer } from 'use-immer';
+import ProfileFollows from './ProfileFollows';
+import ProfileNavigation from './ProfileNavigation';
 
 const Profile = () => {
   const [state, setState] = useImmer({
@@ -21,11 +23,13 @@ const Profile = () => {
     },
     isFollowLoading: false,
   });
-  const { username } = useParams();
   const {
     user: { token, username: currentUsername },
     loggedIn,
   } = useContext(AppStateContext);
+
+  const { username } = useParams();
+  const location = useLocation();
 
   const {
     profileAvatar,
@@ -80,7 +84,7 @@ const Profile = () => {
           draft.profileData = response.data;
         });
       } catch (e) {
-        console.log('There was a problem loading profile');
+        console.log('There was a problem or request was cancelled');
       }
     };
 
@@ -132,19 +136,35 @@ const Profile = () => {
         )}
       </h2>
 
-      <div className="profile-nav nav nav-tabs pt-2 mb-4">
-        <a href="#" className="active nav-item nav-link">
-          Posts: {postCount}
-        </a>
-        <a href="#" className="nav-item nav-link">
-          Followers: {followerCount}
-        </a>
-        <a href="#" className="nav-item nav-link">
-          Following: {followingCount}
-        </a>
-      </div>
+      <ProfileNavigation
+        username={username}
+        postCount={postCount}
+        followerCount={followerCount}
+        followingCount={followingCount}
+      />
 
-      <ProfilePosts />
+      {/* pass unique key to <ProfileFollows /> to re-create instance when the route changes */}
+      <Routes>
+        <Route path="/" element={<ProfilePosts />} />
+        <Route
+          path="/followers"
+          element={
+            <ProfileFollows
+              requestType="fetchProfileFollowers"
+              key={location.pathname}
+            />
+          }
+        />
+        <Route
+          path="/following"
+          element={
+            <ProfileFollows
+              requestType="fetchProfileFollowing"
+              key={location.pathname}
+            />
+          }
+        />
+      </Routes>
     </Page>
   );
 };

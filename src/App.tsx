@@ -52,7 +52,7 @@ const App = () => {
         <Route path="/create-post" element={<CreatePost />} />
         <Route path="/about-us" element={<About />} />
         <Route path="/terms" element={<Terms />} />
-        <Route path="/profile/:username" element={<Profile />} />
+        <Route path="/profile/:username/*" element={<Profile />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <CSSTransition
