@@ -24,18 +24,40 @@ type OpenSearchAction = {
   type: 'openSearch';
 };
 
+type ToggleChatAction = {
+  type: 'toggleChat';
+};
+
+type CloseChatAction = {
+  type: 'closeChat';
+};
+
+type IncrementUnreadChatMessagesCount = {
+  type: 'incrementUnreadChatMessagesCount';
+};
+
+type ClearUnreadChatMessagesCount = {
+  type: 'clearUnreadChatMessagesCount';
+};
+
 type AppAction =
   | LoginAppAction
   | LogoutAppAction
   | AddFlashMessageAppAction
   | CloseSearchAction
-  | OpenSearchAction;
+  | OpenSearchAction
+  | ToggleChatAction
+  | CloseChatAction
+  | IncrementUnreadChatMessagesCount
+  | ClearUnreadChatMessagesCount;
 
 type AppState = {
   loggedIn: boolean;
   flashMessages: string[];
   user: User;
   isSearchActive: boolean;
+  isChatOpen: boolean;
+  unreadChatMessagesCount: number;
 };
 
 type AppDispatchContextType = Dispatch<AppAction>;
@@ -58,6 +80,18 @@ const reducer = (draft: AppState, action: AppAction): void => {
     case 'openSearch':
       draft.isSearchActive = true;
       break;
+    case 'closeChat':
+      draft.isChatOpen = false;
+      break;
+    case 'toggleChat':
+      draft.isChatOpen = !draft.isChatOpen;
+      break;
+    case 'incrementUnreadChatMessagesCount':
+      draft.unreadChatMessagesCount++;
+      break;
+    case 'clearUnreadChatMessagesCount':
+      draft.unreadChatMessagesCount = 0;
+      break;
     default:
       break;
   }
@@ -79,6 +113,8 @@ export const AppContextProvider = ({ children }: { children: ReactNode }) => {
       avatar: localStorage.getItem('complexappAvatar') ?? '',
     },
     isSearchActive: false,
+    isChatOpen: false,
+    unreadChatMessagesCount: 0,
   });
 
   return (

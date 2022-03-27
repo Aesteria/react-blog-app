@@ -11,7 +11,7 @@ const ProfileFollows = ({
 }: {
   requestType: 'fetchProfileFollowers' | 'fetchProfileFollowing';
 }) => {
-  const [follows, setFollows] = useState<ProfileFollow[] | []>([]);
+  const [follows, setFollows] = useState<ProfileFollow[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const { username: profileUsername } = useParams();
   const {

@@ -23,6 +23,7 @@ import EditPost from './pages/EditPost/EditPost';
 import NotFound from './pages/NotFound/NotFound';
 import { ApiService } from './api/ApiService';
 import Search from './components/Search/Search';
+import Chat from './components/Chat/Chat';
 
 axios.defaults.baseURL = ApiService.baseURL;
 
@@ -63,6 +64,7 @@ const App = () => {
       >
         <Search />
       </CSSTransition>
+      <Chat />
       <Footer />
     </BrowserRouter>
   );

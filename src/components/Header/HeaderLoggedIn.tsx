@@ -5,7 +5,7 @@ import { AppDispatchContext, AppStateContext } from '../../context/appContext';
 
 const HeaderLoggedIn = () => {
   const appDispatch = useContext(AppDispatchContext);
-  const { user } = useContext(AppStateContext);
+  const { user, unreadChatMessagesCount } = useContext(AppStateContext);
 
   const logoutHandler = () => {
     appDispatch({ type: 'LOGOUT' });
@@ -32,14 +32,22 @@ const HeaderLoggedIn = () => {
       </a>
       <ReactTooltip id="search" place="bottom" className="custom-tooltip" />
       <span
-        className="mr-2 header-chat-icon text-white"
-        data-tip="Comments"
-        data-for="comments"
+        className={
+          'mr-2 header-chat-icon ' +
+          (unreadChatMessagesCount > 0 ? 'text-danger' : 'text-white')
+        }
+        data-tip="Chat"
+        data-for="chat"
+        onClick={() => appDispatch({ type: 'toggleChat' })}
       >
         <i className="fas fa-comment"></i>
-        <span className="chat-count-badge text-white"> </span>
+        {unreadChatMessagesCount > 0 && (
+          <span className="chat-count-badge text-white">
+            {unreadChatMessagesCount > 9 ? '9+' : unreadChatMessagesCount}
+          </span>
+        )}
       </span>
-      <ReactTooltip id="comments" place="bottom" className="custom-tooltip" />
+      <ReactTooltip id="chat" place="bottom" className="custom-tooltip" />
       <Link
         to={`/profile/${user.username}`}
         className="mr-2"

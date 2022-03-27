@@ -10,7 +10,7 @@ import Page from '../Page/Page';
 
 type InitialState = {
   isLoading: boolean;
-  feed: Post[] | [];
+  feed: Post[];
 };
 
 const Home = () => {
