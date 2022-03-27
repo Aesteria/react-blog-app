@@ -33,6 +33,18 @@ type EditPostData = {
 export class ApiService {
   static baseURL = 'http://localhost:8080';
 
+  static async getHomeFeed(
+    token: string,
+    config: AxiosRequestConfig
+  ): Promise<AxiosResponse<Post[]>> {
+    const response = await axios.post<Post[]>(
+      '/getHomeFeed',
+      { token },
+      config
+    );
+    return response;
+  }
+
   static async login(data: LoginData): Promise<AxiosResponse<User>> {
     const response = await axios.post<User>('/login', {
       username: data.username,
