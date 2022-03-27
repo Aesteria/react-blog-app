@@ -1,6 +1,5 @@
-import { Link } from 'react-router-dom';
 import { SearchResultsProps } from '../../types/search';
-import { formatDate } from '../../utils/formatDate';
+import PostItem from '../PostItem/PostItem';
 
 const SearchResults = ({
   show,
@@ -21,30 +20,9 @@ const SearchResults = ({
             {results.length > 1 ? ' items ' : ' item '}
             found)
           </div>
-          {results.map(
-            ({ _id, author: { avatar, username }, title, createdDate }) => {
-              const dateFormatted = formatDate(createdDate);
-
-              return (
-                <Link
-                  onClick={onCloseSearch}
-                  key={_id}
-                  to={`/post/${_id}`}
-                  className="list-group-item list-group-item-action"
-                >
-                  <img
-                    className="avatar-tiny"
-                    src={avatar}
-                    alt="profile avatar"
-                  />{' '}
-                  <strong>{title}</strong>{' '}
-                  <span className="text-muted small">
-                    by {username} on {dateFormatted}
-                  </span>
-                </Link>
-              );
-            }
-          )}
+          {results.map((post) => (
+            <PostItem key={post._id} post={post} onClick={onCloseSearch} />
+          ))}
         </div>
       )}
       {!Boolean(results.length) && (

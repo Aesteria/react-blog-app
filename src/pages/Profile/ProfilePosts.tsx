@@ -1,10 +1,10 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { ApiService } from '../../api/ApiService';
 import LoadingDotsIcon from '../../components/LoadingDotsIcon/LoadingDotsIcon';
+import PostItem from '../../components/PostItem/PostItem';
 import { Post } from '../../types/post';
-import { formatDate } from '../../utils/formatDate';
 
 const ProfilePosts = () => {
   const [posts, setPosts] = useState<Post[] | []>([]);
@@ -39,21 +39,9 @@ const ProfilePosts = () => {
 
   return (
     <div className="list-group">
-      {posts.map(({ _id, author: { avatar }, title, createdDate }) => {
-        const dateFormatted = formatDate(createdDate);
-
-        return (
-          <Link
-            key={_id}
-            to={`/post/${_id}`}
-            className="list-group-item list-group-item-action"
-          >
-            <img className="avatar-tiny" src={avatar} alt="profile avatar" />{' '}
-            <strong>{title}</strong>{' '}
-            <span className="text-muted small">on {dateFormatted}</span>
-          </Link>
-        );
-      })}
+      {posts.map((post) => (
+        <PostItem post={post} isAuthor key={post._id} />
+      ))}
     </div>
   );
 };
