@@ -64,12 +64,20 @@ export class ApiService {
     return response;
   }
 
-  static async signup(data: SignUpData) {
-    await axios.post('/register', {
-      username: data.username,
-      email: data.email,
-      password: data.password,
-    });
+  static async signup(
+    data: SignUpData,
+    config: AxiosRequestConfig
+  ): Promise<AxiosResponse<User>> {
+    const response = await axios.post<User>(
+      '/register',
+      {
+        username: data.username,
+        email: data.email,
+        password: data.password,
+      },
+      config
+    );
+    return response;
   }
 
   static async fetchPost(
@@ -171,5 +179,29 @@ export class ApiService {
     config: AxiosRequestConfig
   ) {
     await axios.post(`/removeFollow/${profileUsername}`, { token }, config);
+  }
+
+  static async doesUsernameExist(
+    username: string,
+    config: AxiosRequestConfig
+  ): Promise<AxiosResponse<boolean>> {
+    const response = await axios.post<boolean>(
+      '/doesUsernameExist',
+      { username },
+      config
+    );
+    return response;
+  }
+
+  static async doesEmailExist(
+    email: string,
+    config: AxiosRequestConfig
+  ): Promise<AxiosResponse<boolean>> {
+    const response = await axios.post<boolean>(
+      '/doesEmailExist',
+      { email },
+      config
+    );
+    return response;
   }
 }
