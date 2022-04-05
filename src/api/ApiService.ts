@@ -204,4 +204,16 @@ export class ApiService {
     );
     return response;
   }
+
+  static async checkToken(
+    token: string,
+    config: AxiosRequestConfig
+  ): Promise<AxiosResponse<boolean>> {
+    const response = await axios.post<boolean>(
+      '/checkToken',
+      { token },
+      config
+    );
+    return response;
+  }
 }

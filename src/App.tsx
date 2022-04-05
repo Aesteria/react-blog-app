@@ -16,7 +16,7 @@ import Profile from './pages/Profile/Profile';
 
 import FlashMessages from './components/FlashMessages/FlashMessages';
 
-import { AppStateContext } from './context/appContext';
+import { AppDispatchContext, AppStateContext } from './context/appContext';
 
 import './main.css';
 import EditPost from './pages/EditPost/EditPost';
@@ -29,6 +29,7 @@ axios.defaults.baseURL = ApiService.baseURL;
 
 const App = () => {
   const { loggedIn, user, isSearchActive } = useContext(AppStateContext);
+  const appDispatch = useContext(AppDispatchContext);
 
   useEffect(() => {
     if (loggedIn) {
@@ -41,6 +42,34 @@ const App = () => {
       localStorage.removeItem('complexappAvatar');
     }
   }, [loggedIn, user.token, user.username, user.avatar]);
+
+  // check if token has expired
+  useEffect(() => {
+    if (loggedIn) {
+      const source = axios.CancelToken.source();
+
+      const fetchResults = async () => {
+        try {
+          const response = await ApiService.checkToken(user.token, {
+            cancelToken: source.token,
+          });
+
+          if (!response.data) {
+            appDispatch({ type: 'LOGOUT' });
+            appDispatch({
+              type: 'ADD_FLASH_MESSAGE',
+              payload: 'Your session has expired',
+            });
+          }
+        } catch (e) {
+          console.log(
+            'There was an error while check token or request was cancelled.'
+          );
+        }
+      };
+      fetchResults();
+    }
+  }, [loggedIn, user.token, appDispatch]);
 
   return (
     <BrowserRouter>
