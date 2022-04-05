@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react';
+import { lazy, useContext, useEffect, Suspense } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { CSSTransition } from 'react-transition-group';
 import axios from 'axios';
@@ -9,8 +9,6 @@ import Header from './components/Header/Header';
 import HomeGuest from './pages/HomeGuest/HomeGuest';
 import About from './pages/About/About';
 import Terms from './pages/Terms/Terms';
-import ViewSinglePost from './pages/ViewSinglePost/ViewSinglePost';
-import CreatePost from './pages/CreatePost/CreatePost';
 import Home from './pages/Home/Home';
 import Profile from './pages/Profile/Profile';
 
@@ -23,7 +21,13 @@ import EditPost from './pages/EditPost/EditPost';
 import NotFound from './pages/NotFound/NotFound';
 import { ApiService } from './api/ApiService';
 import Search from './components/Search/Search';
-import Chat from './components/Chat/Chat';
+import LoadingDotsIcon from './components/LoadingDotsIcon/LoadingDotsIcon';
+
+const CreatePost = lazy(() => import('./pages/CreatePost/CreatePost'));
+const ViewSinglePost = lazy(
+  () => import('./pages/ViewSinglePost/ViewSinglePost')
+);
+const Chat = lazy(() => import('./components/Chat/Chat'));
 
 axios.defaults.baseURL = ApiService.baseURL;
 
@@ -75,16 +79,18 @@ const App = () => {
     <BrowserRouter>
       <FlashMessages />
       <Header />
-      <Routes>
-        <Route path="/" element={loggedIn ? <Home /> : <HomeGuest />} />
-        <Route path="/post/:id" element={<ViewSinglePost />} />
-        <Route path="/post/:id/edit" element={<EditPost />} />
-        <Route path="/create-post" element={<CreatePost />} />
-        <Route path="/about-us" element={<About />} />
-        <Route path="/terms" element={<Terms />} />
-        <Route path="/profile/:username/*" element={<Profile />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+      <Suspense fallback={<LoadingDotsIcon />}>
+        <Routes>
+          <Route path="/" element={loggedIn ? <Home /> : <HomeGuest />} />
+          <Route path="/post/:id" element={<ViewSinglePost />} />
+          <Route path="/post/:id/edit" element={<EditPost />} />
+          <Route path="/create-post" element={<CreatePost />} />
+          <Route path="/about-us" element={<About />} />
+          <Route path="/terms" element={<Terms />} />
+          <Route path="/profile/:username/*" element={<Profile />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </Suspense>
       <CSSTransition
         timeout={330}
         in={isSearchActive}
@@ -93,7 +99,7 @@ const App = () => {
       >
         <Search />
       </CSSTransition>
-      <Chat />
+      <Suspense fallback="">{loggedIn && <Chat />}</Suspense>
       <Footer />
     </BrowserRouter>
   );

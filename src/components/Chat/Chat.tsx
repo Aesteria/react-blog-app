@@ -29,10 +29,6 @@ interface ServerToClientEvents {
   chatFromServer: (message: ChatMessage) => void;
 }
 
-const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
-  'http://localhost:8080'
-);
-
 const Chat = () => {
   const [state, setState] = useImmer<ChatState>({
     chatValue: '',
@@ -40,6 +36,10 @@ const Chat = () => {
   });
   const chatInputRef = useRef<HTMLInputElement>(null);
   const chatLogRef = useRef<HTMLDivElement>(null);
+  const socket = useRef<Socket<
+    ServerToClientEvents,
+    ClientToServerEvents
+  > | null>(null);
 
   const {
     isChatOpen,
@@ -58,7 +58,10 @@ const Chat = () => {
 
     if (state.chatValue.trim() === '') return;
 
-    socket.emit('chatFromBrowser', { message: state.chatValue, token });
+    socket.current?.emit('chatFromBrowser', {
+      message: state.chatValue,
+      token,
+    });
 
     setState((draft) => {
       draft.messages.push({ message: draft.chatValue, username, avatar });
@@ -67,11 +70,17 @@ const Chat = () => {
   };
 
   useEffect(() => {
-    socket.on('chatFromServer', (message) => {
+    socket.current = io('http://localhost:8080');
+
+    socket.current?.on('chatFromServer', (message) => {
       setState((draft) => {
         draft.messages.push(message);
       });
     });
+
+    return () => {
+      socket.current?.disconnect();
+    };
   }, [setState]);
 
   useEffect(() => {
