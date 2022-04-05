@@ -9,6 +9,10 @@ const HeaderLoggedIn = () => {
 
   const logoutHandler = () => {
     appDispatch({ type: 'LOGOUT' });
+    appDispatch({
+      type: 'ADD_FLASH_MESSAGE',
+      payload: 'You have succesfully logged out',
+    });
   };
 
   const openSearchHandler = (
@@ -22,7 +26,7 @@ const HeaderLoggedIn = () => {
   return (
     <div className="flex-row my-3 my-md-0">
       <a
-        href="#"
+        href="/search"
         className="text-white mr-2 header-search-icon"
         onClick={openSearchHandler}
         data-tip="Search"

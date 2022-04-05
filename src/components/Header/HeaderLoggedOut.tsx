@@ -5,7 +5,7 @@ import { AppDispatchContext } from '../../context/appContext';
 const HeaderLoggedOut = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const dispatch = useContext(AppDispatchContext);
+  const appDispatch = useContext(AppDispatchContext);
 
   const loginHandler = async (event: FormEvent) => {
     event.preventDefault();
@@ -14,9 +14,17 @@ const HeaderLoggedOut = () => {
       const response = await ApiService.login({ username, password });
 
       if (response.data) {
-        dispatch({ type: 'LOGIN', payload: response.data });
+        appDispatch({ type: 'LOGIN', payload: response.data });
+        appDispatch({
+          type: 'ADD_FLASH_MESSAGE',
+          payload: 'You have succesfully logged in',
+        });
       } else {
         console.log('Incorrect username / password');
+        appDispatch({
+          type: 'ADD_FLASH_MESSAGE',
+          payload: 'Incorrect username / password',
+        });
       }
     } catch (e) {
       console.log('There was a problem');
