@@ -95,13 +95,13 @@ const ViewSinglePost = () => {
               <i className="fas fa-edit"></i>
             </Link>
             <ReactTooltip />{' '}
-            <a
-              className="delete-post-button text-danger"
+            <button
+              className="btn delete-post-button text-danger"
               data-tip="Delete"
               onClick={deletePostHandler}
             >
               <i className="fas fa-trash"></i>
-            </a>
+            </button>
             <ReactTooltip />
           </span>
         )}
