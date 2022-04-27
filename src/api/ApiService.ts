@@ -31,7 +31,7 @@ type EditPostData = {
 };
 
 export class ApiService {
-  static baseURL = 'http://localhost:8080';
+  static baseURL = process.env.REACT_APP_BACKEND_URL || '';
 
   static async getHomeFeed(
     token: string,

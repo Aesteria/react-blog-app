@@ -17,7 +17,7 @@ const Footer = () => {
         </Link>
       </p>
       <p className="m-0">
-        Copyright &copy; 2020{' '}
+        Copyright &copy; 2022{' '}
         <Link to="/" className="text-muted">
           ComplexApp
         </Link>
