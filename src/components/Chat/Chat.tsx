@@ -70,7 +70,9 @@ const Chat = () => {
   };
 
   useEffect(() => {
-    socket.current = io('http://localhost:8080');
+    socket.current = io(
+      process.env.REACT_APP_BACKEND_URL || 'https://backendelden.herokuapp.com'
+    );
 
     socket.current?.on('chatFromServer', (message) => {
       setState((draft) => {
