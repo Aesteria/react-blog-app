@@ -11,6 +11,10 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 - Search through posts
 - Follow/unfollow users
 
+## Netlify Deploy
+
+https://sparkling-meerkat-615b7b.netlify.app/
+
 ## Available Scripts
 
 In the project directory, you can run:
