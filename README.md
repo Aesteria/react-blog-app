@@ -2,6 +2,15 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Main Features
+
+- Authorization
+- Create, view, edit, delete posts
+- User profile screens
+- Simple live chat
+- Search through posts
+- Follow/unfollow users
+
 ## Available Scripts
 
 In the project directory, you can run:
