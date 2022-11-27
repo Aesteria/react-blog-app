@@ -32,7 +32,8 @@ type EditPostData = {
 
 export class ApiService {
   static baseURL =
-    process.env.REACT_APP_BACKEND_URL || 'https://backendelden.herokuapp.com';
+    process.env.REACT_APP_BACKEND_URL ||
+    'https://web-production-4c14.up.railway.app/';
 
   static async getHomeFeed(
     token: string,
