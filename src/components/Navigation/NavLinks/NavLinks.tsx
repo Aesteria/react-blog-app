@@ -1,5 +1,5 @@
 import { Disclosure } from '@headlessui/react';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { NavLink } from 'react-router-dom';
 import links from './links';
 
@@ -16,7 +16,7 @@ export default function NavLinks({ isMobile }: NavLinksProps) {
             <Disclosure.Button as="div" key={index}>
               <NavLink
                 className={({ isActive }) =>
-                  classNames({
+                  clsx({
                     'block rounded-md px-3 py-2 text-base font-medium text-gray-300':
                       true,
                     'hover:bg-gray-700 hover:text-white': !isActive,
@@ -41,7 +41,7 @@ export default function NavLinks({ isMobile }: NavLinksProps) {
           key={index}
           to={link.to}
           className={({ isActive }) =>
-            classNames({
+            clsx({
               'rounded-md px-3 py-2 text-sm font-medium text-gray-300 ': true,
               'hover:bg-gray-700 hover:text-white': !isActive,
               'bg-gray-900': isActive,

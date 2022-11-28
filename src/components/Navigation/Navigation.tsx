@@ -15,7 +15,7 @@ export default function Navigation() {
             <div className="flex h-16 items-center justify-between">
               <div className="flex items-center">
                 <Link to="/" className="flex-shrink-0 text-white">
-                  React Blog
+                  Aeste Blog
                 </Link>
 
                 <NavLinks />

@@ -1,5 +1,5 @@
 import { Disclosure, Menu, Transition } from '@headlessui/react';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import list from '../list';
@@ -53,7 +53,7 @@ export default function ProfileLinks({ isMobile }: ProfileLinksProps) {
             {({ active }) => (
               <Link
                 to={link.to}
-                className={classNames({
+                className={clsx({
                   'bg-gray-100': active,
                   'block px-4 py-2 text-sm text-gray-700': true,
                 })}
