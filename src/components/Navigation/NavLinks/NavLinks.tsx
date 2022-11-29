@@ -1,7 +1,7 @@
 import { Disclosure } from '@headlessui/react';
 import clsx from 'clsx';
 import { NavLink } from 'react-router-dom';
-import links from './links';
+import navLinks from '../../../constants/navLinks';
 
 type NavLinksProps = {
   isMobile?: boolean;
@@ -12,7 +12,7 @@ export default function NavLinks({ isMobile }: NavLinksProps) {
     return (
       <div className="flex space-x-4">
         <div className="space-y-1 px-2 pt-2 pb-3">
-          {links.map((link, index) => (
+          {navLinks.map((link, index) => (
             <Disclosure.Button as="div" key={index}>
               <NavLink
                 className={({ isActive }) =>
@@ -36,7 +36,7 @@ export default function NavLinks({ isMobile }: NavLinksProps) {
 
   return (
     <div className="hidden sm:ml-6 sm:block">
-      {links.map((link, index) => (
+      {navLinks.map((link, index) => (
         <NavLink
           key={index}
           to={link.to}

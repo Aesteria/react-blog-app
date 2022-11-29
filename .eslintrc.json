@@ -23,6 +23,7 @@
     "prettier/prettier": "error",
     "jsx-a11y/anchor-is-valid": "warn",
     "react/no-array-index-key": "off",
-    "react/require-default-props": "off"
+    "react/require-default-props": "off",
+    "react/button-has-type": "off"
   }
 }
