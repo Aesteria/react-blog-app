@@ -8,7 +8,7 @@ export default function Footer() {
     <footer className="bg-slate-50">
       <Container>
         <div className="py-16">
-          <div className="mx-auto h-10 w-auto text-center">Aeste Blog</div>
+          <div className="mx-auto h-10 w-auto text-center">AesteBlog</div>
           <nav className="mt-10 text-sm" aria-label="quick links">
             <FooterLinks />
           </nav>

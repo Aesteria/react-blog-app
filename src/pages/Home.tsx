@@ -4,6 +4,7 @@ import BlogCardList from '../components/BlogCardList';
 import { selectSampleBlogs, toggleEditPost } from '../store/sampleBlogsSlice';
 import Container from '../components/Container';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
+import DocumentTitles from '../constants/documentTitles';
 
 const sampleBlogPosts = [
   {
@@ -32,6 +33,7 @@ export default function Home() {
 
   useEffect(() => {
     dispatch(toggleEditPost(false));
+    document.title = DocumentTitles.Home;
   }, [dispatch]);
 
   return (
