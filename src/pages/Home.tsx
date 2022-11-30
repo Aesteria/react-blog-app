@@ -1,6 +1,8 @@
 import Footer from '../components/Footer/Footer';
 import BlogPost from '../components/BlogPost';
 import Navigation from '../components/Navigation/Navigation';
+import BlogCardList from '../components/BlogCardList';
+import Container from '../components/Container';
 
 const sampleBlogPosts = [
   {
@@ -23,6 +25,29 @@ const sampleBlogPosts = [
   },
 ];
 
+const sampleBlogCards = [
+  {
+    blogTitle: 'Blog card #1',
+    blogCoverPhoto: 'stock-1',
+    blogDate: 'May 1, 2021',
+  },
+  {
+    blogTitle: 'Blog card #2',
+    blogCoverPhoto: 'stock-2',
+    blogDate: 'May 1, 2021',
+  },
+  {
+    blogTitle: 'Blog card #3',
+    blogCoverPhoto: 'stock-3',
+    blogDate: 'May 1, 2021',
+  },
+  {
+    blogTitle: 'Blog card #4',
+    blogCoverPhoto: 'stock-4',
+    blogDate: 'May 1, 2021',
+  },
+];
+
 export default function Home() {
   return (
     <div>
@@ -30,6 +55,11 @@ export default function Home() {
       {sampleBlogPosts.map((post, index) => (
         <BlogPost post={post} key={index} />
       ))}
+      <div className="bg-slate-100">
+        <Container>
+          <BlogCardList cards={sampleBlogCards} />
+        </Container>
+      </div>
       <Footer />
     </div>
   );

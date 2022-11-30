@@ -7,6 +7,10 @@ module.exports = {
         4: '4 1 0%',
         3: '3 1 0%',
       },
+      minHeight: {
+        27: '27rem',
+        13: '13rem',
+      },
       height: {
         42: '42rem',
       },
@@ -16,9 +20,12 @@ module.exports = {
       backgroundColor: {
         darkGray: '#303030',
       },
+      transitionProperty: {
+        backgroundColor: 'background-color',
+      },
     },
     fontFamily: {
-      sans: ['Inter var', 'sans-serif'],
+      sans: ['Inter', 'sans-serif'],
     },
   },
   plugins: [],
