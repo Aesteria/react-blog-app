@@ -29,6 +29,10 @@
     "jsx-a11y/anchor-is-valid": "warn",
     "react/no-array-index-key": "off",
     "react/require-default-props": "off",
-    "react/button-has-type": "off"
+    "react/button-has-type": "off",
+    "no-param-reassign": [
+      "error",
+      { "props": true, "ignorePropertyModificationsFor": ["state"] }
+    ]
   }
 }

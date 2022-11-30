@@ -1,8 +1,9 @@
-import Footer from '../components/Footer/Footer';
+import { useEffect } from 'react';
 import BlogPost from '../components/BlogPost';
-import Navigation from '../components/Navigation/Navigation';
 import BlogCardList from '../components/BlogCardList';
+import { selectSampleBlogs, toggleEditPost } from '../store/sampleBlogsSlice';
 import Container from '../components/Container';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
 
 const sampleBlogPosts = [
   {
@@ -25,42 +26,24 @@ const sampleBlogPosts = [
   },
 ];
 
-const sampleBlogCards = [
-  {
-    blogTitle: 'Blog card #1',
-    blogCoverPhoto: 'stock-1',
-    blogDate: 'May 1, 2021',
-  },
-  {
-    blogTitle: 'Blog card #2',
-    blogCoverPhoto: 'stock-2',
-    blogDate: 'May 1, 2021',
-  },
-  {
-    blogTitle: 'Blog card #3',
-    blogCoverPhoto: 'stock-3',
-    blogDate: 'May 1, 2021',
-  },
-  {
-    blogTitle: 'Blog card #4',
-    blogCoverPhoto: 'stock-4',
-    blogDate: 'May 1, 2021',
-  },
-];
-
 export default function Home() {
+  const { blogs, isEdit } = useAppSelector(selectSampleBlogs);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(toggleEditPost(false));
+  }, [dispatch]);
+
   return (
     <div>
-      <Navigation />
       {sampleBlogPosts.map((post, index) => (
         <BlogPost post={post} key={index} />
       ))}
       <div className="bg-slate-100">
         <Container className="max-w-screen-2xl">
-          <BlogCardList cards={sampleBlogCards} />
+          <BlogCardList isEdit={isEdit} blogs={blogs} />
         </Container>
       </div>
-      <Footer />
     </div>
   );
 }

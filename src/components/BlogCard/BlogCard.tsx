@@ -16,9 +16,10 @@ type BlogCardProps = {
     blogCoverPhoto: string;
     blogDate: string;
   };
+  isEdit: boolean;
 };
 
-export default function BlogCard({ post }: BlogCardProps) {
+export default function BlogCard({ post, isEdit }: BlogCardProps) {
   let imgSrc = '';
 
   if (post.blogCoverPhoto === 'stock-1') {
@@ -39,14 +40,16 @@ export default function BlogCard({ post }: BlogCardProps) {
 
   return (
     <div className="relative cursor-pointer flex flex-col rounded-lg bg-white min-h-27">
-      <div className="flex absolute top-2 right-2 z-50">
-        <div className="flex items-center justify-center w-9 h-9 rounded-full bg-white hover:bg-slate-600 transition-backgroundColor mr-2 [&>*]:hover:text-white">
-          <PencilSquareIcon className="pointer-events-none w-5 h-auto transition-colors" />
+      {isEdit && (
+        <div className="flex absolute top-2 right-2 z-50">
+          <div className="flex items-center justify-center w-9 h-9 rounded-full bg-white hover:bg-slate-600 transition-backgroundColor mr-2 [&>*]:hover:text-white">
+            <PencilSquareIcon className="pointer-events-none w-5 h-auto transition-colors" />
+          </div>
+          <div className="flex items-center justify-center w-9 h-9 rounded-full bg-white hover:bg-slate-600 transition-backgroundColor [&>*]:hover:text-white">
+            <TrashIcon className="pointer-events-none w-5 h-auto transition-colors" />
+          </div>
         </div>
-        <div className="flex items-center justify-center w-9 h-9 rounded-full bg-white hover:bg-slate-600 transition-backgroundColor [&>*]:hover:text-white">
-          <TrashIcon className="pointer-events-none w-5 h-auto transition-colors" />
-        </div>
-      </div>
+      )}
       <img
         src={imgSrc}
         alt="Cover"

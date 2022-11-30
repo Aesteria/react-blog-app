@@ -20,7 +20,7 @@ export default function NavLinks({ isMobile }: NavLinksProps) {
                     'block rounded-md px-3 py-2 text-base font-medium text-gray-300':
                       true,
                     'hover:bg-gray-700 hover:text-white': !isActive,
-                    'bg-gray-900': isActive,
+                    'bg-gray-900 text-gray-50': isActive,
                   })
                 }
                 to={link.to}
@@ -44,7 +44,7 @@ export default function NavLinks({ isMobile }: NavLinksProps) {
             clsx({
               'rounded-md px-3 py-2 text-sm font-medium text-gray-300 ': true,
               'hover:bg-gray-700 hover:text-white': !isActive,
-              'bg-gray-900': isActive,
+              'bg-gray-900 text-gray-50': isActive,
             })
           }
         >
