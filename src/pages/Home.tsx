@@ -56,7 +56,7 @@ export default function Home() {
         <BlogPost post={post} key={index} />
       ))}
       <div className="bg-slate-100">
-        <Container>
+        <Container className="max-w-screen-2xl">
           <BlogCardList cards={sampleBlogCards} />
         </Container>
       </div>
