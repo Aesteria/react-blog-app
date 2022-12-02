@@ -1,7 +1,7 @@
 import { Disclosure } from '@headlessui/react';
 import clsx from 'clsx';
 import { NavLink } from 'react-router-dom';
-import navLinks from '../../../constants/navLinks';
+import navLinks from '../../../constants/navList';
 
 type NavLinksProps = {
   isMobile?: boolean;

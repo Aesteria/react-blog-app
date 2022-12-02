@@ -4,7 +4,7 @@ import BlogCardList from '../components/BlogCardList';
 import { selectSampleBlogs, toggleEditPost } from '../store/sampleBlogsSlice';
 import Container from '../components/Container';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
-import DocumentTitles from '../constants/documentTitles';
+import PageTitle from '../constants/pageTitle';
 
 const sampleBlogPosts = [
   {
@@ -27,14 +27,18 @@ const sampleBlogPosts = [
   },
 ];
 
-export default function Home() {
+type HomeProps = {
+  pageTitle: PageTitle.Home;
+};
+
+export default function Home({ pageTitle }: HomeProps) {
   const { blogs, isEdit } = useAppSelector(selectSampleBlogs);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(toggleEditPost(false));
-    document.title = DocumentTitles.Home;
-  }, [dispatch]);
+    document.title = pageTitle;
+  }, [dispatch, pageTitle]);
 
   return (
     <div>
