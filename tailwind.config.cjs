@@ -6,6 +6,7 @@ module.exports = {
       flex: {
         4: '4 1 0%',
         3: '3 1 0%',
+        2: '2 1 0%',
       },
       minHeight: {
         27: '27rem',
@@ -28,5 +29,5 @@ module.exports = {
       sans: ['Inter', 'sans-serif'],
     },
   },
-  plugins: [],
+  plugins: [require('@tailwindcss/forms')],
 };

@@ -33,6 +33,7 @@
     "no-param-reassign": [
       "error",
       { "props": true, "ignorePropertyModificationsFor": ["state"] }
-    ]
+    ],
+    "jsx-a11y/label-has-associated-control": "off"
   }
 }
