@@ -32,6 +32,7 @@ type ButtonProps = {
   to?: string;
   children: ReactNode;
   round?: boolean;
+  onClick?: () => void;
 };
 
 export default function Button({
@@ -41,6 +42,7 @@ export default function Button({
   children,
   round,
   to,
+  onClick,
 }: ButtonProps) {
   const buttonClass = clsx(
     baseStyles[variant],
@@ -54,6 +56,8 @@ export default function Button({
       {children}
     </Link>
   ) : (
-    <button className={buttonClass}>{children}</button>
+    <button onClick={onClick} className={buttonClass}>
+      {children}
+    </button>
   );
 }

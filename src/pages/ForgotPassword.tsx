@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import AuthSplitScreen from '../components/AuthSplitScreen';
 import Button from '../components/Button';
 import InputGroup from '../components/InputGroup';
+import Modal from '../components/Modal';
 import LinkPath from '../constants/linkPath';
 import PageTitle from '../constants/pageTitle';
 
@@ -13,6 +14,7 @@ type ForgotPasswordProps = {
 
 export default function ForgotPassword({ pageTitle }: ForgotPasswordProps) {
   const [email, setEmail] = useState('');
+  const [modalOpen, setModalOpen] = useState(true);
 
   useEffect(() => {
     document.title = pageTitle;
@@ -20,6 +22,9 @@ export default function ForgotPassword({ pageTitle }: ForgotPasswordProps) {
 
   return (
     <AuthSplitScreen>
+      <Modal open={modalOpen} setOpen={setModalOpen}>
+        If your account exists, you will recieve a email!
+      </Modal>
       <div className="mx-auto w-full max-w-sm lg:w-96">
         <div>
           <h2 className="mt-6 text-3xl font-bold tracking-tight text-gray-900">
@@ -32,7 +37,13 @@ export default function ForgotPassword({ pageTitle }: ForgotPasswordProps) {
 
         <div className="mt-8">
           <div className="mt-6">
-            <form action="#" method="POST" className="space-y-6">
+            <form
+              method="POST"
+              className="space-y-6"
+              onSubmit={(e) => {
+                e.preventDefault();
+              }}
+            >
               <InputGroup
                 label="Email"
                 name="email"

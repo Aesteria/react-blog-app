@@ -38,10 +38,12 @@ export default function BlogCard({ post, isEdit }: BlogCardProps) {
     imgSrc = blogCover4;
   }
 
+  // TODO: change div icons wrapper to interactive button elements
+
   return (
     <div className="relative cursor-pointer flex flex-col rounded-lg bg-white min-h-27">
       {isEdit && (
-        <div className="flex absolute top-2 right-2 z-50">
+        <div className="flex absolute top-2 right-2">
           <div className="flex items-center justify-center w-9 h-9 rounded-full bg-white hover:bg-slate-600 transition-backgroundColor mr-2 [&>*]:hover:text-white">
             <PencilSquareIcon className="pointer-events-none w-5 h-auto transition-colors" />
           </div>
@@ -53,9 +55,9 @@ export default function BlogCard({ post, isEdit }: BlogCardProps) {
       <img
         src={imgSrc}
         alt="Cover"
-        className="rounded-t-lg z-10 min-h-13 object-cover"
+        className="rounded-t-lg min-h-13 object-cover select-none"
       />
-      <div className="flex flex-col z-30 py-8 px-4">
+      <div className="flex flex-col py-8 px-4">
         <h4 className="pb-2 font text-xl font-light">{post.blogTitle}</h4>
         <h6 className="font-normal text-xs pb-4">Posted on {post.blogDate}</h6>
         <Link
