@@ -2,8 +2,6 @@ import { Link } from 'react-router-dom';
 import clsx from 'clsx';
 import { ReactNode } from 'react';
 
-// PREV STYLES: flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 md:py-4 md:px-10 md:text-lg
-
 type Variants = 'solid' | 'outline';
 type Colors = 'indigo';
 type BaseStyles = Record<Variants, string>;
@@ -11,9 +9,9 @@ type VariantStyles = Record<Variants, Record<Colors, string>>;
 
 const baseStyles: BaseStyles = {
   solid:
-    'group inline-flex items-center justify-center rounded-full px-8 py-3 text-sm font-semibold focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2',
+    'group inline-flex items-center justify-center rounded-md px-8 py-3 text-sm font-semibold focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2',
   outline:
-    'group inline-flex ring-1 items-center justify-center rounded-full py-2 px-4 text-sm focus:outline-none',
+    'group inline-flex ring-1 items-center justify-center rounded-md py-2 px-4 text-sm focus:outline-none',
 };
 
 const variantStyles: VariantStyles = {
@@ -33,6 +31,7 @@ type ButtonProps = {
   className?: string;
   to?: string;
   children: ReactNode;
+  round?: boolean;
 };
 
 export default function Button({
@@ -40,11 +39,13 @@ export default function Button({
   color = 'indigo',
   className,
   children,
+  round,
   to,
 }: ButtonProps) {
   const buttonClass = clsx(
     baseStyles[variant],
     variantStyles[variant][color],
+    round && 'rounded-full',
     className
   );
 

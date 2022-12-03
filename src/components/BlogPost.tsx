@@ -47,7 +47,7 @@ export default function BlogPost({ post }: BlogPostProps) {
             {post.body}
           </p>
           <div className="mt-10">
-            <Button to="/register" className="rounded-md shadow">
+            <Button round to="/register" className="rounded-md shadow">
               {post.welcomeScreen ? 'Login/Register' : 'View The Post'}
             </Button>
           </div>

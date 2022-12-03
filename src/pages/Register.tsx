@@ -1,7 +1,13 @@
-import { EnvelopeIcon, LockClosedIcon } from '@heroicons/react/24/outline';
-import { useEffect } from 'react';
+import {
+  EnvelopeIcon,
+  LockClosedIcon,
+  UserIcon,
+} from '@heroicons/react/24/outline';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import AuthSplitScreen from '../components/AuthSplitScreen';
+import Button from '../components/Button';
+import InputGroup from '../components/InputGroup';
 import LinkPath from '../constants/linkPath';
 import PageTitle from '../constants/pageTitle';
 
@@ -10,6 +16,10 @@ type RegisterProps = {
 };
 
 export default function Register({ pageTitle }: RegisterProps) {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState('');
+
   useEffect(() => {
     document.title = pageTitle;
   }, [pageTitle]);
@@ -35,53 +45,34 @@ export default function Register({ pageTitle }: RegisterProps) {
         <div className="mt-8">
           <div className="mt-6">
             <form action="#" method="POST" className="space-y-6">
-              <div>
-                <label
-                  htmlFor="email"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Email address
-                </label>
-                <div className="mt-1 relative">
-                  <input
-                    id="email"
-                    name="email"
-                    type="email"
-                    autoComplete="email"
-                    required
-                    className="block w-full appearance-none rounded-md border border-gray-300 pr-3 pl-7 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                  />
-                  <EnvelopeIcon className="absolute left-1 top-1/2 -translate-y-1/2 w-5 h-5" />
-                </div>
-              </div>
+              <InputGroup
+                label="Email"
+                name="email"
+                type="email"
+                Icon={EnvelopeIcon}
+                value={email}
+                onChange={(val) => setEmail(val)}
+              />
 
-              <div className="space-y-1">
-                <label
-                  htmlFor="password"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Password
-                </label>
-                <div className="mt-1 relative">
-                  <input
-                    id="password"
-                    name="password"
-                    type="password"
-                    autoComplete="current-password"
-                    required
-                    className="block w-full appearance-none rounded-md border border-gray-300 pr-3 pl-7 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                  />
-                  <LockClosedIcon className="absolute left-1 top-1/2 -translate-y-1/2 w-5 h-5" />
-                </div>
-              </div>
+              <InputGroup
+                label="Username"
+                name="username"
+                Icon={UserIcon}
+                value={username}
+                onChange={(val) => setUsername(val)}
+              />
+
+              <InputGroup
+                label="Password"
+                name="password"
+                type="password"
+                Icon={LockClosedIcon}
+                value={password}
+                onChange={(val) => setPassword(val)}
+              />
 
               <div>
-                <button
-                  type="submit"
-                  className="flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                >
-                  Create an account
-                </button>
+                <Button className="w-full">Create an account</Button>
               </div>
             </form>
           </div>
