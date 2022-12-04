@@ -1,5 +1,8 @@
+import * as yup from 'yup';
 import { EnvelopeIcon, LockClosedIcon } from '@heroicons/react/24/outline';
-import { useEffect, useState } from 'react';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useEffect } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import AuthSplitScreen from '../components/AuthSplitScreen';
 import Button from '../components/Button';
@@ -7,18 +10,40 @@ import InputGroup from '../components/InputGroup';
 
 import LinkPath from '../constants/linkPath';
 import PageTitle from '../constants/pageTitle';
+import { FormValues } from '../types/form';
 
 type LoginProps = {
   pageTitle: PageTitle.Login;
 };
 
+const schema = yup
+  .object({
+    password: yup.string().required(),
+    email: yup
+      .string()
+      .matches(
+        // eslint-disable-next-line no-useless-escape
+        /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+        { message: 'Incorrect email' }
+      )
+      .required(),
+  })
+  .required();
+
 export default function Login({ pageTitle }: LoginProps) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormValues>({
+    resolver: yupResolver(schema),
+  });
 
   useEffect(() => {
     document.title = pageTitle;
   }, [pageTitle]);
+
+  const onSubmit: SubmitHandler<FormValues> = (data) => console.log(data);
 
   return (
     <AuthSplitScreen>
@@ -40,23 +65,25 @@ export default function Login({ pageTitle }: LoginProps) {
 
         <div className="mt-8">
           <div className="mt-6">
-            <form action="#" method="POST" className="space-y-6">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               <InputGroup
+                required
                 label="Email"
-                name="email"
                 type="email"
+                name="email"
                 Icon={EnvelopeIcon}
-                value={email}
-                onChange={(val) => setEmail(val)}
+                register={register}
+                errors={errors}
               />
 
               <InputGroup
+                required
+                type="password"
                 label="Password"
                 name="password"
-                type="password"
                 Icon={LockClosedIcon}
-                value={password}
-                onChange={(val) => setPassword(val)}
+                register={register}
+                errors={errors}
               />
 
               <div className="flex items-center justify-between">

@@ -1,29 +1,38 @@
+import { ExclamationCircleIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import { ComponentPropsWithoutRef, HTMLInputTypeAttribute } from 'react';
+import { FieldErrorsImpl, Path, UseFormRegister } from 'react-hook-form';
+import { FormValues } from '../types/form';
 
 type InputGroupProps = {
-  name: string;
   type?: HTMLInputTypeAttribute;
   label: string;
-  className?: string;
   Icon?: (
     props: ComponentPropsWithoutRef<'svg'> & {
       title?: string;
       titleId?: string;
     }
   ) => JSX.Element;
-  onChange: (value: string) => void;
-  value: string;
+  className?: string;
+  register: UseFormRegister<FormValues>;
+  required?: boolean;
+  name: Path<FormValues>;
+  maxLength?: number;
+  minLength?: number;
+  errors: Partial<FieldErrorsImpl<FormValues>>;
 };
 
 export default function InputGroup({
-  name,
-  type = 'text',
   label,
-  className,
-  onChange,
-  value,
+  register,
+  required,
   Icon,
+  className,
+  type = 'text',
+  name,
+  maxLength,
+  minLength,
+  errors,
 }: InputGroupProps) {
   return (
     <div className={className}>
@@ -38,16 +47,29 @@ export default function InputGroup({
         )}
         <input
           type={type}
-          name={name}
           id={name}
           className={clsx(
             'block w-full rounded-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm',
-            Icon && 'pl-10'
+            Icon && 'pl-10',
+            errors[name] &&
+              'border-red-300 pr-10 text-red-900 placeholder-red-300 focus:border-red-500 focus:outline-none focus:ring-red-500'
           )}
-          onChange={(e) => onChange(e.target.value)}
-          value={value}
+          {...register(name, { required, maxLength, minLength })}
         />
+        {errors[name] && (
+          <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+            <ExclamationCircleIcon
+              className="h-5 w-5 text-red-500"
+              aria-hidden="true"
+            />
+          </div>
+        )}
       </div>
+      {errors[name] && (
+        <p className="mt-2 text-sm text-red-600" id="email-error">
+          {errors[name]?.message}
+        </p>
+      )}
     </div>
   );
 }
