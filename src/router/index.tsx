@@ -8,6 +8,7 @@ import ForgotPassword from '../pages/ForgotPassword';
 import LinkPath from '../constants/linkPath';
 import PageTitle from '../constants/pageTitle';
 import AuthRoot from '../pages/AuthRoot';
+import Profile from '../pages/Profile';
 
 const router = createBrowserRouter([
   {
@@ -21,6 +22,10 @@ const router = createBrowserRouter([
       {
         path: LinkPath.Blogs,
         element: <Blogs pageTitle={PageTitle.Blogs} />,
+      },
+      {
+        path: LinkPath.Profile,
+        element: <Profile pageTitle={PageTitle.Profile} />,
       },
     ],
   },

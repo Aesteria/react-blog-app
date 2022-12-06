@@ -6,6 +6,7 @@ type CurrentUser = {
   token: string;
   username: string | null;
   photoURL: string | null;
+  id: string;
 };
 
 type InitialState = {

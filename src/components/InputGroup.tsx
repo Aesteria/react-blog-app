@@ -2,7 +2,7 @@ import { ExclamationCircleIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import { ComponentPropsWithoutRef, HTMLInputTypeAttribute } from 'react';
 import { FieldErrorsImpl, Path, UseFormRegister } from 'react-hook-form';
-import { FormValues } from '../types/form';
+import { AuthFormValues } from '../types/form';
 
 type InputGroupProps = {
   type?: HTMLInputTypeAttribute;
@@ -14,12 +14,12 @@ type InputGroupProps = {
     }
   ) => JSX.Element;
   className?: string;
-  register: UseFormRegister<FormValues>;
+  register: UseFormRegister<AuthFormValues>;
   required?: boolean;
-  name: Path<FormValues>;
+  name: Path<AuthFormValues>;
   maxLength?: number;
   minLength?: number;
-  errors: Partial<FieldErrorsImpl<FormValues>>;
+  errors: Partial<FieldErrorsImpl<AuthFormValues>>;
 };
 
 export default function InputGroup({

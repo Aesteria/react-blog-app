@@ -17,7 +17,7 @@ import Button from '../components/Button';
 import InputGroup from '../components/InputGroup';
 import LinkPath from '../constants/linkPath';
 import PageTitle from '../constants/pageTitle';
-import { FormValues } from '../types/form';
+import { AuthFormValues } from '../types/form';
 import { auth, db, storage } from '../firebase';
 import Loading from '../components/Loading';
 import RequestStatus from '../constants/requestStatus';
@@ -46,7 +46,7 @@ export default function Register({ pageTitle }: RegisterProps) {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormValues>({
+  } = useForm<AuthFormValues>({
     resolver: yupResolver(schema),
   });
   const [status, setStatus] = useState<RequestStatus>(RequestStatus.Idle);
@@ -58,7 +58,7 @@ export default function Register({ pageTitle }: RegisterProps) {
   }, [pageTitle]);
 
   // TODO: extract firebase register into separate file
-  const onSubmit: SubmitHandler<FormValues> = async ({
+  const onSubmit: SubmitHandler<AuthFormValues> = async ({
     email,
     password,
     username,

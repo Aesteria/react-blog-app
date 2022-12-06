@@ -5,6 +5,7 @@ enum LinkPath {
   Register = '/register',
   ForgotPassword = '/forgot-password',
   CreatePost = '/create-post',
+  Profile = '/profile',
 }
 
 export default LinkPath;

@@ -11,7 +11,7 @@ import Button from '../components/Button';
 import InputGroup from '../components/InputGroup';
 import LinkPath from '../constants/linkPath';
 import PageTitle from '../constants/pageTitle';
-import { FormValues } from '../types/form';
+import { AuthFormValues } from '../types/form';
 import RequestStatus from '../constants/requestStatus';
 import { auth } from '../firebase';
 import Loading from '../components/Loading';
@@ -39,7 +39,7 @@ export default function Login({ pageTitle }: LoginProps) {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormValues>({
+  } = useForm<AuthFormValues>({
     resolver: yupResolver(schema),
   });
   const [status, setStatus] = useState<RequestStatus>(RequestStatus.Idle);
@@ -50,7 +50,10 @@ export default function Login({ pageTitle }: LoginProps) {
     document.title = pageTitle;
   }, [pageTitle]);
 
-  const onSubmit: SubmitHandler<FormValues> = async ({ email, password }) => {
+  const onSubmit: SubmitHandler<AuthFormValues> = async ({
+    email,
+    password,
+  }) => {
     try {
       setStatus(RequestStatus.Pending);
       setError(null);

@@ -4,6 +4,7 @@ enum PageTitle {
   Register = 'Register | AesteBlog',
   Login = 'Login | AesteBlog',
   ForgotPassword = 'Forgot Password | AesteBlog',
+  Profile = 'Profile Settings | AesteBlog',
 }
 
 export default PageTitle;

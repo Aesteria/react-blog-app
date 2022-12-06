@@ -13,10 +13,10 @@ export const store = configureStore({
 
 onAuthStateChanged(auth, async (user) => {
   if (user) {
-    const { displayName: username, email, photoURL } = user;
+    const { displayName: username, email, photoURL, uid } = user;
     const token = await user.getIdToken();
 
-    store.dispatch(login({ email, token, username, photoURL }));
+    store.dispatch(login({ email, token, username, photoURL, id: uid }));
   } else {
     store.dispatch(logout());
   }

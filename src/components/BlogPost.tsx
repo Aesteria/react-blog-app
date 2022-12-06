@@ -5,6 +5,8 @@ import Button from './Button';
 import beautifulStories from '../assets/blogPhotos/beautiful-stories.jpg';
 import coding from '../assets/blogPhotos/coding.jpg';
 import designedForEveryone from '../assets/blogPhotos/designed-for-everyone.jpg';
+import { useAppSelector } from '../store/hooks';
+import { selectCurrentUser } from '../store/userSlice';
 
 type BlogPostProps = {
   post: {
@@ -16,6 +18,12 @@ type BlogPostProps = {
 };
 
 export default function BlogPost({ post }: BlogPostProps) {
+  const user = useAppSelector(selectCurrentUser);
+
+  if (user && post.welcomeScreen) {
+    return null;
+  }
+
   let imgPath = '';
 
   if (post.cover === 'designed-for-everyone') {

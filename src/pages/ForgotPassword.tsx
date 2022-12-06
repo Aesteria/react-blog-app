@@ -12,7 +12,7 @@ import InputGroup from '../components/InputGroup';
 import Modal from '../components/Modal';
 import LinkPath from '../constants/linkPath';
 import PageTitle from '../constants/pageTitle';
-import { FormValues } from '../types/form';
+import { AuthFormValues } from '../types/form';
 import RequestStatus from '../constants/requestStatus';
 import { auth } from '../firebase';
 import Loading from '../components/Loading';
@@ -39,7 +39,7 @@ export default function ForgotPassword({ pageTitle }: ForgotPasswordProps) {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormValues>({
+  } = useForm<AuthFormValues>({
     resolver: yupResolver(schema),
   });
   const [modalOpen, setModalOpen] = useState(false);
@@ -51,7 +51,7 @@ export default function ForgotPassword({ pageTitle }: ForgotPasswordProps) {
     document.title = pageTitle;
   }, [pageTitle]);
 
-  const onSubmit: SubmitHandler<FormValues> = async ({ email }) => {
+  const onSubmit: SubmitHandler<AuthFormValues> = async ({ email }) => {
     try {
       setStatus(RequestStatus.Pending);
       await sendPasswordResetEmail(auth, email);
