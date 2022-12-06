@@ -4,6 +4,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
+import { sendPasswordResetEmail } from 'firebase/auth';
+
 import AuthSplitScreen from '../components/AuthSplitScreen';
 import Button from '../components/Button';
 import InputGroup from '../components/InputGroup';
@@ -11,6 +13,9 @@ import Modal from '../components/Modal';
 import LinkPath from '../constants/linkPath';
 import PageTitle from '../constants/pageTitle';
 import { FormValues } from '../types/form';
+import RequestStatus from '../constants/requestStatus';
+import { auth } from '../firebase';
+import Loading from '../components/Loading';
 
 type ForgotPasswordProps = {
   pageTitle: PageTitle.ForgotPassword;
@@ -38,17 +43,35 @@ export default function ForgotPassword({ pageTitle }: ForgotPasswordProps) {
     resolver: yupResolver(schema),
   });
   const [modalOpen, setModalOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
+  const [status, setStatus] = useState<RequestStatus>(RequestStatus.Idle);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     document.title = pageTitle;
   }, [pageTitle]);
 
-  const onSubmit: SubmitHandler<FormValues> = (data) => console.log(data);
+  const onSubmit: SubmitHandler<FormValues> = async ({ email }) => {
+    try {
+      setStatus(RequestStatus.Pending);
+      await sendPasswordResetEmail(auth, email);
+
+      setModalMessage('Check your email to reset password');
+      setModalOpen(true);
+      setStatus(RequestStatus.Resolved);
+      setError(null);
+    } catch (e) {
+      if (e instanceof Error) {
+        setStatus(RequestStatus.Rejected);
+        setError(e.message);
+      }
+    }
+  };
 
   return (
     <AuthSplitScreen>
       <Modal open={modalOpen} setOpen={setModalOpen}>
-        If your account exists, you will recieve a email!
+        {modalMessage}
       </Modal>
       <div className="mx-auto w-full max-w-sm lg:w-96">
         <div>
@@ -80,16 +103,23 @@ export default function ForgotPassword({ pageTitle }: ForgotPasswordProps) {
               <div className="flex items-center justify-between">
                 <div className="text-sm">
                   <Link
-                    to={LinkPath.Register}
+                    to={LinkPath.Login}
                     className="font-medium text-indigo-600 hover:text-indigo-500"
                   >
-                    Register
+                    Login
                   </Link>
                 </div>
               </div>
             </form>
           </div>
         </div>
+
+        {status === 'pending' && (
+          <Loading className="mt-6 flex justify-center" />
+        )}
+        {status === 'rejected' && (
+          <p className="text-center text-red-600 mt-6">{error}</p>
+        )}
       </div>
     </AuthSplitScreen>
   );

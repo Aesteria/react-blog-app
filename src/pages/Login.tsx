@@ -1,16 +1,20 @@
 import * as yup from 'yup';
 import { EnvelopeIcon, LockClosedIcon } from '@heroicons/react/24/outline';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+
 import AuthSplitScreen from '../components/AuthSplitScreen';
 import Button from '../components/Button';
 import InputGroup from '../components/InputGroup';
-
 import LinkPath from '../constants/linkPath';
 import PageTitle from '../constants/pageTitle';
 import { FormValues } from '../types/form';
+import RequestStatus from '../constants/requestStatus';
+import { auth } from '../firebase';
+import Loading from '../components/Loading';
 
 type LoginProps = {
   pageTitle: PageTitle.Login;
@@ -38,12 +42,28 @@ export default function Login({ pageTitle }: LoginProps) {
   } = useForm<FormValues>({
     resolver: yupResolver(schema),
   });
+  const [status, setStatus] = useState<RequestStatus>(RequestStatus.Idle);
+  const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     document.title = pageTitle;
   }, [pageTitle]);
 
-  const onSubmit: SubmitHandler<FormValues> = (data) => console.log(data);
+  const onSubmit: SubmitHandler<FormValues> = async ({ email, password }) => {
+    try {
+      setStatus(RequestStatus.Pending);
+      setError(null);
+
+      await signInWithEmailAndPassword(auth, email, password);
+      navigate(LinkPath.Home);
+    } catch (e) {
+      if (e instanceof Error) {
+        setStatus(RequestStatus.Rejected);
+        setError(e.message);
+      }
+    }
+  };
 
   return (
     <AuthSplitScreen>
@@ -103,6 +123,13 @@ export default function Login({ pageTitle }: LoginProps) {
             </form>
           </div>
         </div>
+
+        {status === 'pending' && (
+          <Loading className="mt-6 flex justify-center" />
+        )}
+        {status === 'rejected' && (
+          <p className="text-center text-red-600 mt-6">{error}</p>
+        )}
       </div>
     </AuthSplitScreen>
   );

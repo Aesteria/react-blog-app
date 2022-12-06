@@ -9,7 +9,6 @@ const list = [
   },
   {
     text: 'Sign out',
-    to: '/signout',
   },
 ];
 

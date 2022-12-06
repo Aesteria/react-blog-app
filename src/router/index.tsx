@@ -7,6 +7,7 @@ import Register from '../pages/Register';
 import ForgotPassword from '../pages/ForgotPassword';
 import LinkPath from '../constants/linkPath';
 import PageTitle from '../constants/pageTitle';
+import AuthRoot from '../pages/AuthRoot';
 
 const router = createBrowserRouter([
   {
@@ -24,16 +25,22 @@ const router = createBrowserRouter([
     ],
   },
   {
-    path: LinkPath.Login,
-    element: <Login pageTitle={PageTitle.Login} />,
-  },
-  {
-    path: LinkPath.Register,
-    element: <Register pageTitle={PageTitle.Register} />,
-  },
-  {
-    path: LinkPath.ForgotPassword,
-    element: <ForgotPassword pageTitle={PageTitle.ForgotPassword} />,
+    path: LinkPath.Home,
+    element: <AuthRoot />,
+    children: [
+      {
+        path: LinkPath.Login,
+        element: <Login pageTitle={PageTitle.Login} />,
+      },
+      {
+        path: LinkPath.Register,
+        element: <Register pageTitle={PageTitle.Register} />,
+      },
+      {
+        path: LinkPath.ForgotPassword,
+        element: <ForgotPassword pageTitle={PageTitle.ForgotPassword} />,
+      },
+    ],
   },
 ]);
 

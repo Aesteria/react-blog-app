@@ -3,17 +3,24 @@ import {
   LockClosedIcon,
   UserIcon,
 } from '@heroicons/react/24/outline';
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { doc, setDoc } from 'firebase/firestore';
+import { getDownloadURL, ref } from 'firebase/storage';
+
 import AuthSplitScreen from '../components/AuthSplitScreen';
 import Button from '../components/Button';
 import InputGroup from '../components/InputGroup';
 import LinkPath from '../constants/linkPath';
 import PageTitle from '../constants/pageTitle';
 import { FormValues } from '../types/form';
+import { auth, db, storage } from '../firebase';
+import Loading from '../components/Loading';
+import RequestStatus from '../constants/requestStatus';
 
 type RegisterProps = {
   pageTitle: PageTitle.Register;
@@ -42,12 +49,49 @@ export default function Register({ pageTitle }: RegisterProps) {
   } = useForm<FormValues>({
     resolver: yupResolver(schema),
   });
+  const [status, setStatus] = useState<RequestStatus>(RequestStatus.Idle);
+  const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     document.title = pageTitle;
   }, [pageTitle]);
 
-  const onSubmit: SubmitHandler<FormValues> = (data) => console.log(data);
+  // TODO: extract firebase register into separate file
+  const onSubmit: SubmitHandler<FormValues> = async ({
+    email,
+    password,
+    username,
+  }) => {
+    try {
+      setStatus(RequestStatus.Pending);
+      setError(null);
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const avatar = await getDownloadURL(ref(storage, 'defaults/profile.png'));
+
+      await updateProfile(userCredential.user, {
+        displayName: username,
+        photoURL: avatar,
+      });
+
+      await setDoc(doc(db, 'users', userCredential.user.uid), {
+        username,
+        email,
+        photoURL: avatar,
+      });
+
+      navigate(LinkPath.Home);
+    } catch (e) {
+      if (e instanceof Error) {
+        setStatus(RequestStatus.Rejected);
+        setError(e.message);
+      }
+    }
+  };
 
   return (
     <AuthSplitScreen>
@@ -105,6 +149,13 @@ export default function Register({ pageTitle }: RegisterProps) {
             </form>
           </div>
         </div>
+
+        {status === 'pending' && (
+          <Loading className="mt-6 flex justify-center" />
+        )}
+        {status === 'rejected' && (
+          <p className="text-center text-red-600 mt-6">{error}</p>
+        )}
       </div>
     </AuthSplitScreen>
   );
