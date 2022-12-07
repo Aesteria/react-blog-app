@@ -1,11 +1,10 @@
 import { Menu } from '@headlessui/react';
 import ProfileLinks from '../ProfileLinks/ProfileLinks';
-import ProfileIcon from '../../../../assets/profile.png';
 import { useAppSelector } from '../../../../store/hooks';
-import { selectCurrentUser } from '../../../../store/userSlice';
+import { CurrentUser, selectCurrentUser } from '../../../../store/userSlice';
 
 export default function ProfileDropdown() {
-  const user = useAppSelector(selectCurrentUser);
+  const user = useAppSelector(selectCurrentUser) as CurrentUser;
 
   return (
     <div className="hidden sm:ml-6 sm:block">
@@ -15,7 +14,7 @@ export default function ProfileDropdown() {
             <span className="sr-only">Open user menu</span>
             <img
               className="h-8 w-8 rounded-full"
-              src={user?.photoURL || ProfileIcon}
+              src={user.photoURL as string}
               alt="Freepik"
             />
           </Menu.Button>

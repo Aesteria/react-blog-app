@@ -2,12 +2,12 @@ import { RouterProvider } from 'react-router-dom';
 
 import router from './router';
 import { useAppSelector } from './store/hooks';
-import { selectCurrentUserStatus } from './store/userSlice';
+import { selectAuthStatus } from './store/userSlice';
 
 export default function App() {
-  const status = useAppSelector(selectCurrentUserStatus);
+  const isAuth = useAppSelector(selectAuthStatus);
 
-  if (status === 'pending') {
+  if (isAuth === 'pending') {
     return null;
   }
 

@@ -7,7 +7,6 @@ import ProfileDropdown from './Profile/ProfileDropdown/ProfileDropdown';
 import ProfileLinks from './Profile/ProfileLinks/ProfileLinks';
 import { useAppSelector } from '../../store/hooks';
 import { selectCurrentUser } from '../../store/userSlice';
-import ProfileIcon from '../../assets/profile.png';
 
 export default function Navigation() {
   const user = useAppSelector(selectCurrentUser);
@@ -41,7 +40,7 @@ export default function Navigation() {
                   <div className="flex-shrink-0">
                     <img
                       className="h-10 w-10 rounded-full"
-                      src={user.photoURL || ProfileIcon}
+                      src={user.photoURL as string}
                       alt="Freepik"
                     />
                   </div>
