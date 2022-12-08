@@ -5,6 +5,7 @@ enum PageTitle {
   Login = 'Login | AesteBlog',
   ForgotPassword = 'Forgot Password | AesteBlog',
   Profile = 'Profile Settings | AesteBlog',
+  CreatePost = 'Create Post | AesteBlog',
 }
 
 export default PageTitle;

@@ -11,9 +11,12 @@ module.exports = {
       minHeight: {
         27: '27rem',
         13: '13rem',
+        25: '25rem',
+        40: '40rem',
       },
       height: {
         42: '42rem',
+        '40-screen': '40vh',
       },
       width: {
         25: '25rem',

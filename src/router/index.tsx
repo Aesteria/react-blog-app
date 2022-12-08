@@ -9,6 +9,7 @@ import LinkPath from '../constants/linkPath';
 import PageTitle from '../constants/pageTitle';
 import AuthRoot from '../pages/AuthRoot';
 import Profile from '../pages/Profile';
+import CreatePost from '../pages/CreatePost';
 
 const router = createBrowserRouter([
   {
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
       {
         path: LinkPath.Profile,
         element: <Profile pageTitle={PageTitle.Profile} />,
+      },
+      {
+        path: LinkPath.CreatePost,
+        element: <CreatePost pageTitle={PageTitle.CreatePost} />,
       },
     ],
   },

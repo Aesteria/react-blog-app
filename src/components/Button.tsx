@@ -17,7 +17,7 @@ const baseStyles: BaseStyles = {
 const variantStyles: VariantStyles = {
   solid: {
     indigo:
-      'bg-indigo-600 text-white hover:bg-indigo-700 active:bg-indigo-800 focus-visible:outline-indigo-600',
+      'bg-indigo-600 text-white hover:bg-indigo-700 active:bg-indigo-800 focus-visible:outline-indigo-600 disabled:bg-slate-200',
   },
   outline: {
     indigo:
@@ -33,6 +33,7 @@ type ButtonProps = {
   children: ReactNode;
   round?: boolean;
   onClick?: () => void;
+  disabled?: boolean;
 };
 
 export default function Button({
@@ -42,6 +43,7 @@ export default function Button({
   children,
   round,
   to,
+  disabled,
   onClick,
 }: ButtonProps) {
   const buttonClass = clsx(
@@ -56,7 +58,7 @@ export default function Button({
       {children}
     </Link>
   ) : (
-    <button onClick={onClick} className={buttonClass}>
+    <button onClick={onClick} className={buttonClass} disabled={disabled}>
       {children}
     </button>
   );
