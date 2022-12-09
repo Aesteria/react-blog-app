@@ -34,6 +34,7 @@ type ButtonProps = {
   round?: boolean;
   onClick?: () => void;
   disabled?: boolean;
+  type?: 'submit' | 'button';
 };
 
 export default function Button({
@@ -45,6 +46,7 @@ export default function Button({
   to,
   disabled,
   onClick,
+  type = 'button',
 }: ButtonProps) {
   const buttonClass = clsx(
     baseStyles[variant],
@@ -58,7 +60,12 @@ export default function Button({
       {children}
     </Link>
   ) : (
-    <button onClick={onClick} className={buttonClass} disabled={disabled}>
+    <button
+      type={type}
+      onClick={onClick}
+      className={buttonClass}
+      disabled={disabled}
+    >
       {children}
     </button>
   );
