@@ -6,7 +6,7 @@ import beautifulStories from '../assets/blogPhotos/beautiful-stories.jpg';
 import coding from '../assets/blogPhotos/coding.jpg';
 import designedForEveryone from '../assets/blogPhotos/designed-for-everyone.jpg';
 import { useAppSelector } from '../store/hooks';
-import { selectCurrentUser } from '../store/userSlice';
+import { selectIsUserAuthenticated } from '../store/userSlice';
 
 type BlogPostProps = {
   post: {
@@ -18,9 +18,9 @@ type BlogPostProps = {
 };
 
 export default function BlogPost({ post }: BlogPostProps) {
-  const user = useAppSelector(selectCurrentUser);
+  const isAuth = useAppSelector(selectIsUserAuthenticated);
 
-  if (user && post.welcomeScreen) {
+  if (isAuth && post.welcomeScreen) {
     return null;
   }
 

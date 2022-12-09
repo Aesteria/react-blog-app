@@ -4,22 +4,23 @@ import { NavLink } from 'react-router-dom';
 import LinkPath from '../../../constants/linkPath';
 import navLinks from '../../../constants/navList';
 import { useAppSelector } from '../../../store/hooks';
-import { selectCurrentUser } from '../../../store/userSlice';
+import { selectIsUserAuthenticated } from '../../../store/userSlice';
 
 type NavLinksProps = {
   isMobile?: boolean;
 };
 
 export default function NavLinks({ isMobile }: NavLinksProps) {
-  const user = useAppSelector(selectCurrentUser);
+  const isAuth = useAppSelector(selectIsUserAuthenticated);
 
   if (isMobile) {
     return (
       <div className="flex space-x-4">
         <div className="space-y-1 px-2 pt-2 pb-3">
           {navLinks.map((link, index) => {
-            const hideRegisterLink = user && link.to === LinkPath.Register;
-            const hideCreatePostLink = !user && link.to === LinkPath.CreatePost;
+            const hideRegisterLink = isAuth && link.to === LinkPath.Register;
+            const hideCreatePostLink =
+              !isAuth && link.to === LinkPath.CreatePost;
 
             if (hideRegisterLink || hideCreatePostLink) {
               return null;
@@ -51,8 +52,8 @@ export default function NavLinks({ isMobile }: NavLinksProps) {
   return (
     <div className="hidden sm:ml-6 sm:block">
       {navLinks.map((link, index) => {
-        const hideRegisterLink = user && link.to === LinkPath.Register;
-        const hideCreatePostLink = !user && link.to === LinkPath.CreatePost;
+        const hideRegisterLink = isAuth && link.to === LinkPath.Register;
+        const hideCreatePostLink = !isAuth && link.to === LinkPath.CreatePost;
 
         if (hideRegisterLink || hideCreatePostLink) {
           return null;

@@ -5,7 +5,6 @@ import Container from '../components/Container';
 import PageTitle from '../constants/pageTitle';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import {
-  CurrentUser,
   selectCurrentUser,
   updateAvatar,
   updateUsername,
@@ -22,7 +21,7 @@ type ProfileSettingsFormValues = {
 };
 
 export default function Profile({ pageTitle }: ProfileProps) {
-  const user = useAppSelector(selectCurrentUser) as CurrentUser;
+  const user = useAppSelector(selectCurrentUser);
   const {
     register,
     handleSubmit,

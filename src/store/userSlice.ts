@@ -3,23 +3,24 @@ import { updateProfile, User } from 'firebase/auth';
 import { doc, updateDoc } from 'firebase/firestore';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { auth, db, storage } from '../firebase';
+import { CurrentUser } from '../types/user';
 import type { RootState } from './store';
 
-export type CurrentUser = {
-  email: string | null;
-  token: string;
-  username: string | null;
-  photoURL: string | null;
-  id: string;
-};
-
 type InitialState = {
-  currentUser: CurrentUser | null;
+  currentUser: CurrentUser;
+  authenticated: boolean;
   status: 'pending' | 'resolved';
 };
 
 const initialState: InitialState = {
-  currentUser: null,
+  currentUser: {
+    email: null,
+    token: '',
+    username: null,
+    photoURL: null,
+    id: '',
+  },
+  authenticated: false,
   status: 'pending',
 };
 
@@ -64,11 +65,12 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     login(state, action: PayloadAction<CurrentUser>) {
+      state.authenticated = true;
       state.currentUser = action.payload;
       state.status = 'resolved';
     },
     logout(state) {
-      state.currentUser = null;
+      state.authenticated = false;
       state.status = 'resolved';
     },
   },
@@ -90,6 +92,8 @@ const userSlice = createSlice({
 export const { login, logout } = userSlice.actions;
 
 export const selectCurrentUser = (state: RootState) => state.user.currentUser;
-export const selectAuthStatus = (state: RootState) => state.user.status;
+export const selectIsUserAuthenticated = (state: RootState) =>
+  state.user.authenticated;
+export const selectAuthStateChange = (state: RootState) => state.user.status;
 
 export default userSlice.reducer;

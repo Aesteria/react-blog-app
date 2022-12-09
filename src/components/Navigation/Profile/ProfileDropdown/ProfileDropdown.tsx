@@ -1,10 +1,10 @@
 import { Menu } from '@headlessui/react';
 import ProfileLinks from '../ProfileLinks/ProfileLinks';
 import { useAppSelector } from '../../../../store/hooks';
-import { CurrentUser, selectCurrentUser } from '../../../../store/userSlice';
+import { selectCurrentUser } from '../../../../store/userSlice';
 
 export default function ProfileDropdown() {
-  const user = useAppSelector(selectCurrentUser) as CurrentUser;
+  const user = useAppSelector(selectCurrentUser);
 
   return (
     <div className="hidden sm:ml-6 sm:block">

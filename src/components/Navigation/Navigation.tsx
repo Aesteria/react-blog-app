@@ -6,10 +6,14 @@ import NavLinks from './NavLinks/NavLinks';
 import ProfileDropdown from './Profile/ProfileDropdown/ProfileDropdown';
 import ProfileLinks from './Profile/ProfileLinks/ProfileLinks';
 import { useAppSelector } from '../../store/hooks';
-import { selectCurrentUser } from '../../store/userSlice';
+import {
+  selectCurrentUser,
+  selectIsUserAuthenticated,
+} from '../../store/userSlice';
 
 export default function Navigation() {
   const user = useAppSelector(selectCurrentUser);
+  const isAuth = useAppSelector(selectIsUserAuthenticated);
 
   return (
     <Disclosure as="nav" className="bg-gray-800">
@@ -24,7 +28,7 @@ export default function Navigation() {
 
                 <NavLinks />
               </div>
-              {user && <ProfileDropdown />}
+              {isAuth && <ProfileDropdown />}
               <div className="-mr-2 flex sm:hidden">
                 <Burger open={open} />
               </div>
@@ -34,7 +38,7 @@ export default function Navigation() {
           {/* Mobile */}
           <Disclosure.Panel className="sm:hidden">
             <NavLinks isMobile />
-            {user && (
+            {isAuth && (
               <div className="border-t border-gray-700 pt-4 pb-3">
                 <div className="flex items-center px-5">
                   <div className="flex-shrink-0">
