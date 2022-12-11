@@ -39,7 +39,7 @@ export default function BlogPost({ post }: BlogPostProps) {
   }
 
   return (
-    <div className="lg:relative flex flex-col md:flex-row md:h-42 [&:nth-child(odd)>*:nth-child(1)]:order-2 [&:nth-child(odd)>*:nth-child(2)]:order-1 shadow-md">
+    <div className="lg:relative flex flex-col md:flex-row md:h-blog-post [&:nth-child(odd)>*:nth-child(1)]:order-2 [&:nth-child(odd)>*:nth-child(2)]:order-1 shadow-md">
       <div
         className={clsx({
           'flex justify-center items-center flex-4 order-2 md:order-1 md:flex-3 py-10 px-6':

@@ -1,7 +1,6 @@
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
-import { getDownloadURL, ref } from 'firebase/storage';
-import { auth, db, storage } from '../firebase';
+import { auth, db } from '../firebase';
 
 type RegisterFields = {
   email: string;
@@ -17,16 +16,13 @@ export const createUser = async (data: RegisterFields) => {
     email,
     password
   );
-  const avatar = await getDownloadURL(ref(storage, 'defaults/profile.png'));
 
   await updateProfile(userCredential.user, {
     displayName: username,
-    photoURL: avatar,
   });
 
   await setDoc(doc(db, 'users', userCredential.user.uid), {
     username,
     email,
-    photoURL: avatar,
   });
 };

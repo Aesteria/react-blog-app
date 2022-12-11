@@ -2,6 +2,7 @@ import { Menu } from '@headlessui/react';
 import ProfileLinks from '../ProfileLinks/ProfileLinks';
 import { useAppSelector } from '../../../../store/hooks';
 import { selectCurrentUser } from '../../../../store/userSlice';
+import DefaultUserAvatar from '../../../../assets/profile.png';
 
 export default function ProfileDropdown() {
   const user = useAppSelector(selectCurrentUser);
@@ -14,7 +15,7 @@ export default function ProfileDropdown() {
             <span className="sr-only">Open user menu</span>
             <img
               className="h-8 w-8 rounded-full"
-              src={user.photoURL as string}
+              src={user.photoURL || DefaultUserAvatar}
               alt="Freepik"
             />
           </Menu.Button>

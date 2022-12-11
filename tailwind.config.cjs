@@ -15,7 +15,7 @@ module.exports = {
         40: '40rem',
       },
       height: {
-        42: '42rem',
+        'blog-post': '42rem',
         '40-screen': '40vh',
       },
       width: {

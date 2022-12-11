@@ -124,7 +124,9 @@ export default function Register({ pageTitle }: RegisterProps) {
               />
 
               <div>
-                <Button className="w-full">Create an account</Button>
+                <Button type="submit" className="w-full">
+                  Create an account
+                </Button>
               </div>
             </form>
           </div>

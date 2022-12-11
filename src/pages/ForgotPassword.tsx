@@ -70,9 +70,7 @@ export default function ForgotPassword({ pageTitle }: ForgotPasswordProps) {
 
   return (
     <AuthSplitScreen>
-      <Modal open={modalOpen} setOpen={setModalOpen}>
-        {modalMessage}
-      </Modal>
+      <Modal open={modalOpen} setOpen={setModalOpen} message={modalMessage} />
       <div className="mx-auto w-full max-w-sm lg:w-96">
         <div>
           <h2 className="mt-6 text-3xl font-bold tracking-tight text-gray-900">
@@ -97,7 +95,9 @@ export default function ForgotPassword({ pageTitle }: ForgotPasswordProps) {
               />
 
               <div>
-                <Button className="w-full">Reset</Button>
+                <Button type="submit" className="w-full">
+                  Reset
+                </Button>
               </div>
 
               <div className="flex items-center justify-between">

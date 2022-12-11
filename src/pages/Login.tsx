@@ -59,6 +59,7 @@ export default function Login({ pageTitle }: LoginProps) {
       setError(null);
 
       await signInWithEmailAndPassword(auth, email, password);
+
       navigate(LinkPath.Home);
     } catch (e) {
       if (e instanceof Error) {
@@ -121,7 +122,9 @@ export default function Login({ pageTitle }: LoginProps) {
               </div>
 
               <div>
-                <Button className="w-full">Sign in</Button>
+                <Button type="submit" className="w-full">
+                  Sign in
+                </Button>
               </div>
             </form>
           </div>

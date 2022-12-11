@@ -15,7 +15,7 @@ const navList = [
   },
   {
     text: 'Login/Register',
-    to: LinkPath.Register,
+    to: LinkPath.Login,
   },
 ];
 

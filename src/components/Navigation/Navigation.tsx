@@ -10,6 +10,7 @@ import {
   selectCurrentUser,
   selectIsUserAuthenticated,
 } from '../../store/userSlice';
+import DefaultUserAvatar from '../../assets/profile.png';
 
 export default function Navigation() {
   const user = useAppSelector(selectCurrentUser);
@@ -44,7 +45,7 @@ export default function Navigation() {
                   <div className="flex-shrink-0">
                     <img
                       className="h-10 w-10 rounded-full"
-                      src={user.photoURL as string}
+                      src={user.photoURL || DefaultUserAvatar}
                       alt="Freepik"
                     />
                   </div>
