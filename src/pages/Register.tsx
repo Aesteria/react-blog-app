@@ -17,7 +17,7 @@ import PageTitle from '../constants/pageTitle';
 import { AuthFormValues } from '../types/form';
 import Loading from '../components/Loading';
 import RequestStatus from '../constants/requestStatus';
-import { createUser } from '../api/api';
+import { createUser } from '../api/users';
 
 type RegisterProps = {
   pageTitle: PageTitle.Register;

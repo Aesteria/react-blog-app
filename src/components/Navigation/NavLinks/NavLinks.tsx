@@ -18,7 +18,7 @@ export default function NavLinks({ isMobile }: NavLinksProps) {
       <div className="flex space-x-4">
         <div className="space-y-1 px-2 pt-2 pb-3">
           {navLinks.map((link, index) => {
-            const hideRegisterLink = isAuth && link.to === LinkPath.Register;
+            const hideRegisterLink = isAuth && link.to === LinkPath.Login;
             const hideCreatePostLink =
               !isAuth && link.to === LinkPath.CreatePost;
 
@@ -52,7 +52,7 @@ export default function NavLinks({ isMobile }: NavLinksProps) {
   return (
     <div className="hidden sm:ml-6 sm:block">
       {navLinks.map((link, index) => {
-        const hideRegisterLink = isAuth && link.to === LinkPath.Register;
+        const hideRegisterLink = isAuth && link.to === LinkPath.Login;
         const hideCreatePostLink = !isAuth && link.to === LinkPath.CreatePost;
 
         if (hideRegisterLink || hideCreatePostLink) {

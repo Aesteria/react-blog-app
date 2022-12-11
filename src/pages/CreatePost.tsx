@@ -6,6 +6,12 @@ import Container from '../components/Container';
 import PageTitle from '../constants/pageTitle';
 import 'react-quill/dist/quill.snow.css';
 import Button from '../components/Button';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { addNewPost } from '../store/postsSlice';
+import { selectCurrentUser } from '../store/userSlice';
+import Modal from '../components/Modal';
+import RequestStatus from '../constants/requestStatus';
+import Loading from '../components/Loading';
 
 type CreatePostProps = {
   pageTitle: PageTitle.CreatePost;
@@ -13,7 +19,7 @@ type CreatePostProps = {
 
 type CreatePostFormValues = {
   postBody: string;
-  postCover: FileList | null;
+  postCover: FileList;
   postTitle: string;
 };
 
@@ -25,7 +31,15 @@ export default function CreatePost({ pageTitle }: CreatePostProps) {
     register,
   } = useForm<CreatePostFormValues>();
 
+  const dispatch = useAppDispatch();
+  const user = useAppSelector(selectCurrentUser);
+  const [modal, setModal] = useState(false);
   const [cover, setCover] = useState<File | null>(null);
+  const [requestStatus, setRequestStatus] = useState<RequestStatus>(
+    RequestStatus.Idle
+  );
+  const [requestError, setRequestError] = useState<string | null>(null);
+
   const {
     name: coverName,
     onBlur: onBlurCover,
@@ -40,8 +54,28 @@ export default function CreatePost({ pageTitle }: CreatePostProps) {
     document.title = pageTitle;
   }, [pageTitle]);
 
-  const onSubmit: SubmitHandler<CreatePostFormValues> = (data) => {
-    console.log(data);
+  const onSubmit: SubmitHandler<CreatePostFormValues> = async (data) => {
+    try {
+      setRequestStatus(RequestStatus.Pending);
+      await dispatch(
+        addNewPost({
+          author: {
+            id: user.id,
+            photoURL: user.photoURL,
+            username: user.username,
+          },
+          body: data.postBody,
+          title: data.postTitle,
+          cover: data.postCover[0],
+        })
+      ).unwrap();
+      setRequestStatus(RequestStatus.Resolved);
+    } catch (e) {
+      setRequestStatus(RequestStatus.Rejected);
+      if (e instanceof Error) {
+        setRequestError(e.message);
+      }
+    }
   };
 
   const handleCoverChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -51,6 +85,11 @@ export default function CreatePost({ pageTitle }: CreatePostProps) {
 
   return (
     <div className="py-10">
+      {cover && (
+        <Modal open={modal} setOpen={setModal} className="sm:max-w-2xl">
+          <img src={URL.createObjectURL(cover)} alt="sad" />
+        </Modal>
+      )}
       <Container className="relative">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex flex-wrap mb-8 gap-5">
@@ -79,6 +118,9 @@ export default function CreatePost({ pageTitle }: CreatePostProps) {
                 onBlur={onBlurCover}
                 ref={coverRef}
               />
+              <Button round disabled={!cover} onClick={() => setModal(true)}>
+                Preview Cover
+              </Button>
               <span className="text-sm font-bold">
                 File Chosen:{' '}
                 {cover && (
@@ -120,11 +162,10 @@ export default function CreatePost({ pageTitle }: CreatePostProps) {
             <Button type="submit" round>
               Publish
             </Button>
-            <Button round to="#" className="router-button">
-              Preview
-            </Button>
           </div>
         </form>
+        {requestStatus === RequestStatus.Pending && <Loading />}
+        {requestStatus === RequestStatus.Rejected && <p>{requestError}</p>}
       </Container>
     </div>
   );
