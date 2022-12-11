@@ -71,7 +71,8 @@ const Chat = () => {
 
   useEffect(() => {
     socket.current = io(
-      process.env.REACT_APP_BACKEND_URL || 'https://backendelden.herokuapp.com'
+      process.env.REACT_APP_BACKEND_URL ||
+        'https://web-production-2577.up.railway.app/'
     );
 
     socket.current?.on('chatFromServer', (message) => {
