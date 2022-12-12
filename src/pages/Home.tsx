@@ -5,10 +5,16 @@ import PageTitle from '../constants/pageTitle';
 import { selectIsUserAuthenticated } from '../store/userSlice';
 import RequestStatus from '../constants/requestStatus';
 import Loading from '../components/Loading';
-import { fetchAllPosts, toggleEditPosts } from '../store/postsSlice';
+import {
+  selectAllPosts,
+  selectPostIsEdit,
+  selectPostsError,
+  toggleEditPosts,
+} from '../store/postsSlice';
 import WelcomeScreen from '../components/WelcomeScreen';
-import BlogCardList from '../components/BlogCardList';
+import PostCardList from '../components/PostCardList';
 import Container from '../components/Container';
+import sortPostsByDate from '../utils/sortPostsByDate';
 
 const welcomeScreen = {
   title: 'Remember Writing?',
@@ -24,18 +30,14 @@ type HomeProps = {
 
 export default function Home({ pageTitle }: HomeProps) {
   const isAuth = useAppSelector(selectIsUserAuthenticated);
-  const posts = useAppSelector((state) => state.posts.posts);
+  const posts = useAppSelector(selectAllPosts);
   const postsStatus = useAppSelector((state) => state.posts.status);
-  const postsError = useAppSelector((state) => state.posts.error);
-  const postsIsEdit = useAppSelector((state) => state.posts.isEdit);
+  const postsError = useAppSelector(selectPostsError);
+  const postsIsEdit = useAppSelector(selectPostIsEdit);
   const dispatch = useAppDispatch();
-
-  const blogPosts = posts.slice(0, 2);
-  const blogCardListPosts = posts.slice(2, 6);
 
   useEffect(() => {
     dispatch(toggleEditPosts(false));
-    dispatch(fetchAllPosts());
     document.title = pageTitle;
   }, [dispatch, pageTitle]);
 
@@ -46,7 +48,22 @@ export default function Home({ pageTitle }: HomeProps) {
   }
 
   if (postsStatus === RequestStatus.Resolved) {
-    content = blogPosts.map((post) => <BlogPost key={post.id} post={post} />);
+    const orderedPosts = sortPostsByDate(posts);
+    const blogPosts = orderedPosts.slice(0, 2);
+    const blogCardListPosts = orderedPosts.slice(2, 6);
+
+    content = (
+      <>
+        {blogPosts.map((post) => (
+          <BlogPost key={post.id} post={post} />
+        ))}
+        <div className="bg-slate-100">
+          <Container className="max-w-screen-2xl">
+            <PostCardList isEdit={postsIsEdit} posts={blogCardListPosts} />
+          </Container>
+        </div>
+      </>
+    );
   }
 
   if (postsStatus === RequestStatus.Rejected) {
@@ -56,15 +73,7 @@ export default function Home({ pageTitle }: HomeProps) {
   return (
     <div>
       {!isAuth && <WelcomeScreen data={welcomeScreen} />}
-      {/* {sampleBlogPosts.map((post, index) => (
-        <BlogPost post={post} key={index} />
-      ))} */}
       {content}
-      <div className="bg-slate-100">
-        <Container className="max-w-screen-2xl">
-          <BlogCardList isEdit={postsIsEdit} blogs={blogCardListPosts} />
-        </Container>
-      </div>
     </div>
   );
 }

@@ -1,6 +1,6 @@
 enum PageTitle {
   Home = 'Home | AesteBlog',
-  Blogs = 'Blogs | AesteBlog',
+  Posts = 'Posts | AesteBlog',
   Register = 'Register | AesteBlog',
   Login = 'Login | AesteBlog',
   ForgotPassword = 'Forgot Password | AesteBlog',

@@ -1,6 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom';
 import Root from '../pages/Root';
-import Blogs from '../pages/Blogs';
+import Blogs from '../pages/Posts';
 import Home from '../pages/Home';
 import Login from '../pages/Login';
 import Register from '../pages/Register';
@@ -10,6 +10,7 @@ import PageTitle from '../constants/pageTitle';
 import AuthRoot from '../pages/AuthRoot';
 import Profile from '../pages/Profile';
 import CreatePost from '../pages/CreatePost';
+import ViewPost from '../pages/ViewPost';
 
 const router = createBrowserRouter([
   {
@@ -21,8 +22,8 @@ const router = createBrowserRouter([
         element: <Home pageTitle={PageTitle.Home} />,
       },
       {
-        path: LinkPath.Blogs,
-        element: <Blogs pageTitle={PageTitle.Blogs} />,
+        path: LinkPath.Posts,
+        element: <Blogs pageTitle={PageTitle.Posts} />,
       },
       {
         path: LinkPath.Profile,
@@ -31,6 +32,10 @@ const router = createBrowserRouter([
       {
         path: LinkPath.CreatePost,
         element: <CreatePost pageTitle={PageTitle.CreatePost} />,
+      },
+      {
+        path: LinkPath.ViewPost,
+        element: <ViewPost />,
       },
     ],
   },

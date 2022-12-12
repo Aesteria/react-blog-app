@@ -18,7 +18,11 @@ export default function BlogPost({ post }: BlogPostProps) {
           </h2>
           <ReactQuill theme="bubble" readOnly value={post.body.slice(0, 150)} />
           <div className="mt-10">
-            <Button round to="/register" className="rounded-md shadow">
+            <Button
+              round
+              to={`/posts/${post.id}`}
+              className="rounded-md shadow"
+            >
               View The Post
             </Button>
           </div>

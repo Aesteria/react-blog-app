@@ -1,10 +1,4 @@
-import {
-  addDoc,
-  collection,
-  getDocs,
-  orderBy,
-  query,
-} from 'firebase/firestore';
+import { addDoc, collection, getDocs, query } from 'firebase/firestore';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { db, storage } from '../firebase';
 import { InitialPost, Post } from '../types/post';
@@ -39,22 +33,22 @@ export const createPost = async (post: InitialPost) => {
 };
 
 export const getAllPosts = async () => {
-  const q = query(collection(db, 'posts'), orderBy('createdDate', 'desc'));
+  const q = query(collection(db, 'posts'));
 
   const querySnapshot = await getDocs(q);
   const posts: Post[] = [];
-  querySnapshot.forEach((doc) => {
+  querySnapshot.forEach((document) => {
     posts.push({
       author: {
-        id: doc.data().author.id,
-        username: doc.data().author.username,
-        photoURL: doc.data().author.photoURL,
+        id: document.data().author.id,
+        username: document.data().author.username,
+        photoURL: document.data().author.photoURL,
       },
-      id: doc.id,
-      body: doc.data().body,
-      title: doc.data().title,
-      coverImage: doc.data().coverImage,
-      createdDate: doc.data().createdDate,
+      id: document.id,
+      body: document.data().body,
+      title: document.data().title,
+      coverImage: document.data().coverImage,
+      createdDate: document.data().createdDate,
     });
   });
 

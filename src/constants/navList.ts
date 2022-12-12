@@ -6,8 +6,8 @@ const navList = [
     to: LinkPath.Home,
   },
   {
-    text: 'Blogs',
-    to: LinkPath.Blogs,
+    text: 'Posts',
+    to: LinkPath.Posts,
   },
   {
     text: 'Create Post',

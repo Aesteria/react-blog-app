@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../firebase';
-import postsReducer from './postsSlice';
+import postsReducer, { fetchAllPosts } from './postsSlice';
 import userReducer, { login, logout } from './userSlice';
 
 export const store = configureStore({
@@ -21,6 +21,8 @@ onAuthStateChanged(auth, async (user) => {
     store.dispatch(logout());
   }
 });
+
+store.dispatch(fetchAllPosts());
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;

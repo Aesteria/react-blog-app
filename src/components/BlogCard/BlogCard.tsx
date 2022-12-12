@@ -25,14 +25,14 @@ export default function BlogCard({ post, isEdit }: BlogCardProps) {
     <div className="relative cursor-pointer flex flex-col rounded-lg bg-white shadow-sm hover:shadow-2xl transition-shadow group">
       {allowEdit && (
         <div className="flex absolute top-2 right-2 transition-opacity opacity-0 group-hover:opacity-100">
-          <div className="flex items-center justify-center w-9 h-9 rounded-full bg-white hover:bg-slate-600 transition-backgroundColor mr-2 [&>*]:hover:text-white">
+          <div className="flex items-center justify-center w-9 h-9 rounded-full bg-white hover:bg-slate-600 transition-backgroundColor mr-2 group/button">
             <button>
-              <PencilSquareIcon className="pointer-events-none w-5 h-auto transition-colors" />
+              <PencilSquareIcon className="pointer-events-none w-5 h-auto transition-colors group-hover/button:text-white" />
             </button>
           </div>
-          <div className="flex items-center justify-center w-9 h-9 rounded-full bg-white hover:bg-slate-600 transition-backgroundColor [&>*]:hover:text-white">
+          <div className="flex items-center justify-center w-9 h-9 rounded-full bg-white hover:bg-slate-600 transition-backgroundColor group/button">
             <button>
-              <TrashIcon className="pointer-events-none w-5 h-auto transition-colors" />
+              <TrashIcon className="pointer-events-none w-5 h-auto transition-colors group-hover/button:text-white" />
             </button>
           </div>
         </div>
