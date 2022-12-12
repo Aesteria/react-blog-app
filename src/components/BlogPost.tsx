@@ -1,62 +1,25 @@
-import clsx from 'clsx';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.bubble.css';
 
+import { Post } from '../types/post';
 import Button from './Button';
 
-import beautifulStories from '../assets/blogPhotos/beautiful-stories.jpg';
-import coding from '../assets/blogPhotos/coding.jpg';
-import designedForEveryone from '../assets/blogPhotos/designed-for-everyone.jpg';
-import { useAppSelector } from '../store/hooks';
-import { selectIsUserAuthenticated } from '../store/userSlice';
-
 type BlogPostProps = {
-  post: {
-    title: string;
-    body: string;
-    welcomeScreen?: boolean;
-    cover: string;
-  };
+  post: Post;
 };
 
 export default function BlogPost({ post }: BlogPostProps) {
-  const isAuth = useAppSelector(selectIsUserAuthenticated);
-
-  if (isAuth && post.welcomeScreen) {
-    return null;
-  }
-
-  let imgPath = '';
-
-  if (post.cover === 'designed-for-everyone') {
-    imgPath = designedForEveryone;
-  }
-
-  if (post.cover === 'coding') {
-    imgPath = coding;
-  }
-
-  if (post.cover === 'beautiful-stories') {
-    imgPath = beautifulStories;
-  }
-
   return (
     <div className="lg:relative flex flex-col md:flex-row md:h-blog-post [&:nth-child(odd)>*:nth-child(1)]:order-2 [&:nth-child(odd)>*:nth-child(2)]:order-1 shadow-md">
-      <div
-        className={clsx({
-          'flex justify-center items-center flex-4 order-2 md:order-1 md:flex-3 py-10 px-6':
-            true,
-          'bg-slate-700 text-white': post.welcomeScreen,
-        })}
-      >
-        <div className="w-25">
+      <div className="flex justify-center items-center flex-4 order-2 md:order-1 md:flex-3 py-10 px-6">
+        <div className="w-96">
           <h2 className="font-bold text-3xl md:text-4xl text-indigo-400">
             <span className="block xl:inline">{post.title}</span>{' '}
           </h2>
-          <p className="mt-3 max-w-md text-lg sm:text-xl md:mt-5 md:max-w-3xl">
-            {post.body}
-          </p>
+          <ReactQuill theme="bubble" readOnly value={post.body.slice(0, 150)} />
           <div className="mt-10">
             <Button round to="/register" className="rounded-md shadow">
-              {post.welcomeScreen ? 'Login/Register' : 'View The Post'}
+              View The Post
             </Button>
           </div>
         </div>
@@ -64,7 +27,7 @@ export default function BlogPost({ post }: BlogPostProps) {
       <div className="w-full flex-3 order-1 md:order-2 md:flex-4">
         <img
           className="block w-full h-full object-cover"
-          src={imgPath}
+          src={post.coverImage}
           alt="post cover"
         />
       </div>

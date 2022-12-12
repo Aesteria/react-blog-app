@@ -1,7 +1,8 @@
+import { Post } from '../types/post';
 import BlogCard from './BlogCard/BlogCard';
 
 type BlogCardListProps = {
-  blogs: { blogTitle: string; blogCoverPhoto: string; blogDate: string }[];
+  blogs: Post[];
   isEdit: boolean;
 };
 

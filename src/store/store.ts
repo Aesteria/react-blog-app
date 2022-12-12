@@ -1,13 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../firebase';
-import sampleBlogsReducer from './sampleBlogsSlice';
 import postsReducer from './postsSlice';
 import userReducer, { login, logout } from './userSlice';
 
 export const store = configureStore({
   reducer: {
-    sampleBlogs: sampleBlogsReducer,
     user: userReducer,
     posts: postsReducer,
   },

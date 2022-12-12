@@ -2,7 +2,7 @@ import { Menu } from '@headlessui/react';
 import ProfileLinks from '../ProfileLinks/ProfileLinks';
 import { useAppSelector } from '../../../../store/hooks';
 import { selectCurrentUser } from '../../../../store/userSlice';
-import DefaultUserAvatar from '../../../../assets/profile.png';
+import UserAvatarImage from '../../../UserAvatarImage';
 
 export default function ProfileDropdown() {
   const user = useAppSelector(selectCurrentUser);
@@ -13,11 +13,7 @@ export default function ProfileDropdown() {
         <div>
           <Menu.Button className="flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
             <span className="sr-only">Open user menu</span>
-            <img
-              className="h-8 w-8 rounded-full"
-              src={user.photoURL || DefaultUserAvatar}
-              alt="Freepik"
-            />
+            <UserAvatarImage src={user.photoURL} />
           </Menu.Button>
         </div>
 

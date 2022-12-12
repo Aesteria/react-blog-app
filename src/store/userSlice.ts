@@ -72,6 +72,7 @@ const userSlice = createSlice({
     logout(state) {
       state.authenticated = false;
       state.status = 'resolved';
+      state.currentUser = initialState.currentUser;
     },
   },
   extraReducers(builder) {

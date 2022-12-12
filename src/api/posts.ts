@@ -1,7 +1,13 @@
-import { addDoc, collection } from 'firebase/firestore';
+import {
+  addDoc,
+  collection,
+  getDocs,
+  orderBy,
+  query,
+} from 'firebase/firestore';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { db, storage } from '../firebase';
-import { InitialPost } from '../types/post';
+import { InitialPost, Post } from '../types/post';
 
 // eslint-disable-next-line import/prefer-default-export
 export const createPost = async (post: InitialPost) => {
@@ -30,4 +36,27 @@ export const createPost = async (post: InitialPost) => {
     ...newPost,
     id: docRef.id,
   };
+};
+
+export const getAllPosts = async () => {
+  const q = query(collection(db, 'posts'), orderBy('createdDate', 'desc'));
+
+  const querySnapshot = await getDocs(q);
+  const posts: Post[] = [];
+  querySnapshot.forEach((doc) => {
+    posts.push({
+      author: {
+        id: doc.data().author.id,
+        username: doc.data().author.username,
+        photoURL: doc.data().author.photoURL,
+      },
+      id: doc.id,
+      body: doc.data().body,
+      title: doc.data().title,
+      coverImage: doc.data().coverImage,
+      createdDate: doc.data().createdDate,
+    });
+  });
+
+  return posts;
 };

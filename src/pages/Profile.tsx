@@ -10,7 +10,7 @@ import {
   updateUsername,
 } from '../store/userSlice';
 import Button from '../components/Button';
-import DefaultUserAvatar from '../assets/profile.png';
+import UserAvatarImage from '../components/UserAvatarImage';
 
 type ProfileProps = {
   pageTitle: PageTitle.Profile;
@@ -62,11 +62,7 @@ export default function Profile({ pageTitle }: ProfileProps) {
 
         <div className="mx-auto rounded-lg shadow-md p-8 bg-slate-200 flex flex-col max-w-xl items-center justify-center">
           <div className="relative mb-4">
-            <img
-              src={user.photoURL || DefaultUserAvatar}
-              alt="User avatar"
-              className="h-36 w-36"
-            />
+            <UserAvatarImage src={user.photoURL} size="large" />
           </div>
 
           <form onSubmit={handleSubmit(onSubmit)}>

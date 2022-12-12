@@ -8,18 +8,9 @@ module.exports = {
         3: '3 1 0%',
         2: '2 1 0%',
       },
-      minHeight: {
-        27: '27rem',
-        13: '13rem',
-        25: '25rem',
-        40: '40rem',
-      },
       height: {
-        'blog-post': '42rem',
+        'blog-post': '50rem',
         '40-screen': '40vh',
-      },
-      width: {
-        25: '25rem',
       },
       backgroundColor: {
         darkGray: '#303030',

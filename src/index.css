@@ -15,3 +15,7 @@
   height: 100%;
   overflow: auto;
 }
+
+.quill .ql-editor {
+  font-size: 1.125rem;
+}
