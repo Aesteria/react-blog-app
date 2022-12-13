@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { createPost, getAllPosts } from '../api/posts';
+import { createPost, deletePost, getAllPosts } from '../api/posts';
 import RequestStatus from '../constants/requestStatus';
 import { InitialPost, Post } from '../types/post';
 import type { RootState } from './store';
@@ -33,6 +33,14 @@ export const fetchAllPosts = createAsyncThunk(
   }
 );
 
+export const deletePostById = createAsyncThunk(
+  'posts/deletePostById',
+  async (postId: string) => {
+    await deletePost(postId);
+    return postId;
+  }
+);
+
 const postsSlice = createSlice({
   name: 'posts',
   initialState,
@@ -56,6 +64,9 @@ const postsSlice = createSlice({
       })
       .addCase(fetchAllPosts.pending, (state) => {
         state.status = RequestStatus.Pending;
+      })
+      .addCase(deletePostById.fulfilled, (state, action) => {
+        state.posts = state.posts.filter((post) => post.id !== action.payload);
       });
   },
 });

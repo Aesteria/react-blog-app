@@ -1,4 +1,11 @@
-import { addDoc, collection, getDocs, query } from 'firebase/firestore';
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  getDocs,
+  query,
+} from 'firebase/firestore';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { db, storage } from '../firebase';
 import { InitialPost, Post } from '../types/post';
@@ -53,4 +60,8 @@ export const getAllPosts = async () => {
   });
 
   return posts;
+};
+
+export const deletePost = async (postId: string) => {
+  await deleteDoc(doc(db, 'posts', postId));
 };
