@@ -1,4 +1,4 @@
-import Container from '../Container';
+import Container from '../ui/Container';
 import FooterLinks from './FooterLinks';
 
 // TODO: Change Aeste Blog to logo image

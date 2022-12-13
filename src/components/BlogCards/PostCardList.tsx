@@ -1,5 +1,5 @@
-import { Post } from '../types/post';
-import BlogCard from './BlogCard/BlogCard';
+import { Post } from '../../types/post';
+import BlogCard from './BlogCard';
 
 type BlogCardListProps = {
   posts: Post[];

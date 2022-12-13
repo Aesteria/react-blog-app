@@ -9,7 +9,7 @@ import { useAppSelector } from '../../store/hooks';
 import { selectCurrentUser } from '../../store/userSlice';
 import { Post } from '../../types/post';
 import formatDate from '../../utils/formatDate';
-import UserAvatarImage from '../UserAvatarImage';
+import UserAvatarImage from '../ui/UserAvatarImage';
 
 type BlogCardProps = {
   post: Post;

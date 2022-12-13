@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import DefaultUserAvatar from '../assets/profile.png';
+import DefaultUserAvatar from '../../assets/profile.png';
 
 type UserAvatarImageProps = {
   src: string | null;

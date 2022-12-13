@@ -2,10 +2,10 @@ import { CalendarIcon } from '@heroicons/react/24/outline';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.bubble.css';
 import { useParams } from 'react-router-dom';
-import Container from '../components/Container';
+
+import Container from '../components/ui/Container';
 import Page from '../components/Page';
-import Example from '../components/Tabs';
-import UserAvatarImage from '../components/UserAvatarImage';
+import UserAvatarImage from '../components/ui/UserAvatarImage';
 import PageTitle from '../constants/pageTitle';
 import { useAppSelector } from '../store/hooks';
 import { selectPostById } from '../store/postsSlice';
@@ -31,9 +31,6 @@ export default function ViewPost({ pageTitle }: ViewPostProps) {
     <Page title={pageTitle}>
       <div className="py-16">
         <Container className="max-w-5xl">
-          <div className="mb-10">
-            <Example />
-          </div>
           <img src={post.coverImage} alt="Cover" className="mb-8" />
           <div className="flex items-center mb-8">
             <div className="flex items-center mr-4">

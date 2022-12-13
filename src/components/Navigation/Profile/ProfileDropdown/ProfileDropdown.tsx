@@ -2,7 +2,7 @@ import { Menu } from '@headlessui/react';
 import ProfileLinks from '../ProfileLinks/ProfileLinks';
 import { useAppSelector } from '../../../../store/hooks';
 import { selectCurrentUser } from '../../../../store/userSlice';
-import UserAvatarImage from '../../../UserAvatarImage';
+import UserAvatarImage from '../../../ui/UserAvatarImage';
 
 export default function ProfileDropdown() {
   const user = useAppSelector(selectCurrentUser);

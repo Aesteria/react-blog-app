@@ -7,14 +7,14 @@ import { Link, useNavigate } from 'react-router-dom';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 
 import AuthSplitScreen from '../components/AuthSplitScreen';
-import Button from '../components/Button';
-import InputGroup from '../components/InputGroup';
+import Button from '../components/ui/Button';
+import InputGroup from '../components/ui/InputGroup';
 import LinkPath from '../constants/linkPath';
 import PageTitle from '../constants/pageTitle';
 import { AuthFormValues } from '../types/form';
 import RequestStatus from '../constants/requestStatus';
 import { auth } from '../firebase';
-import Loading from '../components/Loading';
+import Loading from '../components/ui/Loading';
 import Page from '../components/Page';
 
 type LoginProps = {

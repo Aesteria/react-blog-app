@@ -2,16 +2,16 @@ import { useState } from 'react';
 import ReactQuill from 'react-quill';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 
-import Container from '../components/Container';
+import Container from '../components/ui/Container';
 import PageTitle from '../constants/pageTitle';
 import 'react-quill/dist/quill.snow.css';
-import Button from '../components/Button';
+import Button from '../components/ui/Button';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { addNewPost } from '../store/postsSlice';
 import { selectCurrentUser } from '../store/userSlice';
-import Modal from '../components/Modal';
+import Modal from '../components/ui/Modal';
 import RequestStatus from '../constants/requestStatus';
-import Loading from '../components/Loading';
+import Loading from '../components/ui/Loading';
 import Page from '../components/Page';
 
 type CreatePostProps = {

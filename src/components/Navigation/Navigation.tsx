@@ -10,7 +10,7 @@ import {
   selectCurrentUser,
   selectIsUserAuthenticated,
 } from '../../store/userSlice';
-import UserAvatarImage from '../UserAvatarImage';
+import UserAvatarImage from '../ui/UserAvatarImage';
 
 export default function Navigation() {
   const user = useAppSelector(selectCurrentUser);

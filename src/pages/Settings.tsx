@@ -1,6 +1,6 @@
 import { SubmitHandler, useForm } from 'react-hook-form';
 
-import Container from '../components/Container';
+import Container from '../components/ui/Container';
 import PageTitle from '../constants/pageTitle';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import {
@@ -8,8 +8,8 @@ import {
   updateAvatar,
   updateUsername,
 } from '../store/userSlice';
-import Button from '../components/Button';
-import UserAvatarImage from '../components/UserAvatarImage';
+import Button from '../components/ui/Button';
+import UserAvatarImage from '../components/ui/UserAvatarImage';
 import Page from '../components/Page';
 
 type SettingsProps = {

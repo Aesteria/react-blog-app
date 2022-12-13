@@ -1,5 +1,5 @@
 import LinkPath from '../constants/linkPath';
-import Button from './Button';
+import Button from './ui/Button';
 
 import CoverImage from '../assets/blogPhotos/coding.jpg';
 

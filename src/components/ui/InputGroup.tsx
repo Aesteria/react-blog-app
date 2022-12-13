@@ -2,7 +2,7 @@ import { ExclamationCircleIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import { ComponentPropsWithoutRef, HTMLInputTypeAttribute } from 'react';
 import { FieldErrorsImpl, Path, UseFormRegister } from 'react-hook-form';
-import { AuthFormValues } from '../types/form';
+import { AuthFormValues } from '../../types/form';
 
 type InputGroupProps = {
   type?: HTMLInputTypeAttribute;

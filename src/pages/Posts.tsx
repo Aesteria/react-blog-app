@@ -1,12 +1,12 @@
 import { useEffect } from 'react';
-import BlogCardList from '../components/PostCardList';
-import Container from '../components/Container';
+import BlogCardList from '../components/BlogCards/PostCardList';
+import Container from '../components/ui/Container';
 import PageTitle from '../constants/pageTitle';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { selectPosts, toggleEditPosts } from '../store/postsSlice';
 import { selectIsUserAuthenticated } from '../store/userSlice';
 import RequestStatus from '../constants/requestStatus';
-import Loading from '../components/Loading';
+import Loading from '../components/ui/Loading';
 import sortPostsByDate from '../utils/sortPostsByDate';
 import Page from '../components/Page';
 

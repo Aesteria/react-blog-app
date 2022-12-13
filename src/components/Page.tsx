@@ -9,6 +9,7 @@ type PageProps = {
 export default function Page({ children, title }: PageProps) {
   useEffect(() => {
     document.title = `${title} | AesteBlog`;
+    window.scrollTo(0, 0);
   }, [title]);
 
   return children;

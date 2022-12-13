@@ -4,13 +4,13 @@ import { useAppDispatch, useAppSelector } from '../store/hooks';
 import PageTitle from '../constants/pageTitle';
 import { selectIsUserAuthenticated } from '../store/userSlice';
 import RequestStatus from '../constants/requestStatus';
-import Loading from '../components/Loading';
+import Loading from '../components/ui/Loading';
 import { selectPosts, toggleEditPosts } from '../store/postsSlice';
 import WelcomeScreen from '../components/WelcomeScreen';
-import PostCardList from '../components/PostCardList';
-import Container from '../components/Container';
+import PostCardList from '../components/BlogCards/PostCardList';
+import Container from '../components/ui/Container';
 import sortPostsByDate from '../utils/sortPostsByDate';
-import BlogPostList from '../components/BlogPostList';
+import BlogPostList from '../components/BlogPosts/BlogPostList';
 import Page from '../components/Page';
 
 const welcomeScreen = {
