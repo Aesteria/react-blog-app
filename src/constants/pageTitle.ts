@@ -7,6 +7,7 @@ enum PageTitle {
   Settings = 'Profile Settings',
   CreatePost = 'Create Post',
   ViewPost = 'View Post',
+  EditPost = 'Edit Post',
 }
 
 export default PageTitle;

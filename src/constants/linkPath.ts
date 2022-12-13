@@ -6,7 +6,8 @@ enum LinkPath {
   ForgotPassword = '/forgot-password',
   CreatePost = '/create-post',
   Profile = '/profile',
-  ViewPost = '/posts/:postId',
+  ViewPost = '/post/:postId',
+  EditPost = '/post/edit',
 }
 
 export default LinkPath;

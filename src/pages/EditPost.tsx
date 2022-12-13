@@ -14,23 +14,23 @@ import RequestStatus from '../constants/requestStatus';
 import Loading from '../components/ui/Loading';
 import Page from '../components/Page';
 
-type CreatePostProps = {
-  pageTitle: PageTitle.CreatePost;
+type EditPostProps = {
+  pageTitle: PageTitle.EditPost;
 };
 
-type CreatePostFormValues = {
+type EditPostFormValues = {
   postBody: string;
   postCover: FileList;
   postTitle: string;
 };
 
-export default function CreatePost({ pageTitle }: CreatePostProps) {
+export default function EditPost({ pageTitle }: EditPostProps) {
   const {
     control,
     handleSubmit,
     formState: { errors },
     register,
-  } = useForm<CreatePostFormValues>();
+  } = useForm<EditPostFormValues>();
 
   const dispatch = useAppDispatch();
   const user = useAppSelector(selectCurrentUser);
@@ -51,7 +51,7 @@ export default function CreatePost({ pageTitle }: CreatePostProps) {
     validate: (value) => value?.[0]?.type.startsWith('image'),
   });
 
-  const onSubmit: SubmitHandler<CreatePostFormValues> = async (data) => {
+  const onSubmit: SubmitHandler<EditPostFormValues> = async (data) => {
     try {
       setRequestStatus(RequestStatus.Pending);
       await dispatch(

@@ -2,7 +2,7 @@ import { RouterProvider } from 'react-router-dom';
 
 import router from './router';
 import { useAppSelector } from './store/hooks';
-import { selectAuthStateChange } from './store/userSlice';
+import { selectAuthStateChange } from './store/users/userSlice';
 
 export default function App() {
   const authStatus = useAppSelector(selectAuthStateChange);

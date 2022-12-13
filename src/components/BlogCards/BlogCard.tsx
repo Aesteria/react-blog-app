@@ -4,10 +4,9 @@ import {
   TrashIcon,
 } from '@heroicons/react/24/outline';
 import { Link } from 'react-router-dom';
-import LinkPath from '../../constants/linkPath';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { deletePostById } from '../../store/postsSlice';
-import { selectCurrentUser } from '../../store/userSlice';
+import { deletePostById } from '../../store/posts/postsSlice';
+import { selectCurrentUser } from '../../store/users/userSlice';
 import { Post } from '../../types/post';
 import formatDate from '../../utils/formatDate';
 import UserAvatarImage from '../ui/UserAvatarImage';
@@ -39,7 +38,7 @@ export default function BlogCard({ post, isEdit }: BlogCardProps) {
   };
 
   return (
-    <Link to={`${LinkPath.Posts}/${post.id}`}>
+    <Link to={`/post/${post.id}`}>
       <div className="relative flex flex-col rounded-lg bg-white shadow-sm hover:shadow-2xl transition-shadow group">
         {allowEdit && (
           <div className="flex absolute top-2 right-2 transition-opacity opacity-0 group-hover:opacity-100">

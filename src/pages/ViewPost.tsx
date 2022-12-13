@@ -8,7 +8,7 @@ import Page from '../components/Page';
 import UserAvatarImage from '../components/ui/UserAvatarImage';
 import PageTitle from '../constants/pageTitle';
 import { useAppSelector } from '../store/hooks';
-import { selectPostById } from '../store/postsSlice';
+import { selectPostById } from '../store/posts/postsSlice';
 import formatDate from '../utils/formatDate';
 
 type ViewPostProps = {

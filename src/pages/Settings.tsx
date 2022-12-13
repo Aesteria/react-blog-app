@@ -7,7 +7,7 @@ import {
   selectCurrentUser,
   updateAvatar,
   updateUsername,
-} from '../store/userSlice';
+} from '../store/users/userSlice';
 import Button from '../components/ui/Button';
 import UserAvatarImage from '../components/ui/UserAvatarImage';
 import Page from '../components/Page';

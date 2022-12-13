@@ -11,6 +11,7 @@ import AuthRoot from '../pages/AuthRoot';
 import Profile from '../pages/Settings';
 import CreatePost from '../pages/CreatePost';
 import ViewPost from '../pages/ViewPost';
+import EditPost from '../pages/EditPost';
 
 const router = createBrowserRouter([
   {
@@ -36,6 +37,10 @@ const router = createBrowserRouter([
       {
         path: LinkPath.ViewPost,
         element: <ViewPost pageTitle={PageTitle.ViewPost} />,
+      },
+      {
+        path: LinkPath.EditPost,
+        element: <EditPost pageTitle={PageTitle.EditPost} />,
       },
     ],
   },

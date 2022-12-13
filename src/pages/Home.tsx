@@ -2,10 +2,10 @@ import { useEffect } from 'react';
 
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import PageTitle from '../constants/pageTitle';
-import { selectIsUserAuthenticated } from '../store/userSlice';
+import { selectIsUserAuthenticated } from '../store/users/userSlice';
 import RequestStatus from '../constants/requestStatus';
 import Loading from '../components/ui/Loading';
-import { selectPosts, toggleEditPosts } from '../store/postsSlice';
+import { selectPosts, toggleEditPosts } from '../store/posts/postsSlice';
 import WelcomeScreen from '../components/WelcomeScreen';
 import PostCardList from '../components/BlogCards/PostCardList';
 import Container from '../components/ui/Container';
