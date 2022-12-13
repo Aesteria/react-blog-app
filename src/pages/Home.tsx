@@ -11,6 +11,7 @@ import PostCardList from '../components/PostCardList';
 import Container from '../components/Container';
 import sortPostsByDate from '../utils/sortPostsByDate';
 import BlogPostList from '../components/BlogPostList';
+import Page from '../components/Page';
 
 const welcomeScreen = {
   title: 'Remember Writing?',
@@ -31,8 +32,7 @@ export default function Home({ pageTitle }: HomeProps) {
 
   useEffect(() => {
     dispatch(toggleEditPosts(false));
-    document.title = pageTitle;
-  }, [dispatch, pageTitle]);
+  }, [dispatch]);
 
   let content;
 
@@ -63,9 +63,11 @@ export default function Home({ pageTitle }: HomeProps) {
   }
 
   return (
-    <div>
-      {!isAuth && <WelcomeScreen data={welcomeScreen} />}
-      {content}
-    </div>
+    <Page title={pageTitle}>
+      <div>
+        {!isAuth && <WelcomeScreen data={welcomeScreen} />}
+        {content}
+      </div>
+    </Page>
   );
 }

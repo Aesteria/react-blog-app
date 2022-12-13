@@ -1,11 +1,12 @@
 enum PageTitle {
-  Home = 'Home | AesteBlog',
-  Posts = 'Posts | AesteBlog',
-  Register = 'Register | AesteBlog',
-  Login = 'Login | AesteBlog',
-  ForgotPassword = 'Forgot Password | AesteBlog',
-  Profile = 'Profile Settings | AesteBlog',
-  CreatePost = 'Create Post | AesteBlog',
+  Home = 'Home',
+  Posts = 'Posts',
+  Register = 'Register',
+  Login = 'Login',
+  ForgotPassword = 'Forgot Password',
+  Settings = 'Profile Settings',
+  CreatePost = 'Create Post',
+  ViewPost = 'View Post',
 }
 
 export default PageTitle;

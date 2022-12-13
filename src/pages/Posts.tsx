@@ -8,6 +8,7 @@ import { selectIsUserAuthenticated } from '../store/userSlice';
 import RequestStatus from '../constants/requestStatus';
 import Loading from '../components/Loading';
 import sortPostsByDate from '../utils/sortPostsByDate';
+import Page from '../components/Page';
 
 type PostsProps = {
   pageTitle: PageTitle.Posts;
@@ -24,8 +25,7 @@ export default function Posts({ pageTitle }: PostsProps) {
     } else {
       dispatch(toggleEditPosts(false));
     }
-    document.title = pageTitle;
-  }, [dispatch, isAuth, pageTitle]);
+  }, [dispatch, isAuth]);
 
   let content;
 
@@ -43,8 +43,10 @@ export default function Posts({ pageTitle }: PostsProps) {
   }
 
   return (
-    <div className="bg-slate-100">
-      <Container className="max-w-screen-2xl">{content}</Container>
-    </div>
+    <Page title={pageTitle}>
+      <div className="bg-slate-100">
+        <Container className="max-w-screen-2xl">{content}</Container>
+      </div>
+    </Page>
   );
 }

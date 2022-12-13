@@ -5,7 +5,7 @@ import {
 } from '@heroicons/react/24/outline';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -18,6 +18,7 @@ import { AuthFormValues } from '../types/form';
 import Loading from '../components/Loading';
 import RequestStatus from '../constants/requestStatus';
 import { createUser } from '../api/users';
+import Page from '../components/Page';
 
 type RegisterProps = {
   pageTitle: PageTitle.Register;
@@ -50,10 +51,6 @@ export default function Register({ pageTitle }: RegisterProps) {
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    document.title = pageTitle;
-  }, [pageTitle]);
-
   const onSubmit: SubmitHandler<AuthFormValues> = async ({
     email,
     password,
@@ -74,71 +71,73 @@ export default function Register({ pageTitle }: RegisterProps) {
   };
 
   return (
-    <AuthSplitScreen>
-      <div className="mx-auto w-full max-w-sm lg:w-96">
-        <div>
-          <h2 className="mt-6 text-3xl font-bold tracking-tight text-gray-900">
-            Create new account
-          </h2>
-          <p className="mt-2 text-sm text-gray-600">
-            Already have an account?{' '}
-            <Link
-              to={LinkPath.Login}
-              className="font-medium text-indigo-600 hover:text-indigo-500"
-            >
-              Log in
-            </Link>
-          </p>
-        </div>
-
-        <div className="mt-8">
-          <div className="mt-6">
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-              <InputGroup
-                required
-                label="Email"
-                type="email"
-                name="email"
-                Icon={EnvelopeIcon}
-                register={register}
-                errors={errors}
-              />
-
-              <InputGroup
-                required
-                label="Username"
-                name="username"
-                Icon={UserIcon}
-                register={register}
-                errors={errors}
-              />
-
-              <InputGroup
-                required
-                type="password"
-                label="Password"
-                name="password"
-                Icon={LockClosedIcon}
-                register={register}
-                errors={errors}
-              />
-
-              <div>
-                <Button type="submit" className="w-full">
-                  Create an account
-                </Button>
-              </div>
-            </form>
+    <Page title={pageTitle}>
+      <AuthSplitScreen>
+        <div className="mx-auto w-full max-w-sm lg:w-96">
+          <div>
+            <h2 className="mt-6 text-3xl font-bold tracking-tight text-gray-900">
+              Create new account
+            </h2>
+            <p className="mt-2 text-sm text-gray-600">
+              Already have an account?{' '}
+              <Link
+                to={LinkPath.Login}
+                className="font-medium text-indigo-600 hover:text-indigo-500"
+              >
+                Log in
+              </Link>
+            </p>
           </div>
-        </div>
 
-        {status === 'pending' && (
-          <Loading className="mt-6 flex justify-center" />
-        )}
-        {status === 'rejected' && (
-          <p className="text-center text-red-600 mt-6">{error}</p>
-        )}
-      </div>
-    </AuthSplitScreen>
+          <div className="mt-8">
+            <div className="mt-6">
+              <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+                <InputGroup
+                  required
+                  label="Email"
+                  type="email"
+                  name="email"
+                  Icon={EnvelopeIcon}
+                  register={register}
+                  errors={errors}
+                />
+
+                <InputGroup
+                  required
+                  label="Username"
+                  name="username"
+                  Icon={UserIcon}
+                  register={register}
+                  errors={errors}
+                />
+
+                <InputGroup
+                  required
+                  type="password"
+                  label="Password"
+                  name="password"
+                  Icon={LockClosedIcon}
+                  register={register}
+                  errors={errors}
+                />
+
+                <div>
+                  <Button type="submit" className="w-full">
+                    Create an account
+                  </Button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          {status === 'pending' && (
+            <Loading className="mt-6 flex justify-center" />
+          )}
+          {status === 'rejected' && (
+            <p className="text-center text-red-600 mt-6">{error}</p>
+          )}
+        </div>
+      </AuthSplitScreen>
+    </Page>
   );
 }
