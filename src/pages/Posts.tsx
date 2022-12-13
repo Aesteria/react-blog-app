@@ -3,13 +3,7 @@ import BlogCardList from '../components/PostCardList';
 import Container from '../components/Container';
 import PageTitle from '../constants/pageTitle';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
-import {
-  selectAllPosts,
-  selectPostIsEdit,
-  selectPostsError,
-  selectPostsStatus,
-  toggleEditPosts,
-} from '../store/postsSlice';
+import { selectPosts, toggleEditPosts } from '../store/postsSlice';
 import { selectIsUserAuthenticated } from '../store/userSlice';
 import RequestStatus from '../constants/requestStatus';
 import Loading from '../components/Loading';
@@ -21,10 +15,7 @@ type PostsProps = {
 
 export default function Posts({ pageTitle }: PostsProps) {
   const isAuth = useAppSelector(selectIsUserAuthenticated);
-  const posts = useAppSelector(selectAllPosts);
-  const postsStatus = useAppSelector(selectPostsStatus);
-  const postsError = useAppSelector(selectPostsError);
-  const isEdit = useAppSelector(selectPostIsEdit);
+  const data = useAppSelector(selectPosts);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -38,17 +29,17 @@ export default function Posts({ pageTitle }: PostsProps) {
 
   let content;
 
-  if (postsStatus === RequestStatus.Pending) {
+  if (data.status === RequestStatus.Pending) {
     content = <Loading />;
   }
 
-  if (postsStatus === RequestStatus.Resolved) {
-    const orderedPosts = sortPostsByDate(posts);
-    content = <BlogCardList isEdit={isEdit} posts={orderedPosts} />;
+  if (data.status === RequestStatus.Resolved) {
+    const orderedPosts = sortPostsByDate(data.posts);
+    content = <BlogCardList isEdit={data.isEdit} posts={orderedPosts} />;
   }
 
-  if (postsStatus === RequestStatus.Rejected) {
-    content = <p>{postsError}</p>;
+  if (data.status === RequestStatus.Rejected) {
+    content = <p>{data.error}</p>;
   }
 
   return (

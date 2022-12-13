@@ -1,5 +1,6 @@
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.bubble.css';
+import LinkPath from '../constants/linkPath';
 
 import { Post } from '../types/post';
 import Button from './Button';
@@ -20,7 +21,7 @@ export default function BlogPost({ post }: BlogPostProps) {
           <div className="mt-10">
             <Button
               round
-              to={`/posts/${post.id}`}
+              to={`${LinkPath.Posts}/${post.id}`}
               className="rounded-md shadow"
             >
               View The Post

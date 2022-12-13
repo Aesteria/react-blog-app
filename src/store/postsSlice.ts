@@ -61,9 +61,9 @@ const postsSlice = createSlice({
 });
 
 export const { toggleEditPosts } = postsSlice.actions;
-export const selectAllPosts = (state: RootState) => state.posts.posts;
-export const selectPostIsEdit = (state: RootState) => state.posts.isEdit;
-export const selectPostsStatus = (state: RootState) => state.posts.status;
-export const selectPostsError = (state: RootState) => state.posts.error;
+
+export const selectPosts = (state: RootState) => state.posts;
+export const selectPostById = (state: RootState, id: string) =>
+  state.posts.posts.find((post) => post.id === id);
 
 export default postsSlice.reducer;
