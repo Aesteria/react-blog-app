@@ -19,3 +19,7 @@
 .quill .ql-editor {
   font-size: 1.125rem;
 }
+
+.post-view .quill .ql-editor {
+  padding: 0;
+}
