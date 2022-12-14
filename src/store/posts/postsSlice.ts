@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import RequestStatus from '../../constants/requestStatus';
 import { Post } from '../../types/post';
 import type { RootState } from '../store';
-import { addNewPost, deletePost, fetchAllPosts } from './thunks';
+import { addNewPost, deletePost, fetchAllPosts, updatePost } from './thunks';
 
 type InitialState = {
   posts: Post[];
@@ -43,6 +43,23 @@ const postsSlice = createSlice({
       })
       .addCase(deletePost.fulfilled, (state, action) => {
         state.posts = state.posts.filter((post) => post.id !== action.payload);
+      })
+      .addCase(updatePost.fulfilled, (state, action) => {
+        const existingPostIndex = state.posts.findIndex(
+          (post) => post.id === action.payload.id
+        );
+        const existingPost = state.posts.find(
+          (post) => post.id === action.payload.id
+        );
+        if (!existingPost) {
+          throw new Error('somethign went wrong with post update');
+        }
+        state.posts[existingPostIndex] = {
+          ...existingPost,
+          body: action.payload.body,
+          title: action.payload.title,
+          coverImage: action.payload.coverImage,
+        };
       });
   },
 });

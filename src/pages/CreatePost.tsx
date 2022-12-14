@@ -7,9 +7,8 @@ import PageTitle from '../constants/pageTitle';
 import 'react-quill/dist/quill.snow.css';
 import Button from '../components/ui/Button';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
-import { addNewPost } from '../store/posts/postsSlice';
+import { addNewPost } from '../store/posts/thunks';
 import { selectCurrentUser } from '../store/users/userSlice';
-import Modal from '../components/ui/Modal';
 import RequestStatus from '../constants/requestStatus';
 import Loading from '../components/ui/Loading';
 import Page from '../components/Page';
@@ -34,7 +33,7 @@ export default function CreatePost({ pageTitle }: CreatePostProps) {
 
   const dispatch = useAppDispatch();
   const user = useAppSelector(selectCurrentUser);
-  const [modal, setModal] = useState(false);
+
   const [cover, setCover] = useState<File | null>(null);
   const [requestStatus, setRequestStatus] = useState<RequestStatus>(
     RequestStatus.Idle
@@ -83,11 +82,6 @@ export default function CreatePost({ pageTitle }: CreatePostProps) {
   return (
     <Page title={pageTitle}>
       <div className="py-10">
-        {cover && (
-          <Modal open={modal} setOpen={setModal} className="sm:max-w-2xl">
-            <img src={URL.createObjectURL(cover)} alt="sad" />
-          </Modal>
-        )}
         <Container className="relative">
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="flex flex-wrap mb-8 gap-5">
@@ -116,9 +110,6 @@ export default function CreatePost({ pageTitle }: CreatePostProps) {
                   onBlur={onBlurCover}
                   ref={coverRef}
                 />
-                <Button round disabled={!cover} onClick={() => setModal(true)}>
-                  Preview Cover
-                </Button>
                 <span className="text-sm font-bold">
                   File Chosen:{' '}
                   {cover && (
@@ -127,6 +118,16 @@ export default function CreatePost({ pageTitle }: CreatePostProps) {
                 </span>
               </div>
             </div>
+            {cover && (
+              <div>
+                <h3>Cover Preview: </h3>
+                <img
+                  src={URL.createObjectURL(cover)}
+                  alt="sad"
+                  className="w-96"
+                />
+              </div>
+            )}
             <div className="h-40-screen">
               <Controller
                 name="postBody"

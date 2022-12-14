@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import ReactQuill from 'react-quill';
+import { useParams } from 'react-router-dom';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 
 import Container from '../components/ui/Container';
@@ -7,12 +8,13 @@ import PageTitle from '../constants/pageTitle';
 import 'react-quill/dist/quill.snow.css';
 import Button from '../components/ui/Button';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
-import { addNewPost } from '../store/posts/postsSlice';
-import { selectCurrentUser } from '../store/users/userSlice';
-import Modal from '../components/ui/Modal';
+import { updatePost } from '../store/posts/thunks';
 import RequestStatus from '../constants/requestStatus';
 import Loading from '../components/ui/Loading';
 import Page from '../components/Page';
+import { selectPostById } from '../store/posts/postsSlice';
+import { UpdatedPost } from '../types/post';
+import uploadFileInStorage from '../utils/uploadFileInStorage';
 
 type EditPostProps = {
   pageTitle: PageTitle.EditPost;
@@ -25,6 +27,13 @@ type EditPostFormValues = {
 };
 
 export default function EditPost({ pageTitle }: EditPostProps) {
+  const params = useParams<{ postId: string }>();
+
+  const dispatch = useAppDispatch();
+  const post = useAppSelector((state) =>
+    selectPostById(state, params.postId as string)
+  );
+
   const {
     control,
     handleSubmit,
@@ -32,43 +41,52 @@ export default function EditPost({ pageTitle }: EditPostProps) {
     register,
   } = useForm<EditPostFormValues>();
 
-  const dispatch = useAppDispatch();
-  const user = useAppSelector(selectCurrentUser);
-  const [modal, setModal] = useState(false);
   const [cover, setCover] = useState<File | null>(null);
   const [requestStatus, setRequestStatus] = useState<RequestStatus>(
     RequestStatus.Idle
   );
   const [requestError, setRequestError] = useState<string | null>(null);
-
   const {
     name: coverName,
     onBlur: onBlurCover,
     onChange: onChangeCover,
     ref: coverRef,
   } = register('postCover', {
-    required: true,
     validate: (value) => value?.[0]?.type.startsWith('image'),
   });
+
+  if (!post) {
+    return <p>Post not found</p>;
+  }
 
   const onSubmit: SubmitHandler<EditPostFormValues> = async (data) => {
     try {
       setRequestStatus(RequestStatus.Pending);
-      await dispatch(
-        addNewPost({
-          author: {
-            id: user.id,
-            photoURL: user.photoURL,
-            username: user.username,
-          },
+      if (!data.postCover[0]) {
+        const newPost: UpdatedPost = {
           body: data.postBody,
           title: data.postTitle,
-          cover: data.postCover[0],
-        })
-      ).unwrap();
+          coverImage: post.coverImage,
+        };
+        await dispatch(updatePost({ post: newPost, id: post.id })).unwrap();
+      }
+
+      if (data.postCover[0] && cover) {
+        const url = await uploadFileInStorage(
+          cover,
+          `${post.author.id}/postCoverImages/${cover.name}`
+        );
+
+        const newPost: UpdatedPost = {
+          body: data.postBody,
+          title: data.postTitle,
+          coverImage: url,
+        };
+
+        await dispatch(updatePost({ post: newPost, id: post.id })).unwrap();
+      }
       setRequestStatus(RequestStatus.Resolved);
     } catch (e) {
-      setRequestStatus(RequestStatus.Rejected);
       if (e instanceof Error) {
         setRequestError(e.message);
       }
@@ -83,17 +101,13 @@ export default function EditPost({ pageTitle }: EditPostProps) {
   return (
     <Page title={pageTitle}>
       <div className="py-10">
-        {cover && (
-          <Modal open={modal} setOpen={setModal} className="sm:max-w-2xl">
-            <img src={URL.createObjectURL(cover)} alt="sad" />
-          </Modal>
-        )}
         <Container className="relative">
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="flex flex-wrap mb-8 gap-5">
               <div>
                 <input
                   type="text"
+                  defaultValue={post.title}
                   placeholder="Enter Blog Title"
                   className="max-w-fit block rounded-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                   {...register('postTitle', { required: true })}
@@ -116,9 +130,6 @@ export default function EditPost({ pageTitle }: EditPostProps) {
                   onBlur={onBlurCover}
                   ref={coverRef}
                 />
-                <Button round disabled={!cover} onClick={() => setModal(true)}>
-                  Preview Cover
-                </Button>
                 <span className="text-sm font-bold">
                   File Chosen:{' '}
                   {cover && (
@@ -127,10 +138,21 @@ export default function EditPost({ pageTitle }: EditPostProps) {
                 </span>
               </div>
             </div>
+            {cover && (
+              <div>
+                <h3>Cover Preview: </h3>
+                <img
+                  src={URL.createObjectURL(cover)}
+                  alt="sad"
+                  className="w-96"
+                />
+              </div>
+            )}
             <div className="h-40-screen">
               <Controller
                 name="postBody"
                 control={control}
+                defaultValue={post.body}
                 rules={{
                   required: true,
                   validate: (value) =>

@@ -3,14 +3,11 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import Container from '../components/ui/Container';
 import PageTitle from '../constants/pageTitle';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
-import {
-  selectCurrentUser,
-  updateAvatar,
-  updateUsername,
-} from '../store/users/userSlice';
+import { selectCurrentUser } from '../store/users/userSlice';
 import Button from '../components/ui/Button';
 import UserAvatarImage from '../components/ui/UserAvatarImage';
 import Page from '../components/Page';
+import { updateAvatar, updateUsername } from '../store/users/thunks';
 
 type SettingsProps = {
   pageTitle: PageTitle.Settings;

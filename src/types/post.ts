@@ -17,3 +17,9 @@ export type InitialPost = {
   title: string;
   cover: File;
 };
+
+export type UpdatedPost = {
+  body: string;
+  title: string;
+  coverImage: string;
+};

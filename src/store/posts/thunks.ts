@@ -6,23 +6,21 @@ import {
   doc,
   getDocs,
   query,
+  updateDoc,
 } from 'firebase/firestore';
-import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
-import { db, storage } from '../../firebase';
-import { InitialPost, Post } from '../../types/post';
+import { db } from '../../firebase';
+import { InitialPost, Post, UpdatedPost } from '../../types/post';
+import uploadFileInStorage from '../../utils/uploadFileInStorage';
 
 export const addNewPost = createAsyncThunk(
   'posts/addNewPost',
   async (data: InitialPost) => {
     const { author, body, cover, title } = data;
     const timestamp = Date.now();
-    const storageRef = ref(
-      storage,
+    const url = await uploadFileInStorage(
+      cover,
       `${author.id}/postCoverImages/${cover.name}`
     );
-
-    await uploadBytes(storageRef, cover);
-    const url = await getDownloadURL(storageRef);
 
     const newPost = {
       createdDate: timestamp,
@@ -75,5 +73,23 @@ export const deletePost = createAsyncThunk(
   async (postId: string) => {
     await deleteDoc(doc(db, 'posts', postId));
     return postId;
+  }
+);
+
+type UpdatePostData = {
+  post: UpdatedPost;
+  id: string;
+};
+
+export const updatePost = createAsyncThunk(
+  'posts/updatePost',
+  async (data: UpdatePostData) => {
+    const docRef = doc(db, 'posts', data.id);
+    await updateDoc(docRef, data.post);
+
+    return {
+      ...data.post,
+      id: data.id,
+    };
   }
 );

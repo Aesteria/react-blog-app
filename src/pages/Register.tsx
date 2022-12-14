@@ -17,7 +17,7 @@ import PageTitle from '../constants/pageTitle';
 import { AuthFormValues } from '../types/form';
 import Loading from '../components/ui/Loading';
 import RequestStatus from '../constants/requestStatus';
-import { createUser } from '../api/users';
+import { createUser } from '../store/users/thunks';
 import Page from '../components/Page';
 
 type RegisterProps = {

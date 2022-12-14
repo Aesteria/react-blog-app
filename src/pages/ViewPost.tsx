@@ -31,7 +31,11 @@ export default function ViewPost({ pageTitle }: ViewPostProps) {
     <Page title={pageTitle}>
       <div className="py-16">
         <Container className="max-w-5xl">
-          <img src={post.coverImage} alt="Cover" className="mb-8" />
+          <img
+            src={post.coverImage}
+            alt="Cover"
+            className="mb-8 object-cover h-96 w-full"
+          />
           <div className="flex items-center mb-8">
             <div className="flex items-center mr-4">
               <UserAvatarImage size="small" src={post.author.photoURL} />
