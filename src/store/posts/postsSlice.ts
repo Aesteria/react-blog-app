@@ -59,6 +59,7 @@ const postsSlice = createSlice({
           body: action.payload.body,
           title: action.payload.title,
           coverImage: action.payload.coverImage,
+          createdDate: Date.now(),
         };
       });
   },

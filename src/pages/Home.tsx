@@ -40,7 +40,7 @@ export default function Home({ pageTitle }: HomeProps) {
     content = <Loading />;
   }
 
-  if (data.status === RequestStatus.Resolved) {
+  if (data.status === RequestStatus.Resolved && data.posts.length > 0) {
     const orderedPosts = sortPostsByDate(data.posts);
     const blogPosts = orderedPosts.slice(0, 2);
     const blogCardListPosts = orderedPosts.slice(2, 6);
@@ -49,12 +49,26 @@ export default function Home({ pageTitle }: HomeProps) {
     content = (
       <>
         <BlogPostList blogPosts={blogPosts} />
-        <div className="bg-slate-100">
-          <Container className="max-w-screen-2xl">
-            <PostCardList isEdit={isEdit} posts={blogCardListPosts} />
-          </Container>
-        </div>
+        {blogCardListPosts.length > 0 && (
+          <div className="bg-slate-100">
+            <Container className="max-w-screen-2xl">
+              <h3 className="font-light text-3xl pt-14">
+                View More Recent Posts
+              </h3>
+
+              <PostCardList isEdit={isEdit} posts={blogCardListPosts} />
+            </Container>
+          </div>
+        )}
       </>
+    );
+  }
+
+  if (data.status === RequestStatus.Resolved && data.posts.length === 0) {
+    content = (
+      <Container>
+        <h1 className="text-3xl text-center py-16">There are no posts.</h1>
+      </Container>
     );
   }
 

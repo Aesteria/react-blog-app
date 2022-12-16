@@ -11,12 +11,16 @@ module.exports = {
       height: {
         'blog-post': '50rem',
         '40-screen': '40vh',
+        'post-cover': '30rem',
       },
       backgroundColor: {
         darkGray: '#303030',
       },
       transitionProperty: {
         backgroundColor: 'background-color',
+      },
+      strokeWidth: {
+        loader: '50',
       },
     },
     fontFamily: {

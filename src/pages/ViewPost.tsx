@@ -34,7 +34,7 @@ export default function ViewPost({ pageTitle }: ViewPostProps) {
           <img
             src={post.coverImage}
             alt="Cover"
-            className="mb-8 object-cover h-96 w-full"
+            className="mb-8 w-full object-cover h-post-cover"
           />
           <div className="flex items-center mb-8">
             <div className="flex items-center mr-4">

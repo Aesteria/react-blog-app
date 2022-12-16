@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+
 import BlogCardList from '../components/BlogCards/PostCardList';
 import Container from '../components/ui/Container';
 import PageTitle from '../constants/pageTitle';
