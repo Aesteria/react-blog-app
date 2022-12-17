@@ -1,8 +1,6 @@
 import Container from '../ui/Container';
 import FooterLinks from './FooterLinks';
 
-// TODO: Change Aeste Blog to logo image
-
 export default function Footer() {
   return (
     <footer className="bg-slate-50">

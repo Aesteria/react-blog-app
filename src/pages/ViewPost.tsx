@@ -31,7 +31,7 @@ export default function ViewPost({ pageTitle }: ViewPostProps) {
   return (
     <Page title={pageTitle}>
       <div className="py-16">
-        <Container className="max-w-5xl">
+        <Container size="narrow">
           <img
             src={post.coverImage}
             alt="Cover"

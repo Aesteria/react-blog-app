@@ -51,7 +51,7 @@ export default function Home({ pageTitle }: HomeProps) {
         <BlogPostList blogPosts={blogPosts} />
         {blogCardListPosts.length > 0 && (
           <div className="bg-slate-100">
-            <Container className="max-w-screen-2xl">
+            <Container size="wide">
               <h3 className="font-light text-3xl pt-14">
                 View More Recent Posts
               </h3>

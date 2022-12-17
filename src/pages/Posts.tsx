@@ -46,7 +46,7 @@ export default function Posts({ pageTitle }: PostsProps) {
   return (
     <Page title={pageTitle}>
       <div className="bg-slate-100">
-        <Container className="max-w-screen-2xl">{content}</Container>
+        <Container size="wide">{content}</Container>
       </div>
     </Page>
   );

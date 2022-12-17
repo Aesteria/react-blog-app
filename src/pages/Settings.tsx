@@ -61,7 +61,7 @@ export default function Settings({ pageTitle }: SettingsProps) {
 
   return (
     <Page title={pageTitle}>
-      <Container className="max-w-5xl">
+      <Container size="narrow">
         <div>
           <h2 className="text-center mt-5 mb-10 font-light text-3xl">
             Profile Settings
