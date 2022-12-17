@@ -3,3 +3,9 @@ export type AuthFormValues = {
   username: string;
   password: string;
 };
+
+export type EditPostFormValues = {
+  postBody: string;
+  postCover: FileList;
+  postTitle: string;
+};

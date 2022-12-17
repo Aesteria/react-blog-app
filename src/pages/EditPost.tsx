@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import ReactQuill from 'react-quill';
-import { useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 
 import Container from '../components/ui/Container';
@@ -8,28 +9,21 @@ import PageTitle from '../constants/pageTitle';
 import 'react-quill/dist/quill.snow.css';
 import Button from '../components/ui/Button';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
-import { updatePost } from '../store/posts/thunks';
-import RequestStatus from '../constants/requestStatus';
-import Loading from '../components/ui/Loading';
 import Page from '../components/Page';
-import { selectPostById } from '../store/posts/postsSlice';
-import { UpdatedPost } from '../types/post';
-import uploadFileInStorage from '../utils/uploadFileInStorage';
+import { selectPostById, updatePost } from '../store/posts/postsSlice';
+import getUpdatedPostBasedOnCoverImage from '../api/getUpdatedPostBasedOnCoverImage';
+import { EditPostFormValues } from '../types/form';
+import isErrorWithMessage from '../utils/isErrorWithMessage';
 
 type EditPostProps = {
   pageTitle: PageTitle.EditPost;
-};
-
-type EditPostFormValues = {
-  postBody: string;
-  postCover: FileList;
-  postTitle: string;
 };
 
 export default function EditPost({ pageTitle }: EditPostProps) {
   const params = useParams<{ postId: string }>();
 
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const post = useAppSelector((state) =>
     selectPostById(state, params.postId as string)
   );
@@ -37,15 +31,11 @@ export default function EditPost({ pageTitle }: EditPostProps) {
   const {
     control,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
     register,
   } = useForm<EditPostFormValues>();
 
   const [cover, setCover] = useState<File | null>(null);
-  const [requestStatus, setRequestStatus] = useState<RequestStatus>(
-    RequestStatus.Idle
-  );
-  const [requestError, setRequestError] = useState<string | null>(null);
   const {
     name: coverName,
     onBlur: onBlurCover,
@@ -61,34 +51,17 @@ export default function EditPost({ pageTitle }: EditPostProps) {
 
   const onSubmit: SubmitHandler<EditPostFormValues> = async (data) => {
     try {
-      setRequestStatus(RequestStatus.Pending);
-      if (!data.postCover[0]) {
-        const newPost: UpdatedPost = {
-          body: data.postBody,
-          title: data.postTitle,
-          coverImage: post.coverImage,
-        };
-        await dispatch(updatePost({ post: newPost, id: post.id })).unwrap();
-      }
+      const newPost = await getUpdatedPostBasedOnCoverImage({
+        editData: data,
+        post,
+      });
 
-      if (data.postCover[0] && cover) {
-        const url = await uploadFileInStorage(
-          cover,
-          `${post.author.id}/postCoverImages/${cover.name}`
-        );
-
-        const newPost: UpdatedPost = {
-          body: data.postBody,
-          title: data.postTitle,
-          coverImage: url,
-        };
-
-        await dispatch(updatePost({ post: newPost, id: post.id })).unwrap();
-      }
-      setRequestStatus(RequestStatus.Resolved);
+      await dispatch(updatePost({ post: newPost, id: post.id })).unwrap();
+      toast.success('Post was succesfully updated!');
+      navigate(`/post/${post.id}`);
     } catch (e) {
-      if (e instanceof Error) {
-        setRequestError(e.message);
+      if (isErrorWithMessage(e)) {
+        toast.error(e.message);
       }
     }
   };
@@ -179,13 +152,11 @@ export default function EditPost({ pageTitle }: EditPostProps) {
               <p className="text-red-600 mt-3">Title is required</p>
             )}
             <div className="flex sm:flex-row gap-4 mt-5">
-              <Button type="submit" round>
+              <Button disabled={isSubmitting} type="submit" round>
                 Publish
               </Button>
             </div>
           </form>
-          {requestStatus === RequestStatus.Pending && <Loading />}
-          {requestStatus === RequestStatus.Rejected && <p>{requestError}</p>}
         </Container>
       </div>
     </Page>

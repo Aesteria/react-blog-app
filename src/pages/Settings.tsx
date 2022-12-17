@@ -1,13 +1,18 @@
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 
 import Container from '../components/ui/Container';
 import PageTitle from '../constants/pageTitle';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
-import { selectCurrentUser } from '../store/users/userSlice';
+import {
+  selectCurrentUser,
+  updateAvatar,
+  updateUsername,
+} from '../store/users/userSlice';
 import Button from '../components/ui/Button';
 import UserAvatarImage from '../components/ui/UserAvatarImage';
 import Page from '../components/Page';
-import { updateAvatar, updateUsername } from '../store/users/thunks';
+import isErrorWithMessage from '../utils/isErrorWithMessage';
 
 type SettingsProps = {
   pageTitle: PageTitle.Settings;
@@ -37,12 +42,20 @@ export default function Settings({ pageTitle }: SettingsProps) {
   }) => {
     const isFileImage = avatar?.[0]?.type.startsWith('image');
 
-    if (isFileImage) {
-      dispatch(updateAvatar(avatar[0]));
-    }
+    try {
+      if (isFileImage) {
+        dispatch(updateAvatar(avatar[0])).unwrap();
+      }
 
-    if (username !== user.username) {
-      dispatch(updateUsername(username));
+      if (username !== user.username) {
+        dispatch(updateUsername(username));
+      }
+
+      toast.success('Profile has been updated!');
+    } catch (e) {
+      if (isErrorWithMessage(e)) {
+        toast.error(e.message);
+      }
     }
   };
 

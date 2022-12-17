@@ -5,8 +5,8 @@ import {
 } from '@heroicons/react/24/outline';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 import { Link, useNavigate } from 'react-router-dom';
 
 import AuthSplitScreen from '../components/AuthSplitScreen';
@@ -16,9 +16,9 @@ import LinkPath from '../constants/linkPath';
 import PageTitle from '../constants/pageTitle';
 import { AuthFormValues } from '../types/form';
 import Loading from '../components/ui/Loading';
-import RequestStatus from '../constants/requestStatus';
-import { createUser } from '../store/users/thunks';
 import Page from '../components/Page';
+import createUser from '../api/createUser';
+import isErrorWithMessage from '../utils/isErrorWithMessage';
 
 type RegisterProps = {
   pageTitle: PageTitle.Register;
@@ -43,12 +43,10 @@ export default function Register({ pageTitle }: RegisterProps) {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<AuthFormValues>({
     resolver: yupResolver(schema),
   });
-  const [status, setStatus] = useState<RequestStatus>(RequestStatus.Idle);
-  const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
   const onSubmit: SubmitHandler<AuthFormValues> = async ({
@@ -57,15 +55,12 @@ export default function Register({ pageTitle }: RegisterProps) {
     username,
   }) => {
     try {
-      setError(null);
-      setStatus(RequestStatus.Pending);
-
       await createUser({ email, password, username });
+      toast.success(`Welcome, ${username}!`);
       navigate(LinkPath.Home);
     } catch (e) {
-      if (e instanceof Error) {
-        setStatus(RequestStatus.Rejected);
-        setError(e.message);
+      if (isErrorWithMessage(e)) {
+        toast.error(e.message);
       }
     }
   };
@@ -122,7 +117,11 @@ export default function Register({ pageTitle }: RegisterProps) {
                 />
 
                 <div>
-                  <Button type="submit" className="w-full">
+                  <Button
+                    disabled={isSubmitting}
+                    type="submit"
+                    className="w-full"
+                  >
                     Create an account
                   </Button>
                 </div>
@@ -130,12 +129,7 @@ export default function Register({ pageTitle }: RegisterProps) {
             </div>
           </div>
 
-          {status === 'pending' && (
-            <Loading className="mt-6 flex justify-center" />
-          )}
-          {status === 'rejected' && (
-            <p className="text-center text-red-600 mt-6">{error}</p>
-          )}
+          {isSubmitting && <Loading className="mt-6 flex justify-center" />}
         </div>
       </AuthSplitScreen>
     </Page>

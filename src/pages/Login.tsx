@@ -1,9 +1,9 @@
 import * as yup from 'yup';
 import { EnvelopeIcon, LockClosedIcon } from '@heroicons/react/24/outline';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 
 import AuthSplitScreen from '../components/AuthSplitScreen';
@@ -12,10 +12,10 @@ import InputGroup from '../components/ui/InputGroup';
 import LinkPath from '../constants/linkPath';
 import PageTitle from '../constants/pageTitle';
 import { AuthFormValues } from '../types/form';
-import RequestStatus from '../constants/requestStatus';
 import { auth } from '../firebase';
 import Loading from '../components/ui/Loading';
 import Page from '../components/Page';
+import isErrorWithMessage from '../utils/isErrorWithMessage';
 
 type LoginProps = {
   pageTitle: PageTitle.Login;
@@ -39,12 +39,10 @@ export default function Login({ pageTitle }: LoginProps) {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<AuthFormValues>({
     resolver: yupResolver(schema),
   });
-  const [status, setStatus] = useState<RequestStatus>(RequestStatus.Idle);
-  const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
   const onSubmit: SubmitHandler<AuthFormValues> = async ({
@@ -52,16 +50,12 @@ export default function Login({ pageTitle }: LoginProps) {
     password,
   }) => {
     try {
-      setStatus(RequestStatus.Pending);
-      setError(null);
-
-      await signInWithEmailAndPassword(auth, email, password);
-
+      const res = await signInWithEmailAndPassword(auth, email, password);
+      toast.success(`Welcome back, ${res.user.displayName}`);
       navigate(LinkPath.Home);
     } catch (e) {
-      if (e instanceof Error) {
-        setStatus(RequestStatus.Rejected);
-        setError(e.message);
+      if (isErrorWithMessage(e)) {
+        toast.error(e.message);
       }
     }
   };
@@ -120,7 +114,11 @@ export default function Login({ pageTitle }: LoginProps) {
                 </div>
 
                 <div>
-                  <Button type="submit" className="w-full">
+                  <Button
+                    disabled={isSubmitting}
+                    type="submit"
+                    className="w-full"
+                  >
                     Sign in
                   </Button>
                 </div>
@@ -128,12 +126,7 @@ export default function Login({ pageTitle }: LoginProps) {
             </div>
           </div>
 
-          {status === 'pending' && (
-            <Loading className="mt-6 flex justify-center" />
-          )}
-          {status === 'rejected' && (
-            <p className="text-center text-red-600 mt-6">{error}</p>
-          )}
+          {isSubmitting && <Loading className="mt-6 flex justify-center" />}
         </div>
       </AuthSplitScreen>
     </Page>

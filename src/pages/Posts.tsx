@@ -40,7 +40,7 @@ export default function Posts({ pageTitle }: PostsProps) {
   }
 
   if (data.status === RequestStatus.Rejected) {
-    content = <p>{data.error}</p>;
+    content = <p>Something went wrong while fetching posts: {data.error}</p>;
   }
 
   return (

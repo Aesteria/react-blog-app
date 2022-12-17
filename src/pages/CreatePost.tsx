@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import ReactQuill from 'react-quill';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 
 import Container from '../components/ui/Container';
@@ -7,11 +9,11 @@ import PageTitle from '../constants/pageTitle';
 import 'react-quill/dist/quill.snow.css';
 import Button from '../components/ui/Button';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
-import { addNewPost } from '../store/posts/thunks';
 import { selectCurrentUser } from '../store/users/userSlice';
-import RequestStatus from '../constants/requestStatus';
 import Loading from '../components/ui/Loading';
 import Page from '../components/Page';
+import isErrorWithMessage from '../utils/isErrorWithMessage';
+import { addNewPost } from '../store/posts/postsSlice';
 
 type CreatePostProps = {
   pageTitle: PageTitle.CreatePost;
@@ -27,18 +29,15 @@ export default function CreatePost({ pageTitle }: CreatePostProps) {
   const {
     control,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
     register,
   } = useForm<CreatePostFormValues>();
 
   const dispatch = useAppDispatch();
   const user = useAppSelector(selectCurrentUser);
+  const navigate = useNavigate();
 
   const [cover, setCover] = useState<File | null>(null);
-  const [requestStatus, setRequestStatus] = useState<RequestStatus>(
-    RequestStatus.Idle
-  );
-  const [requestError, setRequestError] = useState<string | null>(null);
 
   const {
     name: coverName,
@@ -52,8 +51,7 @@ export default function CreatePost({ pageTitle }: CreatePostProps) {
 
   const onSubmit: SubmitHandler<CreatePostFormValues> = async (data) => {
     try {
-      setRequestStatus(RequestStatus.Pending);
-      await dispatch(
+      const { id } = await dispatch(
         addNewPost({
           author: {
             id: user.id,
@@ -65,11 +63,11 @@ export default function CreatePost({ pageTitle }: CreatePostProps) {
           cover: data.postCover[0],
         })
       ).unwrap();
-      setRequestStatus(RequestStatus.Resolved);
+      toast.success('Post was succesfully created!');
+      navigate(`/post/${id}`);
     } catch (e) {
-      setRequestStatus(RequestStatus.Rejected);
-      if (e instanceof Error) {
-        setRequestError(e.message);
+      if (isErrorWithMessage(e)) {
+        toast.error(e.message);
       }
     }
   };
@@ -158,13 +156,12 @@ export default function CreatePost({ pageTitle }: CreatePostProps) {
               <p className="text-red-600 mt-3">Title is required</p>
             )}
             <div className="flex sm:flex-row gap-4 mt-5">
-              <Button type="submit" round>
+              <Button disabled={isSubmitting} type="submit" round>
                 Publish
               </Button>
             </div>
           </form>
-          {requestStatus === RequestStatus.Pending && <Loading />}
-          {requestStatus === RequestStatus.Rejected && <p>{requestError}</p>}
+          {isSubmitting && <Loading />}
         </Container>
       </div>
     </Page>

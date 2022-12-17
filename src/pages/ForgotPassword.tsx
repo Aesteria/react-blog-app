@@ -1,22 +1,21 @@
 import * as yup from 'yup';
 import { EnvelopeIcon } from '@heroicons/react/24/outline';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { sendPasswordResetEmail } from 'firebase/auth';
 
 import AuthSplitScreen from '../components/AuthSplitScreen';
 import Button from '../components/ui/Button';
 import InputGroup from '../components/ui/InputGroup';
-import Modal from '../components/ui/Modal';
 import LinkPath from '../constants/linkPath';
 import PageTitle from '../constants/pageTitle';
 import { AuthFormValues } from '../types/form';
-import RequestStatus from '../constants/requestStatus';
 import { auth } from '../firebase';
 import Loading from '../components/ui/Loading';
 import Page from '../components/Page';
+import isErrorWithMessage from '../utils/isErrorWithMessage';
 
 type ForgotPasswordProps = {
   pageTitle: PageTitle.ForgotPassword;
@@ -39,28 +38,18 @@ export default function ForgotPassword({ pageTitle }: ForgotPasswordProps) {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<AuthFormValues>({
     resolver: yupResolver(schema),
   });
-  const [modalOpen, setModalOpen] = useState(false);
-  const [modalMessage, setModalMessage] = useState('');
-  const [status, setStatus] = useState<RequestStatus>(RequestStatus.Idle);
-  const [error, setError] = useState<string | null>(null);
 
   const onSubmit: SubmitHandler<AuthFormValues> = async ({ email }) => {
     try {
-      setStatus(RequestStatus.Pending);
       await sendPasswordResetEmail(auth, email);
-
-      setModalMessage('Check your email to reset password');
-      setModalOpen(true);
-      setStatus(RequestStatus.Resolved);
-      setError(null);
+      toast.success('Check your email to reset password');
     } catch (e) {
-      if (e instanceof Error) {
-        setStatus(RequestStatus.Rejected);
-        setError(e.message);
+      if (isErrorWithMessage(e)) {
+        toast.error(e.message);
       }
     }
   };
@@ -68,7 +57,6 @@ export default function ForgotPassword({ pageTitle }: ForgotPasswordProps) {
   return (
     <Page title={pageTitle}>
       <AuthSplitScreen>
-        <Modal open={modalOpen} setOpen={setModalOpen} message={modalMessage} />
         <div className="mx-auto w-full max-w-sm lg:w-96">
           <div>
             <h2 className="mt-6 text-3xl font-bold tracking-tight text-gray-900">
@@ -112,12 +100,7 @@ export default function ForgotPassword({ pageTitle }: ForgotPasswordProps) {
             </div>
           </div>
 
-          {status === 'pending' && (
-            <Loading className="mt-6 flex justify-center" />
-          )}
-          {status === 'rejected' && (
-            <p className="text-center text-red-600 mt-6">{error}</p>
-          )}
+          {isSubmitting && <Loading className="mt-6 flex justify-center" />}
         </div>
       </AuthSplitScreen>
     </Page>

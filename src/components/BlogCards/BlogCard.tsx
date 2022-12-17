@@ -5,7 +5,7 @@ import {
 } from '@heroicons/react/24/outline';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { deletePost } from '../../store/posts/thunks';
+import { deletePost } from '../../store/posts/postsSlice';
 import { selectCurrentUser } from '../../store/users/userSlice';
 import { Post } from '../../types/post';
 import formatDate from '../../utils/formatDate';
