@@ -45,6 +45,7 @@ export default function ViewPost({ pageTitle }: ViewPostProps) {
             <CalendarIcon className="h-6 w-6 text-fuchsia-500" />
             <span className="ml-2">{date}</span>
           </div>
+
           <div className="mb-8">
             <HeadingSecondary>{post.title}</HeadingSecondary>
           </div>

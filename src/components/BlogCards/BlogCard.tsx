@@ -3,12 +3,13 @@ import {
   PencilSquareIcon,
   TrashIcon,
 } from '@heroicons/react/24/outline';
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { deletePost } from '../../store/posts/postsSlice';
+import { useAppSelector } from '../../store/hooks';
 import { selectCurrentUser } from '../../store/users/userSlice';
 import { Post } from '../../types/post';
 import formatDate from '../../utils/formatDate';
+import DeletePostModal from '../ui/DeletePostModal';
 import UserAvatarImage from '../ui/UserAvatarImage';
 
 type BlogCardProps = {
@@ -17,18 +18,19 @@ type BlogCardProps = {
 };
 
 export default function BlogCard({ post, isEdit }: BlogCardProps) {
-  const dispatch = useAppDispatch();
   const date = formatDate(post.createdDate);
   const user = useAppSelector(selectCurrentUser);
   const allowEdit = isEdit && user.username === post.author.username;
   const navigate = useNavigate();
+
+  const [showModal, setShowModal] = useState(false);
 
   const handleDeletePost = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     e.preventDefault();
     e.stopPropagation();
-    dispatch(deletePost(post.id));
+    setShowModal(true);
   };
 
   const handleEditPost = (
@@ -60,6 +62,11 @@ export default function BlogCard({ post, isEdit }: BlogCardProps) {
           </button>
         </div>
       )}
+      <DeletePostModal
+        postId={post.id}
+        open={showModal}
+        setOpen={setShowModal}
+      />
       <img
         src={post.coverImage}
         alt="Cover"
