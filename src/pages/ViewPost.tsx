@@ -10,6 +10,7 @@ import PageTitle from '../constants/pageTitle';
 import { useAppSelector } from '../store/hooks';
 import { selectPostById } from '../store/posts/postsSlice';
 import formatDate from '../utils/formatDate';
+import HeadingSecondary from '../components/ui/HeadingSecondary';
 
 type ViewPostProps = {
   pageTitle: PageTitle;
@@ -44,7 +45,9 @@ export default function ViewPost({ pageTitle }: ViewPostProps) {
             <CalendarIcon className="h-6 w-6 text-fuchsia-500" />
             <span className="ml-2">{date}</span>
           </div>
-          <h2 className="mb-8 text-3xl font-light">{post.title}</h2>
+          <div className="mb-8">
+            <HeadingSecondary>{post.title}</HeadingSecondary>
+          </div>
           <div className="post-view">
             <ReactQuill theme="bubble" readOnly value={post.body} />
           </div>
