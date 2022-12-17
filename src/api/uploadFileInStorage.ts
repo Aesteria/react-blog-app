@@ -3,6 +3,7 @@ import { storage } from '../firebase';
 
 const uploadFileInStorage = async (file: File, filePath: string) => {
   const storageRef = ref(storage, filePath);
+
   await uploadBytes(storageRef, file);
   const url = await getDownloadURL(storageRef);
 
