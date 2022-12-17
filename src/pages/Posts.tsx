@@ -34,7 +34,11 @@ export default function Posts({ pageTitle }: PostsProps) {
     content = <Loading />;
   }
 
-  if (data.status === RequestStatus.Resolved) {
+  if (data.status === RequestStatus.Resolved && data.posts.length === 0) {
+    content = <p>There are no posts.</p>;
+  }
+
+  if (data.status === RequestStatus.Resolved && data.posts.length > 0) {
     const orderedPosts = sortPostsByDate(data.posts);
     content = <BlogCardList isEdit={data.isEdit} posts={orderedPosts} />;
   }

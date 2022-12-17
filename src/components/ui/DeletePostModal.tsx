@@ -1,10 +1,12 @@
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 import { Fragment, useRef } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 import { useAppDispatch } from '../../store/hooks';
 import { deletePost } from '../../store/posts/postsSlice';
 import isErrorWithMessage from '../../utils/isErrorWithMessage';
+import LinkPath from '../../constants/linkPath';
 
 type DeletePostModalProps = {
   open: boolean;
@@ -19,12 +21,14 @@ export default function DeletePostModal({
 }: DeletePostModalProps) {
   const cancelButtonRef = useRef(null);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const handleDelete = () => {
     setOpen(false);
     try {
       dispatch(deletePost(postId)).unwrap();
       toast.success('Post was succesfully deleted!');
+      navigate(LinkPath.Posts);
     } catch (e) {
       if (isErrorWithMessage(e)) {
         toast.error(e.message);
