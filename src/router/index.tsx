@@ -8,7 +8,7 @@ import ForgotPassword from '../pages/ForgotPassword';
 import LinkPath from '../constants/linkPath';
 import PageTitle from '../constants/pageTitle';
 import AuthRoot from '../pages/AuthRoot';
-import Profile from '../pages/Settings';
+import Settings from '../pages/Settings';
 import CreatePost from '../pages/CreatePost';
 import ViewPost from '../pages/ViewPost';
 import EditPost from '../pages/EditPost';
@@ -27,8 +27,8 @@ const router = createBrowserRouter([
         element: <Blogs pageTitle={PageTitle.Posts} />,
       },
       {
-        path: LinkPath.Profile,
-        element: <Profile pageTitle={PageTitle.Settings} />,
+        path: LinkPath.Settings,
+        element: <Settings pageTitle={PageTitle.Settings} />,
       },
       {
         path: LinkPath.CreatePost,
