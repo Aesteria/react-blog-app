@@ -3,14 +3,17 @@ import clsx from 'clsx';
 import { signOut } from 'firebase/auth';
 import { Fragment } from 'react';
 import { Link } from 'react-router-dom';
+import LinkPath from '../../../../constants/linkPath';
 import { auth } from '../../../../firebase';
-import list from '../list';
+import { useAppSelector } from '../../../../store/hooks';
+import { selectCurrentUser } from '../../../../store/users/userSlice';
 
 type ProfileLinksProps = {
   isMobile?: boolean;
 };
 
 export default function ProfileLinks({ isMobile }: ProfileLinksProps) {
+  const user = useAppSelector(selectCurrentUser);
   const signOutHandler = () => {
     signOut(auth);
   };
@@ -20,7 +23,7 @@ export default function ProfileLinks({ isMobile }: ProfileLinksProps) {
       <div className="mt-3 space-y-1 px-2">
         <Disclosure.Button
           as="a"
-          href="#"
+          href={`/profile/${user.id}`}
           className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
         >
           Your Profile
@@ -54,37 +57,45 @@ export default function ProfileLinks({ isMobile }: ProfileLinksProps) {
       leaveTo="transform opacity-0 scale-95"
     >
       <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-        {list.map((link, index) => (
-          <Menu.Item key={index}>
-            {({ active }) => {
-              if (!link.to) {
-                return (
-                  <button
-                    className={clsx({
-                      'bg-gray-100': active,
-                      'w-full text-left px-4 py-2 text-sm text-gray-700': true,
-                    })}
-                    onClick={signOutHandler}
-                  >
-                    Sign out
-                  </button>
-                );
-              }
-
-              return (
-                <Link
-                  to={link.to}
-                  className={clsx({
-                    'bg-gray-100': active,
-                    'block px-4 py-2 text-sm text-gray-700': true,
-                  })}
-                >
-                  {link.text}
-                </Link>
-              );
-            }}
-          </Menu.Item>
-        ))}
+        <Menu.Item>
+          {({ active }) => (
+            <Link
+              to={LinkPath.Settings}
+              className={clsx({
+                'bg-gray-100': active,
+                'block px-4 py-2 text-sm text-gray-700': true,
+              })}
+            >
+              Settings
+            </Link>
+          )}
+        </Menu.Item>
+        <Menu.Item>
+          {({ active }) => (
+            <Link
+              to={`/profile/${user.id}`}
+              className={clsx({
+                'bg-gray-100': active,
+                'block px-4 py-2 text-sm text-gray-700': true,
+              })}
+            >
+              Profile
+            </Link>
+          )}
+        </Menu.Item>
+        <Menu.Item>
+          {({ active }) => (
+            <button
+              className={clsx({
+                'bg-gray-100': active,
+                'w-full text-left px-4 py-2 text-sm text-gray-700': true,
+              })}
+              onClick={signOutHandler}
+            >
+              Sign out
+            </button>
+          )}
+        </Menu.Item>
       </Menu.Items>
     </Transition>
   );

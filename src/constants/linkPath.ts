@@ -5,7 +5,7 @@ enum LinkPath {
   Register = '/register',
   ForgotPassword = '/forgot-password',
   CreatePost = '/create-post',
-  Profile = '/profile',
+  Profile = '/profile/:userId',
   ViewPost = '/post/:postId',
   EditPost = '/post/:postId/edit',
   Settings = '/settings',

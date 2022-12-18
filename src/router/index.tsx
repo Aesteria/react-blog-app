@@ -12,6 +12,7 @@ import Settings from '../pages/Settings';
 import CreatePost from '../pages/CreatePost';
 import ViewPost from '../pages/ViewPost';
 import EditPost from '../pages/EditPost';
+import Profile from '../pages/Profile';
 
 const router = createBrowserRouter([
   {
@@ -29,6 +30,10 @@ const router = createBrowserRouter([
       {
         path: LinkPath.Settings,
         element: <Settings pageTitle={PageTitle.Settings} />,
+      },
+      {
+        path: LinkPath.Profile,
+        element: <Profile pageTitle={PageTitle.Profile} />,
       },
       {
         path: LinkPath.CreatePost,

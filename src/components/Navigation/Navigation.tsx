@@ -36,7 +36,6 @@ export default function Navigation() {
             </div>
           </div>
 
-          {/* Mobile */}
           <Disclosure.Panel className="sm:hidden">
             <NavLinks isMobile />
             {isAuth && (
