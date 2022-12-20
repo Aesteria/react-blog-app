@@ -23,7 +23,7 @@ export default function ProfileLinks({ isMobile }: ProfileLinksProps) {
       <div className="mt-3 space-y-1 px-2">
         <Disclosure.Button
           as={Link}
-          to={`/profile/${user.username}`}
+          to={`/profile/${user.id}`}
           className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
         >
           Your Profile
@@ -73,7 +73,7 @@ export default function ProfileLinks({ isMobile }: ProfileLinksProps) {
         <Menu.Item>
           {({ active }) => (
             <Link
-              to={`/profile/${user.username}`}
+              to={`/profile/${user.id}`}
               className={clsx({
                 'bg-gray-100': active,
                 'block px-4 py-2 text-sm text-gray-700': true,

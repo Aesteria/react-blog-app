@@ -2,15 +2,17 @@ import { Link, useParams } from 'react-router-dom';
 import formatDate from '../../utils/formatDate';
 import UserAvatarImage from '../../components/ui/UserAvatarImage';
 import { useAppSelector } from '../../store/hooks';
-import { selectPostsByAuthorName } from '../../store/postsSlice';
+import { selectPostsByAuthorId } from '../../store/postsSlice';
 
 export default function Feed() {
-  const { authorName } = useParams<{ authorName: string }>();
+  const { authorId } = useParams<{ authorId: string }>();
   const posts = useAppSelector((state) =>
-    selectPostsByAuthorName(state, authorName ?? '')
+    selectPostsByAuthorId(state, authorId ?? '')
   );
 
-  if (!authorName) return <p>User Not Found</p>;
+  if (!authorId) return <p>User Not Found</p>;
+
+  console.log(posts);
 
   return (
     <div>

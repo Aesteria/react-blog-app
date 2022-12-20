@@ -16,17 +16,20 @@ import RequestStatus from '../../constants/requestStatus';
 import Loading from '../../components/ui/Loading';
 import { selectCurrentUser } from '../../store/authSlice';
 import Button from '../../components/ui/Button';
+import { addDoc, collection, doc } from 'firebase/firestore';
+import { db } from '../../firebase';
 
 type ProfileProps = {
   pageTitle: PageTitle.Profile;
 };
 
 export default function Profile({ pageTitle }: ProfileProps) {
-  const { authorName } = useParams<{ authorName: string }>();
+  const { authorId } = useParams<{ authorId: string }>();
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) =>
-    selectUserById(state, authorName as string)
+    selectUserById(state, authorId as string)
   );
+
   const currentUser = useAppSelector(selectCurrentUser);
   const usersStatus = useAppSelector(selectUsersStatus);
   const usersError = useAppSelector(selectUsersError);
@@ -37,6 +40,8 @@ export default function Profile({ pageTitle }: ProfileProps) {
 
   let content;
 
+  if (!user) return <p>User not found</p>;
+
   if (usersStatus === RequestStatus.Pending) {
     content = <Loading className="mx-auto" />;
   }
@@ -45,8 +50,8 @@ export default function Profile({ pageTitle }: ProfileProps) {
     content = (
       <>
         <div className="flex flex-col justify-center items-center gap-4">
-          <UserAvatarImage src={user?.photoURL ?? ''} size="large" />
-          <h2 className="text-2xl">{authorName}</h2>
+          <UserAvatarImage src={user?.photoURL ?? null} size="large" />
+          <h2 className="text-2xl">{user?.username}</h2>
         </div>
         <Outlet />
       </>
@@ -58,17 +63,26 @@ export default function Profile({ pageTitle }: ProfileProps) {
   }
 
   const tabs = [
-    { name: 'Posts', to: `/profile/${authorName}`, root: true },
-    { name: 'Followers', to: `/profile/${authorName}/followers` },
-    { name: 'Following', to: `/profile/${authorName}/following` },
+    { name: 'Posts', to: `/profile/${authorId}`, root: true },
+    { name: 'Followers', to: `/profile/${authorId}/followers` },
+    { name: 'Following', to: `/profile/${authorId}/following` },
   ];
+
+  const handleFollow = async () => {
+    const docRef = await addDoc(collection(db, 'follow'), {
+      author: user.id,
+      follower: currentUser.id,
+    });
+  };
 
   return (
     <Page title={pageTitle}>
       <Container size="narrow">
         <div className="mb-10 mt-10">
           <Tabs tabs={tabs} />
-          {currentUser.id === user?.id && <Button>Subscribe</Button>}
+          {currentUser.id !== user?.id && (
+            <Button onClick={handleFollow}>Subscribe</Button>
+          )}
           {content}
         </div>
       </Container>

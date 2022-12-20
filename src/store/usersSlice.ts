@@ -104,7 +104,7 @@ const usersSlice = createSlice({
 export const selectUsers = (state: RootState) => state.users.users;
 export const selectUsersStatus = (state: RootState) => state.users.status;
 export const selectUsersError = (state: RootState) => state.users.error;
-export const selectUserById = (state: RootState, username: string) =>
-  state.users.users.find((user) => user.username === username);
+export const selectUserById = (state: RootState, id: string) =>
+  state.users.users.find((user) => user.id === id);
 
 export default usersSlice.reducer;

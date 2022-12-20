@@ -6,7 +6,7 @@ import {
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.bubble.css';
 import { useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 
 import Container from '../components/ui/Container';
 import Page from '../components/Page';
@@ -62,7 +62,12 @@ export default function ViewPost({ pageTitle }: ViewPostProps) {
             <div className="flex items-center">
               <div className="flex items-center mr-4">
                 <UserAvatarImage size="small" src={post.author.photoURL} />
-                <span className="ml-2">{post.author.username}</span>
+                <Link
+                  to={`/profile/${post.author.id}`}
+                  className="ml-2 underline"
+                >
+                  {post.author.username}
+                </Link>
               </div>
               <CalendarIcon className="h-6 w-6 text-fuchsia-500" />
               <span className="ml-2">{date}</span>

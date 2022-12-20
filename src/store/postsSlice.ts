@@ -223,7 +223,7 @@ export const { toggleEditPosts } = postsSlice.actions;
 export const selectPosts = (state: RootState) => state.posts;
 export const selectPostById = (state: RootState, id: string) =>
   state.posts.posts.find((post) => post.id === id);
-export const selectPostsByAuthorName = (state: RootState, authorName: string) =>
-  state.posts.posts.filter((post) => post.author.username === authorName);
+export const selectPostsByAuthorId = (state: RootState, id: string) =>
+  state.posts.posts.filter((post) => post.author.id === id);
 
 export default postsSlice.reducer;
