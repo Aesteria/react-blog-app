@@ -23,6 +23,8 @@ const createUser = async (data: RegisterFields) => {
   await setDoc(doc(db, 'users', userCredential.user.uid), {
     username,
     email,
+    followers: [],
+    following: [],
   });
 };
 

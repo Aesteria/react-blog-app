@@ -12,7 +12,10 @@ import Settings from '../pages/Settings';
 import CreatePost from '../pages/CreatePost';
 import ViewPost from '../pages/ViewPost';
 import EditPost from '../pages/EditPost';
-import Profile from '../pages/Profile';
+import Profile from '../pages/Profile/Profile';
+import Followers from '../pages/Profile/Followers';
+import Following from '../pages/Profile/Following';
+import Feed from '../pages/Profile/Feed';
 
 const router = createBrowserRouter([
   {
@@ -34,6 +37,20 @@ const router = createBrowserRouter([
       {
         path: LinkPath.Profile,
         element: <Profile pageTitle={PageTitle.Profile} />,
+        children: [
+          {
+            path: LinkPath.Profile,
+            element: <Feed />,
+          },
+          {
+            path: LinkPath.Followers,
+            element: <Followers />,
+          },
+          {
+            path: LinkPath.Following,
+            element: <Following />,
+          },
+        ],
       },
       {
         path: LinkPath.CreatePost,

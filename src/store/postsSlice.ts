@@ -1,0 +1,188 @@
+import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  getDocs,
+  query,
+  updateDoc,
+  where,
+} from 'firebase/firestore';
+import RequestStatus from '../constants/requestStatus';
+import type { RootState } from './store';
+
+import { db } from '../firebase';
+import { InitialPost, Post, UpdatedPost } from '../types/post';
+import uploadFileInStorage from '../api/uploadFileInStorage';
+
+export const addNewPost = createAsyncThunk(
+  'posts/addNewPost',
+  async (data: InitialPost) => {
+    const { author, body, cover, title } = data;
+    const timestamp = Date.now();
+    const url = await uploadFileInStorage(
+      cover,
+      `${author.id}/postCoverImages/${cover.name}`
+    );
+
+    const newPost = {
+      createdDate: timestamp,
+      author: {
+        username: author.username,
+        photoURL: author.photoURL,
+        id: author.id,
+      },
+      body,
+      coverImage: url,
+      title,
+    };
+    const docRef = await addDoc(collection(db, 'posts'), newPost);
+
+    return {
+      ...newPost,
+      id: docRef.id,
+    };
+  }
+);
+
+export const fetchAllPosts = createAsyncThunk(
+  'posts/fetchAllPosts',
+  async () => {
+    const q = query(collection(db, 'posts'));
+    const querySnapshot = await getDocs(q);
+    const posts: Post[] = [];
+    querySnapshot.forEach((document) => {
+      posts.push({
+        author: {
+          id: document.data().author.id,
+          username: document.data().author.username,
+          photoURL: document.data().author.photoURL,
+        },
+        id: document.id,
+        body: document.data().body,
+        title: document.data().title,
+        coverImage: document.data().coverImage,
+        createdDate: document.data().createdDate,
+      });
+    });
+
+    return posts;
+  }
+);
+
+export const deletePost = createAsyncThunk(
+  'posts/deletePost',
+  async (postId: string) => {
+    await deleteDoc(doc(db, 'posts', postId));
+    return postId;
+  }
+);
+
+// export const updatePostsByAuthorId = createAsyncThunk(
+//   'posts/updatePostsByAuthor',
+//   async (authorId: string) => {
+//     const q = query(
+//       collection(db, 'posts'),
+//       where('author.id', '==', authorId)
+//     );
+
+//     const querySnapshot = await getDocs(q);
+//     querySnapshot.forEach((document) => {
+//       console.log(document.ref);
+
+//       updateDoc(document.ref, {
+//         'author.username': 'LOREM',
+//       });
+//     });
+//   }
+// );
+
+type UpdatePostData = {
+  post: UpdatedPost;
+  id: string;
+};
+
+export const updatePost = createAsyncThunk(
+  'posts/updatePost',
+  async (data: UpdatePostData) => {
+    const docRef = doc(db, 'posts', data.id);
+    await updateDoc(docRef, data.post);
+
+    return {
+      ...data.post,
+      id: data.id,
+    };
+  }
+);
+
+type InitialState = {
+  posts: Post[];
+  status: RequestStatus;
+  error?: string;
+  isEdit: boolean;
+};
+
+const initialState: InitialState = {
+  posts: [],
+  status: RequestStatus.Idle,
+  isEdit: false,
+};
+
+const postsSlice = createSlice({
+  name: 'posts',
+  initialState,
+  reducers: {
+    toggleEditPosts(state, action: PayloadAction<boolean>) {
+      state.isEdit = action.payload;
+    },
+  },
+  extraReducers(builder) {
+    builder
+      .addCase(addNewPost.fulfilled, (state, action) => {
+        state.posts.push(action.payload);
+      })
+      .addCase(fetchAllPosts.fulfilled, (state, action) => {
+        state.posts = action.payload;
+        state.status = RequestStatus.Resolved;
+      })
+      .addCase(fetchAllPosts.rejected, (state, action) => {
+        state.status = RequestStatus.Rejected;
+        state.error = action.error.message;
+      })
+      .addCase(fetchAllPosts.pending, (state) => {
+        state.status = RequestStatus.Pending;
+      })
+      .addCase(deletePost.fulfilled, (state, action) => {
+        state.posts = state.posts.filter((post) => post.id !== action.payload);
+      })
+      .addCase(updatePost.fulfilled, (state, action) => {
+        const existingPostIndex = state.posts.findIndex(
+          (post) => post.id === action.payload.id
+        );
+        const existingPost = state.posts.find(
+          (post) => post.id === action.payload.id
+        );
+        if (!existingPost) {
+          throw new Error('somethign went wrong with post update');
+        }
+        state.posts[existingPostIndex] = {
+          ...existingPost,
+          body: action.payload.body,
+          title: action.payload.title,
+          coverImage: action.payload.coverImage,
+          createdDate: Date.now(),
+        };
+      });
+  },
+});
+
+export const { toggleEditPosts } = postsSlice.actions;
+
+export const selectPosts = (state: RootState) => state.posts;
+export const selectPostById = (state: RootState, id: string) =>
+  state.posts.posts.find((post) => post.id === id);
+export const selectPostsByAuthorName = (state: RootState, authorName: string) =>
+  state.posts.posts.filter((post) => post.author.username === authorName);
+
+export default postsSlice.reducer;

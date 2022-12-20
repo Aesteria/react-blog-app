@@ -1,5 +1,6 @@
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
+import { useEffect } from 'react';
 
 import Container from '../components/ui/Container';
 import PageTitle from '../constants/pageTitle';
@@ -8,11 +9,13 @@ import {
   selectCurrentUser,
   updateAvatar,
   updateUsername,
-} from '../store/users/userSlice';
+} from '../store/authSlice';
 import Button from '../components/ui/Button';
 import UserAvatarImage from '../components/ui/UserAvatarImage';
 import Page from '../components/Page';
 import isErrorWithMessage from '../utils/isErrorWithMessage';
+import HeadingSecondary from '../components/ui/HeadingSecondary';
+import { fetchUsers } from '../store/usersSlice';
 
 type SettingsProps = {
   pageTitle: PageTitle.Settings;
@@ -25,6 +28,7 @@ type SettingsSettingsFormValues = {
 
 export default function Settings({ pageTitle }: SettingsProps) {
   const user = useAppSelector(selectCurrentUser);
+
   const {
     register,
     handleSubmit,
@@ -36,6 +40,10 @@ export default function Settings({ pageTitle }: SettingsProps) {
   });
   const dispatch = useAppDispatch();
 
+  useEffect(() => {
+    dispatch(fetchUsers());
+  }, [dispatch]);
+
   const onSubmit: SubmitHandler<SettingsSettingsFormValues> = async ({
     username,
     avatar,
@@ -44,11 +52,11 @@ export default function Settings({ pageTitle }: SettingsProps) {
 
     try {
       if (isFileImage) {
-        dispatch(updateAvatar(avatar[0])).unwrap();
+        await dispatch(updateAvatar(avatar[0])).unwrap();
       }
 
       if (username !== user.username) {
-        dispatch(updateUsername(username));
+        await dispatch(updateUsername(username));
       }
 
       toast.success('Profile has been updated!');
@@ -63,9 +71,9 @@ export default function Settings({ pageTitle }: SettingsProps) {
     <Page title={pageTitle}>
       <Container size="narrow">
         <div>
-          <h2 className="text-center mt-5 mb-10 font-light text-3xl">
+          <HeadingSecondary className="text-center mt-5 mb-10">
             Profile Settings
-          </h2>
+          </HeadingSecondary>
 
           <div className="mx-auto rounded-lg shadow-md p-8 bg-slate-200 flex flex-col max-w-xl items-center justify-center">
             <div className="relative mb-4">
