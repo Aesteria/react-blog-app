@@ -9,11 +9,11 @@ import PageTitle from '../constants/pageTitle';
 import 'react-quill/dist/quill.snow.css';
 import Button from '../components/ui/Button';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
-import { selectCurrentUser } from '../store/users/userSlice';
+import { selectCurrentUser } from '../store/authSlice';
 import Loading from '../components/ui/Loading';
 import Page from '../components/Page';
 import isErrorWithMessage from '../utils/isErrorWithMessage';
-import { addNewPost } from '../store/posts/postsSlice';
+import { addNewPost } from '../store/postsSlice';
 
 type CreatePostProps = {
   pageTitle: PageTitle.CreatePost;

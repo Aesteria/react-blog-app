@@ -6,7 +6,7 @@ import {
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../store/hooks';
-import { selectCurrentUser } from '../../store/users/userSlice';
+import { selectCurrentUser } from '../../store/authSlice';
 import { Post } from '../../types/post';
 import formatDate from '../../utils/formatDate';
 import DeletePostModal from '../ui/DeletePostModal';

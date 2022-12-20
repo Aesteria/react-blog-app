@@ -7,7 +7,7 @@ import RequestStatus from './constants/requestStatus';
 
 import router from './router';
 import { useAppSelector } from './store/hooks';
-import { selectAuthStateChange } from './store/users/userSlice';
+import { selectAuthStateChange } from './store/authSlice';
 
 export default function App() {
   const authStatus = useAppSelector(selectAuthStateChange);

@@ -10,7 +10,7 @@ import 'react-quill/dist/quill.snow.css';
 import Button from '../components/ui/Button';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import Page from '../components/Page';
-import { selectPostById, updatePost } from '../store/posts/postsSlice';
+import { selectPostById, updatePost } from '../store/postsSlice';
 import getUpdatedPostBasedOnCoverImage from '../api/getUpdatedPostBasedOnCoverImage';
 import { EditPostFormValues } from '../types/form';
 import isErrorWithMessage from '../utils/isErrorWithMessage';

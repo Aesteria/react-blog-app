@@ -9,7 +9,7 @@ import { useAppSelector } from '../../store/hooks';
 import {
   selectCurrentUser,
   selectIsUserAuthenticated,
-} from '../../store/users/userSlice';
+} from '../../store/authSlice';
 import UserAvatarImage from '../ui/UserAvatarImage';
 
 export default function Navigation() {

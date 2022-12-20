@@ -4,7 +4,7 @@ import { NavLink } from 'react-router-dom';
 import LinkPath from '../../../constants/linkPath';
 import navLinks from '../../../constants/navList';
 import { useAppSelector } from '../../../store/hooks';
-import { selectIsUserAuthenticated } from '../../../store/users/userSlice';
+import { selectIsUserAuthenticated } from '../../../store/authSlice';
 
 type NavLinksProps = {
   isMobile?: boolean;

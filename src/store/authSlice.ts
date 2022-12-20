@@ -3,12 +3,12 @@ import { updateProfile, User } from 'firebase/auth';
 import { doc, updateDoc } from 'firebase/firestore';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 
-import type { RootState } from '../store';
-import { CurrentUser } from '../../types/user';
-import { auth, db, storage } from '../../firebase';
+import type { RootState } from './store';
+import { CurrentUser } from '../types/user';
+import { auth, db, storage } from '../firebase';
 
 export const updateAvatar = createAsyncThunk(
-  'user/updateAvatar',
+  'auth/updateAvatar',
   async (file: File) => {
     const user = auth.currentUser as User;
     const storageRef = ref(storage, `${user.uid}/avatar`);
@@ -28,7 +28,7 @@ export const updateAvatar = createAsyncThunk(
 );
 
 export const updateUsername = createAsyncThunk(
-  'user/updateUsername',
+  'auth/updateUsername',
   async (newName: string) => {
     const user = auth.currentUser as User;
     await updateProfile(user, {
@@ -61,8 +61,8 @@ const initialState: InitialState = {
   status: 'pending',
 };
 
-const userSlice = createSlice({
-  name: 'user',
+const authSlice = createSlice({
+  name: 'auth',
   initialState,
   reducers: {
     login(state, action: PayloadAction<CurrentUser>) {
@@ -91,11 +91,11 @@ const userSlice = createSlice({
   },
 });
 
-export const { login, logout } = userSlice.actions;
+export const { login, logout } = authSlice.actions;
 
-export const selectCurrentUser = (state: RootState) => state.user.currentUser;
+export const selectCurrentUser = (state: RootState) => state.auth.currentUser;
 export const selectIsUserAuthenticated = (state: RootState) =>
-  state.user.authenticated;
-export const selectAuthStateChange = (state: RootState) => state.user.status;
+  state.auth.authenticated;
+export const selectAuthStateChange = (state: RootState) => state.auth.status;
 
-export default userSlice.reducer;
+export default authSlice.reducer;

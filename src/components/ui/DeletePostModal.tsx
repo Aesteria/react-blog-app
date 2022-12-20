@@ -4,7 +4,7 @@ import { Fragment, useRef } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 import { useAppDispatch } from '../../store/hooks';
-import { deletePost } from '../../store/posts/postsSlice';
+import { deletePost } from '../../store/postsSlice';
 import isErrorWithMessage from '../../utils/isErrorWithMessage';
 import LinkPath from '../../constants/linkPath';
 

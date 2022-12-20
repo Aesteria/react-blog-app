@@ -1,7 +1,7 @@
 import { Menu } from '@headlessui/react';
 import ProfileLinks from '../ProfileLinks/ProfileLinks';
 import { useAppSelector } from '../../../../store/hooks';
-import { selectCurrentUser } from '../../../../store/users/userSlice';
+import { selectCurrentUser } from '../../../../store/authSlice';
 import UserAvatarImage from '../../../ui/UserAvatarImage';
 
 export default function ProfileDropdown() {
