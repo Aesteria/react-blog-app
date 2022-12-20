@@ -19,6 +19,9 @@ import Loading from '../components/ui/Loading';
 import Page from '../components/Page';
 import createUser from '../api/createUser';
 import isErrorWithMessage from '../utils/isErrorWithMessage';
+import { useAppDispatch } from '../store/hooks';
+import { login } from '../store/authSlice';
+import { auth } from '../firebase';
 
 type RegisterProps = {
   pageTitle: PageTitle.Register;
@@ -48,6 +51,7 @@ export default function Register({ pageTitle }: RegisterProps) {
     resolver: yupResolver(schema),
   });
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   const onSubmit: SubmitHandler<AuthFormValues> = async ({
     email,
@@ -56,8 +60,23 @@ export default function Register({ pageTitle }: RegisterProps) {
   }) => {
     try {
       await createUser({ email, password, username });
-      toast.success(`Welcome, ${username}!`);
-      navigate(LinkPath.Home);
+      const { currentUser: user } = auth;
+      if (user) {
+        const token = await user.getIdToken();
+        dispatch(
+          login({
+            email: user.email,
+            id: user.uid,
+            photoURL: user.photoURL,
+            token,
+            username: user.displayName,
+          })
+        );
+        toast.success(`Welcome, ${username}!`);
+        navigate(LinkPath.Home);
+      } else {
+        throw Error('Something went wrong');
+      }
     } catch (e) {
       if (isErrorWithMessage(e)) {
         toast.error(e.message);
