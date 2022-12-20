@@ -13,8 +13,6 @@ export const fetchUsers = createAsyncThunk('users/fetchUsers', async () => {
     users.push({
       id: document.id,
       email: document.data().email,
-      followers: document.data().followers,
-      following: document.data().following,
       photoURL: document.data().photoURL,
       username: document.data().username,
     });
@@ -23,33 +21,34 @@ export const fetchUsers = createAsyncThunk('users/fetchUsers', async () => {
   return users;
 });
 
-// type UpdateUserById = {
-//   userId: string;
-//   newData: {
-//     username?: string;
-//     photoURL?: string;
-//   };
-// };
+type UpdateUserByIdData = {
+  userId: string;
+  data: string;
+};
 
-// export const updateUserById = createAsyncThunk(
-//   'users/updateUserById',
-//   async (data: UpdateUserById) => {
-//     const docRef = doc(db, 'users', data.userId);
-//     if (data.newData.username && !data.newData.photoURL) {
-//       await updateDoc(docRef, {
-//         username: data.newData.username,
-//       });
-//     }
+export const updateUserNameById = createAsyncThunk(
+  'users/updateUserNameById',
+  async (data: UpdateUserByIdData) => {
+    const docRef = doc(db, 'users', data.userId);
+    await updateDoc(docRef, {
+      username: data.data,
+    });
 
-//     if (!data.newData.username && data.newData.photoURL) {
-//       await updateDoc(docRef, {
-//         photoURL: data.newData.photoURL,
-//       });
-//     }
+    return data;
+  }
+);
 
-//     return data;
-//   }
-// );
+export const updateUserAvatarById = createAsyncThunk(
+  'users/updateUserAvatarById',
+  async (data: UpdateUserByIdData) => {
+    const docRef = doc(db, 'users', data.userId);
+    await updateDoc(docRef, {
+      photoURL: data.data,
+    });
+
+    return data;
+  }
+);
 
 type InitialState = {
   users: UserProfile[];
@@ -78,30 +77,34 @@ const usersSlice = createSlice({
       })
       .addCase(fetchUsers.pending, (state) => {
         state.status = RequestStatus.Pending;
+      })
+      .addCase(updateUserAvatarById.fulfilled, (state, action) => {
+        const existingUserIndex = state.users.findIndex(
+          (user) => user.id === action.payload.userId
+        );
+        const existingUser = state.users[existingUserIndex];
+        state.users[existingUserIndex] = {
+          ...existingUser,
+          photoURL: action.payload.data,
+        };
+      })
+      .addCase(updateUserNameById.fulfilled, (state, action) => {
+        const existingUserIndex = state.users.findIndex(
+          (user) => user.id === action.payload.userId
+        );
+        const existingUser = state.users[existingUserIndex];
+        state.users[existingUserIndex] = {
+          ...existingUser,
+          username: action.payload.data,
+        };
       });
-    // .addCase(updateUserById.fulfilled, (state, action) => {
-    //   const existingUserIndex = state.users.findIndex(
-    //     (user) => user.id === action.payload.userId
-    //   );
-    //   const existingUser = state.users[existingUserIndex];
-
-    //   if (action.payload.newData.photoURL) {
-    //     state.users[existingUserIndex] = {
-    //       ...existingUser,
-    //       photoURL: action.payload.newData.photoURL,
-    //     };
-    //   }
-
-    //   if (action.payload.newData.username) {
-    //     state.users[existingUserIndex] = {
-    //       ...existingUser,
-    //       username: action.payload.newData.username,
-    //     };
-    //   }
-    // });
   },
 });
 
 export const selectUsers = (state: RootState) => state.users.users;
+export const selectUsersStatus = (state: RootState) => state.users.status;
+export const selectUsersError = (state: RootState) => state.users.error;
+export const selectUserById = (state: RootState, username: string) =>
+  state.users.users.find((user) => user.username === username);
 
 export default usersSlice.reducer;

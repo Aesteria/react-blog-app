@@ -79,24 +79,49 @@ export const deletePost = createAsyncThunk(
   }
 );
 
-// export const updatePostsByAuthorId = createAsyncThunk(
-//   'posts/updatePostsByAuthor',
-//   async (authorId: string) => {
-//     const q = query(
-//       collection(db, 'posts'),
-//       where('author.id', '==', authorId)
-//     );
+type UpdatePostsAuthorByIdData = {
+  data: string;
+  authorId: string;
+};
 
-//     const querySnapshot = await getDocs(q);
-//     querySnapshot.forEach((document) => {
-//       console.log(document.ref);
+export const updatePostsAuthorAvatarById = createAsyncThunk(
+  'posts/updatePostsAuthorAvatarById',
+  async (data: UpdatePostsAuthorByIdData) => {
+    const q = query(
+      collection(db, 'posts'),
+      where('author.id', '==', data.authorId)
+    );
 
-//       updateDoc(document.ref, {
-//         'author.username': 'LOREM',
-//       });
-//     });
-//   }
-// );
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((document) => {
+      updateDoc(document.ref, {
+        'author.photoURL': data.data,
+      });
+    });
+
+    return data;
+  }
+);
+
+export const updatePostsAuthorNameById = createAsyncThunk(
+  'posts/updatePostsAuthorNameById',
+  async (data: UpdatePostsAuthorByIdData) => {
+    const q = query(
+      collection(db, 'posts'),
+      where('author.id', '==', data.authorId)
+    );
+
+    const querySnapshot = await getDocs(q);
+
+    querySnapshot.forEach((document) => {
+      updateDoc(document.ref, {
+        'author.username': data.data,
+      });
+    });
+
+    return data;
+  }
+);
 
 type UpdatePostData = {
   post: UpdatedPost;
@@ -173,6 +198,22 @@ const postsSlice = createSlice({
           coverImage: action.payload.coverImage,
           createdDate: Date.now(),
         };
+      })
+      .addCase(updatePostsAuthorAvatarById.fulfilled, (state, action) => {
+        state.posts.forEach((post) => {
+          if (post.author.id === action.payload.authorId) {
+            // eslint-disable-next-line no-param-reassign
+            post.author.photoURL = action.payload.data;
+          }
+        });
+      })
+      .addCase(updatePostsAuthorNameById.fulfilled, (state, action) => {
+        state.posts.forEach((post) => {
+          if (post.author.id === action.payload.authorId) {
+            // eslint-disable-next-line no-param-reassign
+            post.author.username = action.payload.data;
+          }
+        });
       });
   },
 });

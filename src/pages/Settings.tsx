@@ -15,7 +15,15 @@ import UserAvatarImage from '../components/ui/UserAvatarImage';
 import Page from '../components/Page';
 import isErrorWithMessage from '../utils/isErrorWithMessage';
 import HeadingSecondary from '../components/ui/HeadingSecondary';
-import { fetchUsers } from '../store/usersSlice';
+import {
+  fetchUsers,
+  updateUserAvatarById,
+  updateUserNameById,
+} from '../store/usersSlice';
+import {
+  updatePostsAuthorAvatarById,
+  updatePostsAuthorNameById,
+} from '../store/postsSlice';
 
 type SettingsProps = {
   pageTitle: PageTitle.Settings;
@@ -52,11 +60,17 @@ export default function Settings({ pageTitle }: SettingsProps) {
 
     try {
       if (isFileImage) {
-        await dispatch(updateAvatar(avatar[0])).unwrap();
+        const url = await dispatch(updateAvatar(avatar[0])).unwrap();
+        await dispatch(updateUserAvatarById({ data: url, userId: user.id }));
+        dispatch(updatePostsAuthorAvatarById({ data: url, authorId: user.id }));
       }
 
       if (username !== user.username) {
         await dispatch(updateUsername(username));
+        await dispatch(updateUserNameById({ data: username, userId: user.id }));
+        dispatch(
+          updatePostsAuthorNameById({ data: username, authorId: user.id })
+        );
       }
 
       toast.success('Profile has been updated!');
