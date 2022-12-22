@@ -14,7 +14,6 @@ import ViewPost from '../pages/ViewPost';
 import EditPost from '../pages/EditPost';
 import Profile from '../pages/Profile/Profile';
 import Followers from '../pages/Profile/Followers';
-import Following from '../pages/Profile/Following';
 import Feed from '../pages/Profile/Feed';
 
 const router = createBrowserRouter([
@@ -45,10 +44,6 @@ const router = createBrowserRouter([
           {
             path: LinkPath.Followers,
             element: <Followers />,
-          },
-          {
-            path: LinkPath.Following,
-            element: <Following />,
           },
         ],
       },

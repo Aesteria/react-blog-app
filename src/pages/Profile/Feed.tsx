@@ -12,8 +12,6 @@ export default function Feed() {
 
   if (!authorId) return <p>User Not Found</p>;
 
-  console.log(posts);
-
   return (
     <div>
       <ul className="divide-y divide-gray-200">

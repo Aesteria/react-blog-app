@@ -61,16 +61,22 @@ export default function Settings({ pageTitle }: SettingsProps) {
     try {
       if (isFileImage) {
         const url = await dispatch(updateAvatar(avatar[0])).unwrap();
-        await dispatch(updateUserAvatarById({ data: url, userId: user.id }));
-        dispatch(updatePostsAuthorAvatarById({ data: url, authorId: user.id }));
+        await dispatch(
+          updateUserAvatarById({ data: url, userId: user.id })
+        ).unwrap();
+        await dispatch(
+          updatePostsAuthorAvatarById({ data: url, authorId: user.id })
+        ).unwrap();
       }
 
       if (username !== user.username) {
         await dispatch(updateUsername(username));
-        await dispatch(updateUserNameById({ data: username, userId: user.id }));
-        dispatch(
+        await dispatch(
+          updateUserNameById({ data: username, userId: user.id })
+        ).unwrap();
+        await dispatch(
           updatePostsAuthorNameById({ data: username, authorId: user.id })
-        );
+        ).unwrap();
       }
 
       toast.success('Profile has been updated!');

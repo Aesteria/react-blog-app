@@ -5,12 +5,14 @@ import { auth } from '../firebase';
 import postsReducer, { fetchAllPosts } from './postsSlice';
 import authReducer, { login, logout } from './authSlice';
 import usersReducer from './usersSlice';
+import followsReducer from './followsSlice';
 
 export const store = configureStore({
   reducer: {
     auth: authReducer,
     posts: postsReducer,
     users: usersReducer,
+    follows: followsReducer,
   },
 });
 
