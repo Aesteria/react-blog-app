@@ -5,8 +5,6 @@ import PageTitle from '../../constants/pageTitle';
 import RequestStatus from '../../constants/requestStatus';
 import Loading from '../../components/ui/Loading';
 import useUserProfile from './hooks/useUsersProfile';
-import { useAppSelector } from '../../store/hooks';
-import { selectCurrentUser } from '../../store/authSlice';
 import ProfileInfo from './ProfileInfo';
 import ProfileTabs from './ProfileTabs';
 
@@ -16,7 +14,6 @@ type ProfileProps = {
 
 export default function Profile({ pageTitle }: ProfileProps) {
   const { authorId } = useParams<{ authorId: string }>();
-  const currentUser = useAppSelector(selectCurrentUser);
   const { user, usersError, usersStatus } = useUserProfile(authorId);
 
   let content;
@@ -26,7 +23,7 @@ export default function Profile({ pageTitle }: ProfileProps) {
   } else if (usersStatus === RequestStatus.Resolved && user) {
     content = (
       <>
-        <ProfileInfo currentUser={currentUser} user={user} />
+        <ProfileInfo user={user} />
         <Outlet />
       </>
     );
@@ -38,7 +35,9 @@ export default function Profile({ pageTitle }: ProfileProps) {
     <Page title={pageTitle}>
       <Container size="narrow">
         <div className="mb-10 mt-10">
-          <ProfileTabs authorId={authorId as string} />
+          <div className="mb-10">
+            <ProfileTabs authorId={authorId as string} />
+          </div>
           {content}
         </div>
       </Container>

@@ -17,9 +17,14 @@ export default function Following() {
   } else if (followingStatus === RequestStatus.Pending) {
     content = <Loading />;
   } else if (followingStatus === RequestStatus.Resolved) {
-    content = following.map((follow) => (
-      <FollowItem key={follow.userId} usernameId={follow.userId} />
-    ));
+    content =
+      following.length > 0 ? (
+        following.map((follow) => (
+          <FollowItem key={follow.userId} usernameId={follow.userId} />
+        ))
+      ) : (
+        <p>You have no following</p>
+      );
   }
 
   return <div>{content}</div>;

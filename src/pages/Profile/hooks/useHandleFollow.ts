@@ -1,74 +1,93 @@
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import fetchIsCurrentUserFollowing from '../../../api/fetchIsCurrentUserFollowing';
+import {
+  selectCurrentUser,
+  selectIsUserAuthenticated,
+} from '../../../store/authSlice';
 import { addFollower, deleteFollower } from '../../../store/followersSlice';
 import { addFollowing, deleteFollowing } from '../../../store/followingSlice';
-import { useAppDispatch } from '../../../store/hooks';
+import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 
-export default function useHandleFollow(userId: string, currentUserId: string) {
+export default function useHandleFollow(userId: string) {
   const [isFollowing, setIsFollowing] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const { id } = useAppSelector(selectCurrentUser);
+  const auth = useAppSelector(selectIsUserAuthenticated);
+  const [status, setStatus] = useState<'idle' | 'resolved'>('idle');
 
   const dispatch = useAppDispatch();
   const handleFollow = async () => {
-    dispatch(
-      addFollower({
-        authorId: userId,
-        currentUserId,
-      })
-    );
-    dispatch(
-      addFollowing({
-        authorId: userId,
-        currentUserId,
-      })
-    );
-    setIsFollowing(true);
+    try {
+      setIsLoading(true);
+      dispatch(
+        addFollower({
+          authorId: userId,
+          currentUserId: id,
+        })
+      );
+      dispatch(
+        addFollowing({
+          authorId: userId,
+          currentUserId: id,
+        })
+      );
+      setIsFollowing(true);
+    } catch (e) {
+      toast.error('Something went wrong');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleUnfollow = async () => {
     try {
+      setIsLoading(true);
       await dispatch(
         deleteFollower({
           authorId: userId,
-          currentUserId,
+          currentUserId: id,
         })
       ).unwrap();
 
       await dispatch(
         deleteFollowing({
           authorId: userId,
-          currentUserId,
+          currentUserId: id,
         })
       );
     } catch (e) {
       toast.error('Something went wrong');
+    } finally {
+      setIsLoading(false);
     }
     setIsFollowing(false);
   };
 
   useEffect(() => {
-    setIsFollowing(true);
-    fetchIsCurrentUserFollowing(userId, currentUserId)
-      .then((res) => {
-        setIsFollowing(res);
-        setIsLoading(false);
-      })
-      .catch(() => {
-        toast.error('Something went wrong');
-        setIsLoading(false);
-      });
-  }, [currentUserId, userId]);
+    if (auth) {
+      fetchIsCurrentUserFollowing(userId, id)
+        .then((res) => {
+          setIsFollowing(res);
+          setStatus('resolved');
+        })
+        .catch(() => {
+          toast.error('Something went wrong');
+        });
+    }
+  }, [auth, id, userId]);
 
-  const isCurrentUserCanFollow = currentUserId !== userId;
-  const showFollowButton = !isLoading && isCurrentUserCanFollow && !isFollowing;
+  const isCurrentUserCanFollow = auth && id !== userId;
+  const showFollowButton =
+    isCurrentUserCanFollow && !isFollowing && status === 'resolved';
   const showUnfollowButton =
-    !isLoading && isCurrentUserCanFollow && isFollowing;
+    isCurrentUserCanFollow && isFollowing && status === 'resolved';
 
   return {
     showFollowButton,
     showUnfollowButton,
     handleFollow,
     handleUnfollow,
+    isLoading,
   };
 }

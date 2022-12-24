@@ -73,6 +73,10 @@ export const deleteFollower = createAsyncThunk(
     if (follower.exists()) {
       deleteDoc(followerRef);
     }
+
+    return {
+      userId: data.currentUserId,
+    };
   }
 );
 
@@ -95,6 +99,11 @@ const followersSlice = createSlice({
       })
       .addCase(addFollower.fulfilled, (state, action) => {
         state.followers.push(action.payload);
+      })
+      .addCase(deleteFollower.fulfilled, (state, action) => {
+        state.followers = state.followers.filter(
+          (follower) => follower.userId !== action.payload.userId
+        );
       });
   },
 });
