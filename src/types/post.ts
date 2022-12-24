@@ -1,13 +1,25 @@
-type PostAuthor = {
-  avatar: string;
-  username: string;
-};
+import { CurrentUser } from './user';
+
+export type PostAuthor = Pick<CurrentUser, 'username' | 'photoURL' | 'id'>;
 
 export type Post = {
+  createdDate: number;
+  author: PostAuthor;
+  body: string;
+  coverImage: string;
+  title: string;
+  id: string;
+};
+
+export type InitialPost = {
   author: PostAuthor;
   body: string;
   title: string;
-  createdDate: string;
-  isVisitorOwner: boolean;
-  _id: string;
+  cover: File;
+};
+
+export type UpdatedPost = {
+  body: string;
+  title: string;
+  coverImage: string;
 };

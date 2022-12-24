@@ -1,17 +1,6 @@
-type ProfileCounts = {
-  followerCount: number;
-  followingCount: number;
-  postCount: number;
-};
-
-export type ProfileFollow = {
+export type UserProfile = {
+  email: string;
+  photoURL: string | null;
   username: string;
-  avatar: string;
-};
-
-export type ProfileData = {
-  profileAvatar: string;
-  profileUsername: string;
-  isFollowing: boolean;
-  counts: ProfileCounts;
+  id: string;
 };

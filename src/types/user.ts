@@ -1,5 +1,7 @@
-export type User = {
+export type CurrentUser = {
+  email: string | null;
   token: string;
-  username: string;
-  avatar: string;
+  username: string | null;
+  photoURL: string | null;
+  id: string;
 };

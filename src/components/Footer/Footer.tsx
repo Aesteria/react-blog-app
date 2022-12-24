@@ -1,30 +1,23 @@
-import { Link } from 'react-router-dom';
+import Container from '../ui/Container';
+import FooterLinks from './FooterLinks';
 
-const Footer = () => {
+export default function Footer() {
   return (
-    <footer className="border-top text-center small text-muted py-3">
-      <p>
-        <Link to="/" className="mx-1">
-          Home
-        </Link>{' '}
-        |
-        <Link className="mx-1" to="/about-us">
-          About Us
-        </Link>{' '}
-        |
-        <Link className="mx-1" to="/terms">
-          Terms
-        </Link>
-      </p>
-      <p className="m-0">
-        Copyright &copy; 2022{' '}
-        <Link to="/" className="text-muted">
-          ComplexApp
-        </Link>
-        . All rights reserved.
-      </p>
+    <footer className="bg-slate-50">
+      <Container>
+        <div className="py-16">
+          <div className="mx-auto h-10 w-auto text-center">AesteBlog</div>
+          <nav className="mt-10 text-sm" aria-label="quick links">
+            <FooterLinks />
+          </nav>
+        </div>
+        <div className="flex flex-col items-center border-t border-slate-400/10 py-10 sm:flex-row-reverse sm:justify-between">
+          <p className="mt-6 text-sm text-slate-500 sm:mt-0">
+            Copyright &copy; {new Date().getFullYear()} Aesteria. All rights
+            reserved.
+          </p>
+        </div>
+      </Container>
     </footer>
   );
-};
-
-export default Footer;
+}

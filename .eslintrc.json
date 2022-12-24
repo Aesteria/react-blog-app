@@ -1,0 +1,40 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true
+  },
+  "extends": [
+    "airbnb",
+    "airbnb-typescript",
+    "airbnb/hooks",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:react/jsx-runtime",
+    "prettier"
+  ],
+  "overrides": [],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "./tsconfig.json",
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "plugins": ["react", "@typescript-eslint", "prettier"],
+  "rules": {
+    "prettier/prettier": [
+      "error",
+      {
+        "endOfLine": "auto"
+      }
+    ],
+    "jsx-a11y/anchor-is-valid": "warn",
+    "react/no-array-index-key": "off",
+    "react/require-default-props": "off",
+    "react/button-has-type": "off",
+    "no-param-reassign": [
+      "error",
+      { "props": true, "ignorePropertyModificationsFor": ["state"] }
+    ],
+    "jsx-a11y/label-has-associated-control": "off",
+    "react/jsx-props-no-spreading": "off"
+  }
+}

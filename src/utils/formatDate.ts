@@ -1,8 +1,6 @@
-export const formatDate = (createdDate: string): string => {
-  const date = new Date(createdDate);
-  const dateFormatted = `${
-    date.getMonth() + 1
-  }/${date.getDate()}/${date.getFullYear()}`;
+const formatDate = (timestamp: number) =>
+  new Date(timestamp).toLocaleDateString('en-US', {
+    dateStyle: 'long',
+  });
 
-  return dateFormatted;
-};
+export default formatDate;
