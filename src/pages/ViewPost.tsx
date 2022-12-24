@@ -17,6 +17,7 @@ import { selectPostById } from '../store/postsSlice';
 import formatDate from '../utils/formatDate';
 import HeadingSecondary from '../components/ui/HeadingSecondary';
 import DeletePostModal from '../components/ui/DeletePostModal';
+import { selectCurrentUser } from '../store/authSlice';
 
 type ViewPostProps = {
   pageTitle: PageTitle;
@@ -29,6 +30,7 @@ export default function ViewPost({ pageTitle }: ViewPostProps) {
   );
   const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
+  const currentUser = useAppSelector(selectCurrentUser);
 
   if (!post) {
     return <h2>Post Not Found!</h2>;
@@ -72,20 +74,22 @@ export default function ViewPost({ pageTitle }: ViewPostProps) {
               <CalendarIcon className="h-6 w-6 text-fuchsia-500" />
               <span className="ml-2">{date}</span>
             </div>
-            <div className="flex">
-              <button
-                onClick={handleEditPost}
-                className="flex items-center justify-center w-9 h-9 rounded-full bg-white hover:bg-green-600 transition-backgroundColor mr-2 group/button"
-              >
-                <PencilSquareIcon className="pointer-events-none w-5 h-auto transition-colors group-hover/button:text-white text-green-600" />
-              </button>
-              <button
-                onClick={handleDeletePost}
-                className="flex items-center justify-center w-9 h-9 rounded-full bg-white hover:bg-red-600 transition-backgroundColor group/button"
-              >
-                <TrashIcon className="pointer-events-none w-5 h-auto transition-colors group-hover/button:text-white text-red-500" />
-              </button>
-            </div>
+            {currentUser.username === post.author.username && (
+              <div className="flex">
+                <button
+                  onClick={handleEditPost}
+                  className="flex items-center justify-center w-9 h-9 rounded-full bg-white hover:bg-green-600 transition-backgroundColor mr-2 group/button"
+                >
+                  <PencilSquareIcon className="pointer-events-none w-5 h-auto transition-colors group-hover/button:text-white text-green-600" />
+                </button>
+                <button
+                  onClick={handleDeletePost}
+                  className="flex items-center justify-center w-9 h-9 rounded-full bg-white hover:bg-red-600 transition-backgroundColor group/button"
+                >
+                  <TrashIcon className="pointer-events-none w-5 h-auto transition-colors group-hover/button:text-white text-red-500" />
+                </button>
+              </div>
+            )}
           </div>
 
           <div className="mb-8">
