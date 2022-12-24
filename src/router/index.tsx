@@ -15,6 +15,7 @@ import EditPost from '../pages/EditPost';
 import Profile from '../pages/Profile/Profile';
 import Followers from '../pages/Profile/Followers';
 import Feed from '../pages/Profile/Feed';
+import Following from '../pages/Profile/Following';
 
 const router = createBrowserRouter([
   {
@@ -38,12 +39,16 @@ const router = createBrowserRouter([
         element: <Profile pageTitle={PageTitle.Profile} />,
         children: [
           {
-            path: LinkPath.Profile,
+            path: LinkPath.Feed,
             element: <Feed />,
           },
           {
             path: LinkPath.Followers,
             element: <Followers />,
+          },
+          {
+            path: LinkPath.Following,
+            element: <Following />,
           },
         ],
       },

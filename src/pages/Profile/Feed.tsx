@@ -3,6 +3,7 @@ import formatDate from '../../utils/formatDate';
 import UserAvatarImage from '../../components/ui/UserAvatarImage';
 import { useAppSelector } from '../../store/hooks';
 import { selectPostsByAuthorId } from '../../store/postsSlice';
+import sortPostsByDate from '../../utils/sortPostsByDate';
 
 export default function Feed() {
   const { authorId } = useParams<{ authorId: string }>();
@@ -10,12 +11,14 @@ export default function Feed() {
     selectPostsByAuthorId(state, authorId ?? '')
   );
 
+  if (posts.length === 0) return <p>There is no posts</p>;
+
   if (!authorId) return <p>User Not Found</p>;
 
   return (
     <div>
       <ul className="divide-y divide-gray-200">
-        {posts.map((post) => (
+        {sortPostsByDate(posts).map((post) => (
           <li
             key={post.id}
             className="p-4 hover:bg-slate-200 rounded-sm transition-backgroundColor"

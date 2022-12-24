@@ -73,7 +73,7 @@ export default function ProfileLinks({ isMobile }: ProfileLinksProps) {
         <Menu.Item>
           {({ active }) => (
             <Link
-              to={`/profile/${user.id}`}
+              to={`/profile/${user.id}/feed`}
               className={clsx({
                 'bg-gray-100': active,
                 'block px-4 py-2 text-sm text-gray-700': true,

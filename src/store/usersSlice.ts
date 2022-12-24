@@ -82,21 +82,13 @@ const usersSlice = createSlice({
         const existingUserIndex = state.users.findIndex(
           (user) => user.id === action.payload.userId
         );
-        const existingUser = state.users[existingUserIndex];
-        state.users[existingUserIndex] = {
-          ...existingUser,
-          photoURL: action.payload.data,
-        };
+        state.users[existingUserIndex].photoURL = action.payload.data;
       })
       .addCase(updateUserNameById.fulfilled, (state, action) => {
         const existingUserIndex = state.users.findIndex(
           (user) => user.id === action.payload.userId
         );
-        const existingUser = state.users[existingUserIndex];
-        state.users[existingUserIndex] = {
-          ...existingUser,
-          username: action.payload.data,
-        };
+        state.users[existingUserIndex].username = action.payload.data;
       });
   },
 });
@@ -104,7 +96,7 @@ const usersSlice = createSlice({
 export const selectUsers = (state: RootState) => state.users.users;
 export const selectUsersStatus = (state: RootState) => state.users.status;
 export const selectUsersError = (state: RootState) => state.users.error;
-export const selectUserById = (state: RootState, id: string) =>
+export const selectUserById = (state: RootState, id: string | undefined) =>
   state.users.users.find((user) => user.id === id);
 
 export default usersSlice.reducer;
