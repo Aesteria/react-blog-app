@@ -5,10 +5,15 @@ import {
   selectPostsError,
   selectPostsStatus,
 } from '../../store/postsSlice';
+import sortPostsByDate from '../../utils/sortPostsByDate';
 import Loading from '../ui/Loading';
 import BlogCard from './BlogCard';
 
-export default function BlogCardList() {
+type BlogCardListProps = {
+  searchTerm: string;
+};
+
+export default function BlogCardList({ searchTerm }: BlogCardListProps) {
   const posts = useAppSelector(selectPosts);
   const status = useAppSelector(selectPostsStatus);
   const error = useAppSelector(selectPostsError);
@@ -20,7 +25,13 @@ export default function BlogCardList() {
   } else if (status === RequestStatus.Pending) {
     content = <Loading />;
   } else if (status === RequestStatus.Resolved) {
-    content = posts.map((post) => <BlogCard key={post.id} post={post} />);
+    content = sortPostsByDate(posts)
+      .filter(
+        (post) =>
+          post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          post.body.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+      .map((post) => <BlogCard key={post.id} post={post} />);
   }
 
   return (
