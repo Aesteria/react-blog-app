@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import PageTitle from '../constants/pageTitle';
 
 type PageProps = {
-  children: JSX.Element;
+  children: React.ReactNode;
   title: PageTitle;
 };
 
@@ -12,5 +12,5 @@ export default function Page({ children, title }: PageProps) {
     window.scrollTo(0, 0);
   }, [title]);
 
-  return children;
+  return <main>{children}</main>;
 }

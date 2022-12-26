@@ -11,7 +11,7 @@ export default function UserAvatarImage({
   size = 'medium',
 }: UserAvatarImageProps) {
   const imageClass = clsx({
-    'rounded-full': true,
+    'rounded-full object-cover': true,
     'h-8 w-8': size === 'small',
     'h-10 w-10': size === 'medium',
     'h-36 w-36': size === 'large',

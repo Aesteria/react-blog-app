@@ -23,3 +23,7 @@
 .post-view .quill .ql-editor {
   padding: 0;
 }
+
+.blog-card .quill .ql-editor > p {
+  cursor: pointer;
+}

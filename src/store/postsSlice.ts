@@ -145,23 +145,17 @@ type InitialState = {
   posts: Post[];
   status: RequestStatus;
   error?: string;
-  isEdit: boolean;
 };
 
 const initialState: InitialState = {
   posts: [],
   status: RequestStatus.Idle,
-  isEdit: false,
 };
 
 const postsSlice = createSlice({
   name: 'posts',
   initialState,
-  reducers: {
-    toggleEditPosts(state, action: PayloadAction<boolean>) {
-      state.isEdit = action.payload;
-    },
-  },
+  reducers: {},
   extraReducers(builder) {
     builder
       .addCase(addNewPost.fulfilled, (state, action) => {
@@ -218,9 +212,9 @@ const postsSlice = createSlice({
   },
 });
 
-export const { toggleEditPosts } = postsSlice.actions;
-
-export const selectPosts = (state: RootState) => state.posts;
+export const selectPosts = (state: RootState) => state.posts.posts;
+export const selectPostsStatus = (state: RootState) => state.posts.status;
+export const selectPostsError = (state: RootState) => state.posts.error;
 export const selectPostById = (state: RootState, id: string) =>
   state.posts.posts.find((post) => post.id === id);
 export const selectPostsByAuthorId = (state: RootState, id: string) =>
