@@ -52,7 +52,6 @@ type InitialState = {
 const initialState: InitialState = {
   currentUser: {
     email: null,
-    token: '',
     username: null,
     photoURL: null,
     id: '',

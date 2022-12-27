@@ -62,13 +62,11 @@ export default function Register({ pageTitle }: RegisterProps) {
       await createUser({ email, password, username });
       const { currentUser: user } = auth;
       if (user) {
-        const token = await user.getIdToken();
         dispatch(
           login({
             email: user.email,
             id: user.uid,
             photoURL: user.photoURL,
-            token,
             username: user.displayName,
           })
         );

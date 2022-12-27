@@ -7,6 +7,7 @@ import authReducer, { login, logout } from './authSlice';
 import usersReducer from './usersSlice';
 import followersReducer from './followersSlice';
 import followingReducer from './followingSlice';
+import { CurrentUser } from '../types/user';
 
 export const store = configureStore({
   reducer: {
@@ -16,15 +17,32 @@ export const store = configureStore({
     followers: followersReducer,
     following: followingReducer,
   },
+  preloadedState: {
+    auth: {
+      authenticated: Boolean(localStorage.getItem('authUser')),
+      status: localStorage.getItem('authUser') ? 'resolved' : 'pending',
+      currentUser: localStorage.getItem('authUser')
+        ? (JSON.parse(
+            localStorage.getItem('authUser') as string
+          ) as CurrentUser)
+        : {
+            email: null,
+            id: '',
+            photoURL: null,
+            username: null,
+          },
+    },
+  },
 });
 
 onAuthStateChanged(auth, async (user) => {
   if (user) {
     const { displayName: username, email, photoURL, uid } = user;
-    const token = await user.getIdToken();
-
-    store.dispatch(login({ email, token, username, photoURL, id: uid }));
+    const userData = { email, username, photoURL, id: uid };
+    localStorage.setItem('authUser', JSON.stringify(userData));
+    store.dispatch(login(userData));
   } else {
+    localStorage.removeItem('authUser');
     store.dispatch(logout());
   }
 });
