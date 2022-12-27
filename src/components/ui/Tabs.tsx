@@ -2,7 +2,12 @@ import clsx from 'clsx';
 import { NavLink } from 'react-router-dom';
 
 type TabsProps = {
-  tabs: { name: string; to: string; count: number | undefined }[];
+  tabs: {
+    name: string;
+    to: string;
+    root?: boolean;
+    count: number | undefined;
+  }[];
 };
 
 export default function Tabs({ tabs }: TabsProps) {
@@ -21,6 +26,7 @@ export default function Tabs({ tabs }: TabsProps) {
                 'w-1/4 py-4 px-1 text-center border-b-2 font-medium text-xs sm:text-sm'
               )
             }
+            end={tab.root}
           >
             {tab.name} {tab.count ?? ''}
           </NavLink>

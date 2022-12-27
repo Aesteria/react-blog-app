@@ -15,6 +15,7 @@ import Profile from '../pages/Profile/Profile';
 import Followers from '../pages/Profile/Followers';
 import Following from '../pages/Profile/Following';
 import PostsFeed from '../pages/Profile/PostsFeed';
+import NotFound from '../pages/NotFound';
 
 export default function AppRouter() {
   return (
@@ -66,6 +67,8 @@ export default function AppRouter() {
           element={<ForgotPassword pageTitle={PageTitle.ForgotPassword} />}
         />
       </Route>
+
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 }

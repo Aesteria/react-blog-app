@@ -65,7 +65,7 @@ export default function ViewPost({ pageTitle }: ViewPostProps) {
               <div className="flex items-center mr-4">
                 <UserAvatarImage size="small" src={post.author.photoURL} />
                 <Link
-                  to={`/profile/${post.author.id}/feed`}
+                  to={`/profile/${post.author.id}`}
                   className="ml-2 underline"
                 >
                   {post.author.username}
