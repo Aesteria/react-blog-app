@@ -18,7 +18,7 @@ export default function ProfileTabs({ authorId }: ProfileTabsProps) {
   const tabs = [
     {
       name: 'Posts',
-      to: 'feed',
+      to: '',
       count: postsCount,
       root: true,
     },

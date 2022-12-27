@@ -5,7 +5,7 @@ import { useAppSelector } from '../../store/hooks';
 import { selectPostsByAuthorId } from '../../store/postsSlice';
 import sortPostsByDate from '../../utils/sortPostsByDate';
 
-export default function Feed() {
+export default function PostsFeed() {
   const { authorId } = useParams<{ authorId: string }>();
   const posts = useAppSelector((state) =>
     selectPostsByAuthorId(state, authorId ?? '')

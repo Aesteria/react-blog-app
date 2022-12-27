@@ -1,12 +1,9 @@
-import { RouterProvider } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
-
 import Loading from './components/ui/Loading';
-
-import router from './router';
 import { useAppSelector } from './store/hooks';
 import { selectAuthStateChange } from './store/authSlice';
+import AppRouter from './router/AppRouter';
 
 export default function App() {
   const authStatus = useAppSelector(selectAuthStateChange);
@@ -22,7 +19,7 @@ export default function App() {
   return (
     <>
       <ToastContainer />
-      <RouterProvider router={router} />
+      <AppRouter />
     </>
   );
 }
