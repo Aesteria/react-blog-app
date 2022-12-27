@@ -219,5 +219,11 @@ export const selectPostById = (state: RootState, id: string) =>
   state.posts.posts.find((post) => post.id === id);
 export const selectPostsByAuthorId = (state: RootState, id: string) =>
   state.posts.posts.filter((post) => post.author.id === id);
+export const selectFilteredPosts = (state: RootState, searchTerm: string) =>
+  state.posts.posts.filter(
+    (post) =>
+      post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      post.body.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
 export default postsSlice.reducer;
