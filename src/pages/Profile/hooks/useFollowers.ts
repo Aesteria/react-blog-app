@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import RequestStatus from '../../../constants/requestStatus';
 
 import {
   fetchFollowers,
@@ -15,8 +16,10 @@ export default function useFollowers(authorId: string) {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(fetchFollowers(authorId));
-  }, [authorId, dispatch]);
+    if (followersStatus === RequestStatus.Idle) {
+      dispatch(fetchFollowers(authorId));
+    }
+  }, [authorId, dispatch, followersStatus]);
 
   return {
     followersError,

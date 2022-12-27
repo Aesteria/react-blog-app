@@ -15,8 +15,10 @@ export default function useFollowing(authorId: string) {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(fetchFollowing(authorId));
-  }, [authorId, dispatch]);
+    if (followingStatus === RequestStatus.Idle) {
+      dispatch(fetchFollowing(authorId));
+    }
+  }, [authorId, dispatch, followingStatus]);
 
   return {
     followingStatus,
