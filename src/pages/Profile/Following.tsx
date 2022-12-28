@@ -2,7 +2,7 @@ import { useParams } from 'react-router-dom';
 import FollowItem from '../../components/FollowItem';
 import Loading from '../../components/ui/Loading';
 import RequestStatus from '../../constants/requestStatus';
-import useFollowing from './hooks/useFollowing';
+import useFollowing from '../../hooks/useFollowing';
 
 export default function Following() {
   const params = useParams<{ authorId: string }>();
@@ -20,7 +20,7 @@ export default function Following() {
     content =
       following.length > 0 ? (
         following.map((follow) => (
-          <FollowItem key={follow.userId} usernameId={follow.userId} />
+          <FollowItem key={follow} usernameId={follow} />
         ))
       ) : (
         <p>You have no following</p>

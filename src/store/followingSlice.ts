@@ -9,11 +9,11 @@ import {
 } from 'firebase/firestore';
 import RequestStatus from '../constants/requestStatus';
 import { db } from '../firebase';
-import { AddFollowData, UserFollower } from '../types/follow';
+import { AddFollowData } from '../types/follow';
 import type { RootState } from './store';
 
 type InitialState = {
-  following: UserFollower[];
+  following: string[];
   status: RequestStatus;
   error?: string;
 };
@@ -29,11 +29,9 @@ export const fetchFollowing = createAsyncThunk(
     const querySnapshot = await getDocs(
       collection(db, `following/${userId}/userFollowing`)
     );
-    const newData: UserFollower[] = [];
+    const newData: string[] = [];
     querySnapshot.forEach((document) => {
-      newData.push({
-        userId: document.id,
-      });
+      newData.push(document.id);
     });
 
     return newData;
@@ -53,6 +51,8 @@ export const addFollowing = createAsyncThunk(
     );
 
     await setDoc(userFollowingRef, {});
+
+    return data.authorId;
   }
 );
 
@@ -68,6 +68,8 @@ export const deleteFollowing = createAsyncThunk(
     if (following.exists()) {
       deleteDoc(followingRef);
     }
+
+    return data.authorId;
   }
 );
 
@@ -87,6 +89,14 @@ const followingSlice = createSlice({
       })
       .addCase(fetchFollowing.pending, (state) => {
         state.status = RequestStatus.Pending;
+      })
+      .addCase(deleteFollowing.fulfilled, (state, action) => {
+        state.following = state.following.filter(
+          (follow) => follow !== action.payload
+        );
+      })
+      .addCase(addFollowing.fulfilled, (state, action) => {
+        state.following.push(action.payload);
       });
   },
 });
@@ -94,5 +104,6 @@ const followingSlice = createSlice({
 export const selectFollowingStatus = (state: RootState) =>
   state.following.status;
 export const selectFollowingError = (state: RootState) => state.following.error;
+export const selectFollowing = (state: RootState) => state.following.following;
 
 export default followingSlice.reducer;

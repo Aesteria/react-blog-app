@@ -2,7 +2,7 @@ import Tabs from '../../components/ui/Tabs';
 import { useAppSelector } from '../../store/hooks';
 import { selectPostsByAuthorId } from '../../store/postsSlice';
 import useFollowers from './hooks/useFollowers';
-import useFollowing from './hooks/useFollowing';
+import useFollowing from '../../hooks/useFollowing';
 
 type ProfileTabsProps = {
   authorId: string;

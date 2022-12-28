@@ -28,7 +28,7 @@ export default function DeletePostModal({
     try {
       dispatch(deletePost(postId)).unwrap();
       toast.success('Post was succesfully deleted!');
-      navigate(LinkPath.Posts);
+      navigate(LinkPath.Home);
     } catch (e) {
       if (isErrorWithMessage(e)) {
         toast.error(e.message);

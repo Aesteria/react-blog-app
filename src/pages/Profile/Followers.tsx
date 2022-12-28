@@ -20,7 +20,7 @@ export default function Followers() {
     content =
       followers.length > 0 ? (
         followers.map((follower) => (
-          <FollowItem key={follower.userId} usernameId={follower.userId} />
+          <FollowItem key={follower} usernameId={follower} />
         ))
       ) : (
         <p>You have no followers yet</p>

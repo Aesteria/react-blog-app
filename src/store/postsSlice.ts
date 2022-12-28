@@ -226,4 +226,6 @@ export const selectFilteredPosts = (state: RootState, searchTerm: string) =>
       post.body.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+export const selectPostsByFollowing = (state: RootState, following: string[]) =>
+  state.posts.posts.filter((post) => following.includes(post.author.id));
 export default postsSlice.reducer;

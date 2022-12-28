@@ -9,11 +9,11 @@ import {
 } from 'firebase/firestore';
 import RequestStatus from '../constants/requestStatus';
 import { db } from '../firebase';
-import { AddFollowData, UserFollower } from '../types/follow';
+import { AddFollowData } from '../types/follow';
 import type { RootState } from './store';
 
 type InitialState = {
-  followers: UserFollower[];
+  followers: string[];
   status: RequestStatus;
   error?: string;
 };
@@ -29,11 +29,9 @@ export const fetchFollowers = createAsyncThunk(
     const querySnapshot = await getDocs(
       collection(db, `followers/${userId}/userFollowers`)
     );
-    const newData: UserFollower[] = [];
+    const newData: string[] = [];
     querySnapshot.forEach((document) => {
-      newData.push({
-        userId: document.id,
-      });
+      newData.push(document.id);
     });
     return newData;
   }
@@ -53,9 +51,7 @@ export const addFollower = createAsyncThunk(
 
     await setDoc(userFollowersRef, {});
 
-    return {
-      userId: data.currentUserId,
-    };
+    return data.currentUserId;
   }
 );
 
@@ -74,9 +70,7 @@ export const deleteFollower = createAsyncThunk(
       deleteDoc(followerRef);
     }
 
-    return {
-      userId: data.currentUserId,
-    };
+    return data.currentUserId;
   }
 );
 
@@ -102,7 +96,7 @@ const followersSlice = createSlice({
       })
       .addCase(deleteFollower.fulfilled, (state, action) => {
         state.followers = state.followers.filter(
-          (follower) => follower.userId !== action.payload.userId
+          (follower) => follower !== action.payload
         );
       });
   },
